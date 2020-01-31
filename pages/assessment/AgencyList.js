@@ -3,19 +3,21 @@ import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
 import { StyleSheet, View, Text, Platform, FlatList, ActivityIndicator } from 'react-native';
 
-export default class ListView extends Component {
+export default class AgencyList extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            isLoading: true
+            isLoading: true,
+            client_id: this.props.navigation.state.params.client_id
         }
     }
 
     async componentDidMount() {
         try {
+            console.log(this.state.client_id);
             db.transaction(tx => {
-                tx.executeSql('SELECT * FROM client_table', [], (tx, results) => {
+                tx.executeSql('SELECT * FROM agency_table WHERE client_id = ?', [this.state.client_id], (tx, results) => {
                     var temp = [];
                     for (let i = 0; i < results.rows.length; ++i) {
                         temp.push(results.rows.item(i));
@@ -32,9 +34,9 @@ export default class ListView extends Component {
         }
     }
 
-    clickFunction = (client_id) => {
-        this.props.navigation.navigate('AgencyList', {
-            client_id: client_id
+    clickFunction = (agency_id) => {
+        this.props.navigation.navigate('BcaForm', {
+            agency_id: agency_id
         });
     }
 
@@ -72,9 +74,9 @@ export default class ListView extends Component {
                         <View style={{ flex: 1, flexDirection: 'row' }}>
                             <Text style={styles.rowViewContainer}
                                 onPress={this.clickFunction.bind(
-                                    this, item.client_id
+                                    this, item.agency_id
                                 )} >
-                                {item.client_desc}
+                                {item.agency_name}
                             </Text>
                             <Text style={styles.textViewContainer}>&rarr;</Text>
                         </View>}
