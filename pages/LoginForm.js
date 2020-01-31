@@ -2,7 +2,7 @@ import React from 'react';
 import ValidationComponent from '../vals';
 import { sha256 } from 'react-native-sha256';
 import { openDatabase } from 'react-native-sqlite-storage';
-var db = openDatabase({ name: 'keres_assessments.db', createFromLocation: "~keres_assessment.db" });
+var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, KeyboardAvoidingView } from 'react-native';
 
 export default class LoginForm extends ValidationComponent {
@@ -19,10 +19,10 @@ export default class LoginForm extends ValidationComponent {
 
   _onPressButton = () => {
     this.validate({
-     // Username: { required: true },
-     // Password: { required: true },
+      // Username: { required: true },
+      // Password: { required: true },
     });
-    this.props.navigation.navigate('BcaHome');
+    this.props.navigation.navigate('AssessmentHome');
     if (this.isFormValid()) {
       this.getUser();
     }
@@ -42,12 +42,9 @@ export default class LoginForm extends ValidationComponent {
               this.setState({
                 user_name: results.rows.item(0).user_name,
               });
-              this.props.navigation.navigate('BcaHome');
+              this.props.navigation.navigate('AssessmentHome');
             } else {
-              alert('Login Failed');
-              this.setState({
-                user_name: ''
-              });
+              //alert('Login Failed');
             }
           }
         );
@@ -82,22 +79,6 @@ export default class LoginForm extends ValidationComponent {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%'
-  },
-  TextInputStyleClass: {
-    textAlign: 'center',
-    width: '100%',
-    marginBottom: 7,
-    height: 40,
-    borderWidth: 1,
-    borderColor: '#333',
-    borderRadius: 5,
-  },
   button: {
     backgroundColor: '#133156',
     borderRadius: 5,

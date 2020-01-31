@@ -3,7 +3,7 @@
 import React from 'react';
 import { View, ActivityIndicator, Text, StyleSheet } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
-var db = openDatabase({ name: 'keres_assessments.db', createFromLocation: "~keres_assessment.db" });
+var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
 
 export default class UpdateApp extends React.Component {
 
@@ -59,6 +59,7 @@ export default class UpdateApp extends React.Component {
                     })
                     this.deleteUsers();
                     var obj = this.state.dataSource;
+                    //console.log(obj);
                     for (var key in obj) {
                         if (obj.hasOwnProperty(key)) {
                             var val = obj[key];

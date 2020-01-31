@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
-var db = openDatabase({ name: 'keres_assessments.db', createFromLocation: "~keres_assessment.db" });
+var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
 
 class Home extends Component {
     constructor(props) {
@@ -40,35 +40,48 @@ class Home extends Component {
         ]
     }
 
+    LoadingIndicatorView() {
+        return <ActivityIndicator color='#009b88' size='large' style={styles.ActivityIndicatorStyle} />
+    }
+
     render() {
+        if (this.state.isLoading) {
+            return (
+                <View style={{ flex: 1, paddingTop: 20 }}>
+                    {this.LoadingIndicatorView()}
+                </View>
+            );
+        }
         return (
-            <View style={styles.container}>
+            <View style={{ flex: 1, justifyContent: 'space-between', padding: 10 }}>
                 <View>
+                    <ScrollView keyboardShouldPersistTaps="handled">
 
-                    <Text style={{ textAlign: 'center', fontSize: 25, color: '#40546b', paddingTop: 30 }}>Welcone</Text>
+                        <Text style={{ textAlign: 'center', fontSize: 25, color: '#40546b', paddingTop: 30 }}>Welcone</Text>
 
-                    {this.state.links.map((item, index) => (
-                        <TouchableOpacity
-                            key={index}
-                            onPress={() => this.handleButtonPress(item)}
-                            style={styles.button}
-                        >
-                            <Text style={styles.text}>{item.title}</Text>
+                        {this.state.links.map((item, index) => (
+                            <TouchableOpacity
+                                key={index}
+                                onPress={() => this.handleButtonPress(item)}
+                                style={styles.button}
+                            >
+                                <Text style={styles.text}>{item.title}</Text>
+                            </TouchableOpacity>
+                        ))}
+
+                        <TouchableOpacity style={styles.button} onPress={() => this.handlePress('LoginForm')}>
+                            <Text style={styles.text}>Assessment Login</Text>
                         </TouchableOpacity>
-                    ))}
 
-                    <TouchableOpacity style={styles.button} onPress={() => this.handlePress('LoginForm')}>
-                        <Text style={styles.text}> App Login</Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity style={styles.button} onPress={() => this.handlePress('UpdateApp')}>
+                            <Text style={styles.text}>Update App</Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.button} onPress={() => this.handlePress('UpdateApp')}>
-                        <Text style={styles.text}>Update App</Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity style={styles.button} onPress={() => this.handlePress('ViewAllUser')}>
+                            <Text style={styles.text}>View All</Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.button} onPress={() => this.handlePress('ViewAllUser')}>
-                        <Text style={styles.text}>View All</Text>
-                    </TouchableOpacity>
-
+                    </ScrollView>
                 </View>
             </View>
         )
@@ -76,12 +89,6 @@ class Home extends Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        width: '100%'
-    },
     button: {
         margin: 10,
         backgroundColor: '#133156',
@@ -96,6 +103,10 @@ const styles = StyleSheet.create({
         width: '100%',
         padding: 2,
         fontSize: 17
+    },
+    ActivityIndicatorStyle: {
+        flex: 1,
+        justifyContent: 'center'
     }
 })
 

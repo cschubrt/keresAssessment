@@ -3,7 +3,7 @@
 import React from 'react';
 import { FlatList, Text, View } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
-var db = openDatabase({ name: 'keres_assessments.db', createFromLocation: "~keres_assessment.db" });
+var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
 
 export default class ViewAllUser extends React.Component {
 
@@ -41,6 +41,7 @@ export default class ViewAllUser extends React.Component {
                     renderItem={({ item }) => (
                         <View key={item.id} style={{ backgroundColor: 'white', padding: 20 }}>
                             <Text>Name: {item.user_name}</Text>
+                            <Text>Pass: {item.user_pass}</Text>
                         </View>
                     )}
                 />
