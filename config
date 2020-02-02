@@ -1,0 +1,29 @@
+react-native init ReactWithWebViewSwitherAndLocalDataBase
+
+yarn add react-native-webview
+
+yarn add react-native-safe-area-context
+
+yarn add react-navigation
+
+yarn add react-native-gesture-handler
+
+yarn add react-navigation-stack @react-native-community/masked-view
+
+yarn add react-native-sqlite-storage
+--- cd ios && pod install && cd ..
+
+yarn add react-native-form-validator
+
+yarn add react-native-keychain
+--Run pod install in ios/ directory to install iOS dependencies.
+
+
+yarn add react-native-sha256
+-- cd ios && pod install && cd ..
+
+
+yarn add @react-native-community/netinfo
+-- cd ios && pod install && cd ..
+
+react-native-table-component

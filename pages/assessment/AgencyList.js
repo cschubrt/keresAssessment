@@ -15,7 +15,6 @@ export default class AgencyList extends Component {
 
     async componentDidMount() {
         try {
-            console.log(this.state.client_id);
             db.transaction(tx => {
                 tx.executeSql('SELECT * FROM agency_table WHERE client_id = ?', [this.state.client_id], (tx, results) => {
                     var temp = [];
@@ -34,9 +33,10 @@ export default class AgencyList extends Component {
         }
     }
 
-    clickFunction = (agency_id) => {
-        this.props.navigation.navigate('BcaForm', {
-            agency_id: agency_id
+    clickFunction = (agency_id, agency_name) => {
+        this.props.navigation.navigate('AssessmentList', {
+            agency_id: agency_id,
+            agency_name: agency_name
         });
     }
 
@@ -74,7 +74,8 @@ export default class AgencyList extends Component {
                         <View style={{ flex: 1, flexDirection: 'row' }}>
                             <Text style={styles.rowViewContainer}
                                 onPress={this.clickFunction.bind(
-                                    this, item.agency_id
+                                    this, item.agency_id,
+                                    item.agency_name
                                 )} >
                                 {item.agency_name}
                             </Text>

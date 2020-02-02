@@ -32,9 +32,10 @@ export default class ListView extends Component {
         }
     }
 
-    clickFunction = (client_id) => {
+    clickFunction = (client_id, client_desc) => {
         this.props.navigation.navigate('AgencyList', {
-            client_id: client_id
+            client_id: client_id,
+            client_desc: client_desc
         });
     }
 
@@ -72,7 +73,8 @@ export default class ListView extends Component {
                         <View style={{ flex: 1, flexDirection: 'row' }}>
                             <Text style={styles.rowViewContainer}
                                 onPress={this.clickFunction.bind(
-                                    this, item.client_id
+                                    this, item.client_id,
+                                    item.client_desc
                                 )} >
                                 {item.client_desc}
                             </Text>

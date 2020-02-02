@@ -10,6 +10,7 @@ import ViewAllUser from '../pages/ViewAllUser';
 import AssessmentHome from '../pages/assessment/AssessmentHome';
 import ListView from '../pages/assessment/ListView';
 import AgencyList from '../pages/assessment/AgencyList';
+import AssessmentList from '../pages/assessment/AssessmentList';
 
 const HomeStack = createStackNavigator({
     Home: {
@@ -51,6 +52,13 @@ const HomeStack = createStackNavigator({
         screen: AgencyList,
         navigationOptions: ({ navigation }) => ({
             title: 'Agencies',
+            headerTintColor: '#40546b'
+        })
+    },
+    AssessmentList: {
+        screen: AssessmentList,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Assessment List',
             headerTintColor: '#40546b'
         })
     },

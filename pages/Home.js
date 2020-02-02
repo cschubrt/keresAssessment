@@ -1,27 +1,56 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
-import { openDatabase } from 'react-native-sqlite-storage';
-var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
+import NetInfo from "@react-native-community/netinfo";
 
 class Home extends Component {
+
     constructor(props) {
         super(props);
-        db.transaction(function (txn) {
-            txn.executeSql(
-                "SELECT name FROM sqlite_master WHERE type='table' AND name='users_table'",
-                [],
-                function (tx, res) {
-                    //console.log('item:', res.rows.length);
-                    if (res.rows.length == 0) {
-                        txn.executeSql('DROP TABLE IF EXISTS users_table', []);
-                        txn.executeSql(
-                            'CREATE TABLE IF NOT EXISTS users_table(user_id INTEGER PRIMARY KEY AUTOINCREMENT, user_name VARCHAR(255), user_email VARCHAR(255), user_pass VARCHAR(255))',
-                            []
-                        );
-                    }
-                }
-            );
+        this.state = {
+            links: [
+                { title: 'Keres Assessment Server', link: 'https://cschubert.serviceseval.com/keres_framework' }
+            ],
+            connection_Status: "",
+            connection: true
+        }
+    }
+
+    componentDidMount() {
+        NetInfo.addEventListener(connected => {
+            if (connected.isConnected == true) {
+                this.setState({
+                    connection_Status: "Online",
+                    connection: true
+                })
+            } else {
+                this.setState({
+                    connection_Status: "Offline",
+                    connection: false
+                })
+            }
         });
+    }
+
+    keresButton() {
+        if (this.state.connection) {
+            return this.state.links.map((item, index) => (
+                <TouchableOpacity
+                    key={index}
+                    onPress={() => this.handleButtonPress(item)}
+                    style={styles.button}
+                >
+                    <Text style={styles.text}>{item.title}</Text>
+                </TouchableOpacity>
+            ));
+        }
+    }
+
+    updateButton() {
+        if (this.state.connection) {
+            return <TouchableOpacity style={styles.button} onPress={() => this.handlePress('UpdateApp')}>
+                <Text style={styles.text}>Update App</Text>
+            </TouchableOpacity>
+        }
     }
 
     handleButtonPress(item) {
@@ -31,13 +60,6 @@ class Home extends Component {
 
     handlePress(prs) {
         this.props.navigation.navigate(prs);
-    }
-
-    state = {
-        links: [
-            { title: 'Keres Assessment Server', link: 'https://cschubert.serviceseval.com/keres_framework' }
-            //{ title: 'next', link: 'https:' }
-        ]
     }
 
     LoadingIndicatorView() {
@@ -57,25 +79,17 @@ class Home extends Component {
                 <View>
                     <ScrollView keyboardShouldPersistTaps="handled">
 
-                        <Text style={{ textAlign: 'center', fontSize: 25, color: '#40546b', paddingTop: 30 }}>Welcone</Text>
+                        <Text style={{ textAlign: 'center', fontSize: 25, color: '#40546b', paddingTop: 30 }}>
+                            Welcome {this.state.connection_Status}
+                        </Text>
 
-                        {this.state.links.map((item, index) => (
-                            <TouchableOpacity
-                                key={index}
-                                onPress={() => this.handleButtonPress(item)}
-                                style={styles.button}
-                            >
-                                <Text style={styles.text}>{item.title}</Text>
-                            </TouchableOpacity>
-                        ))}
+                        {this.keresButton()}
 
                         <TouchableOpacity style={styles.button} onPress={() => this.handlePress('LoginForm')}>
                             <Text style={styles.text}>Assessment Login</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.button} onPress={() => this.handlePress('UpdateApp')}>
-                            <Text style={styles.text}>Update App</Text>
-                        </TouchableOpacity>
+                        {this.updateButton()}
 
                         <TouchableOpacity style={styles.button} onPress={() => this.handlePress('ViewAllUser')}>
                             <Text style={styles.text}>View All</Text>
