@@ -26,33 +26,116 @@ export default class AssessmentList extends Component {
         this.setState({
           connection: true
         })
+        this.getAssessmentByAgency()
       } else {
         this.setState({
           connection: false,
           isLoading: false
         })
+        this.getAssessments();
       }
     });
-    this.getAssessments();
   }
 
-  editValues(values) {
-    Alert.alert("User id =" + values);
+  addAssessment = (master_id) => {
+    fetch('https://cschubert.serviceseval.com/keres_framework/app/getAssessment.php', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        master_id: master_id,
+        key: 'xxxx'
+      })
+    }).then((response) => response.json())
+      .then((responseJson) => {
+        var obj = responseJson;
+        for (var key in obj) {
+          if (obj.hasOwnProperty(key)) {
+            var val = obj[key];
+            this.insertAssessment(val['agency_id'], val['site_id'], val['master_id'], val['building_id'], val['assessment_name'], val['assessment_date'], val['name_of_assessor']);
+          }
+        }
+      }).catch((error) => {
+        console.error(error);
+      });
+  }
+
+  insertAssessment = (agency_id, site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor) => {
+    db.transaction(function (tx) {
+      tx.executeSql(
+        'INSERT INTO assessment_table(agency_id, site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor, downloaded) VALUES (?,?,?,?,?,?,?,?);',
+        [agency_id, site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor, 1],
+        (tx, results) => {
+          if (results.rows.length > 0) {
+            alert('Assessment Downloaded');
+          } else {
+            alert('Assessment Download Failed');
+          }
+        }
+      );
+    });
+  };
+
+  getAssessmentByAgency() {
+    const editIcon = values => (
+      <TouchableOpacity onPress={() => this.addAssessment(values)}>
+        <Text style={{ color: '#000', textAlign: 'right', paddingRight: 10 }}><FontAwesome icon={SolidIcons.download} /></Text>
+      </TouchableOpacity>
+    );
+    try {
+      fetch('https://cschubert.serviceseval.com/keres_framework/app/getAssessmentByAgency.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          agency_id: this.state.agency_id,
+          key: 'xxxx'
+        })
+      }).then((response) => response.json())
+        .then((responseJson) => {
+          var obj = responseJson;
+          for (var key in obj) {
+            if (obj.hasOwnProperty(key)) {
+              var val = obj[key];
+              var joined = this.state.tableData.concat([
+                [
+                  val['assessment_name'],
+                  format(new Date(val['assessment_date']), "MM/dd/yyyy"),
+                  val['name_of_assessor'],
+                  editIcon(val['master_id'])
+                ]
+              ]);
+              this.setState({
+                tableData: joined,
+                isLoading: false
+              });
+            }
+          }
+        }).catch((error) => {
+          console.error(error);
+        });
+      this.setState({
+        isLoading: false
+      })
+    }
+    catch (error) {
+      console.error(error);
+    }
   }
 
   getAssessments() {
     const editIcon = values => (
-      <TouchableOpacity onPress={() => this.editValues(values)}>
+      <TouchableOpacity onPress={() => this.addAssessment(values)}>
         <Text style={{ color: '#000', textAlign: 'right', paddingRight: 10 }}><FontAwesome icon={SolidIcons.download} /></Text>
       </TouchableOpacity>
     );
     try {
       db.transaction(tx => {
-        //console.log(this.state.connection);
-        var strTrue = 'SELECT * FROM assessment_table WHERE agency_id = ?';
-        var strFalse = 'SELECT * FROM assessment_table WHERE downloaded = 1 AND agency_id = ?';
-        var sqlToUse = (this.state.connection ? strTrue : strFalse);
-        tx.executeSql(sqlToUse, [this.state.agency_id], (tx, results) => {
+        tx.executeSql('SELECT * FROM assessment_table WHERE downloaded = 1 AND agency_id = ?', [this.state.agency_id], (tx, results) => {
           var len = results.rows.length;
           if (len > 0) {
             for (let i = 0; i < len; i++) {

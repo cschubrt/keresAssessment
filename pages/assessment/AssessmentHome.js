@@ -19,7 +19,7 @@ export default class AssessmentHome extends Component {
             if (connected.isConnected == true) {
                 this.startClients();
                 this.getAgency();
-                this.getAssessment();
+                //this.getAssessment();
                 this.setState({
                     connection: true
                 })
@@ -32,7 +32,7 @@ export default class AssessmentHome extends Component {
         });
     }
 
-    insertAssessment = (agency_id, site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor) => {
+    /*insertAssessment = (agency_id, site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor) => {
         db.transaction(function (tx) {
             tx.executeSql(
                 'INSERT INTO assessment_table(agency_id, site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor) VALUES (?,?,?,?,?,?,?);',
@@ -40,9 +40,9 @@ export default class AssessmentHome extends Component {
                 (tx, results) => { }
             );
         });
-    };
+    };*/
 
-    getAssessment() {
+    /*getAssessment() {
         try {
             fetch('https://cschubert.serviceseval.com/keres_framework/app/getAssessments.php', {
                 method: 'POST',
@@ -73,7 +73,7 @@ export default class AssessmentHome extends Component {
         catch (error) {
             console.error(error);
         }
-    }
+    }*/
 
     insertClient = (client_id, client_desc) => {
         db.transaction(function (tx) {
@@ -156,6 +156,9 @@ export default class AssessmentHome extends Component {
         catch (error) {
             console.error(error);
         }
+        this.setState({
+            isLoading: false
+        })
     }
 
     handlePress(prs) {
