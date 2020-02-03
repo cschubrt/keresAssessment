@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
+import styles from './components/styles';
 import { WebView } from 'react-native-webview';
-import { ActivityIndicator, StyleSheet } from 'react-native';
+import { ActivityIndicator } from 'react-native';
 
 class Browser extends Component {
     
     LoadingIndicatorView() {
         return <ActivityIndicator color='#009b88' size='large' style={styles.ActivityIndicatorStyle} />
     }
-
     render() {
         const { params } = this.props.navigation.state
 
@@ -24,12 +24,5 @@ class Browser extends Component {
         )
     }
 }
-
-const styles = StyleSheet.create({
-    ActivityIndicatorStyle: {
-        flex: 1,
-        justifyContent: 'center'
-    }
-})
 
 export default Browser

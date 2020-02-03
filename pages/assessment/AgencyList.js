@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import styles from '../components/styles';
 import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
-import { StyleSheet, View, Text, Platform, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator } from 'react-native';
+import FontAwesome, { SolidIcons } from 'react-native-fontawesome';
 
 export default class AgencyList extends Component {
 
@@ -65,7 +67,7 @@ export default class AgencyList extends Component {
             );
         }
         return (
-            <View style={styles.MainContainer_For_Show}>
+            <View style={styles.listContainer}>
                 <FlatList
                     data={this.state.dataSource}
                     ItemSeparatorComponent={this.ListViewItemSeparator}
@@ -79,7 +81,7 @@ export default class AgencyList extends Component {
                                 )} >
                                 {item.agency_name}
                             </Text>
-                            <Text style={styles.textViewContainer}>&rarr;</Text>
+                            <Text style={styles.textViewList}><FontAwesome icon={SolidIcons.chevronRight} /></Text>
                         </View>}
                 />
             </View>
@@ -87,27 +89,3 @@ export default class AgencyList extends Component {
     }
 
 }
-
-const styles = StyleSheet.create({
-    MainContainer_For_Show: {
-        flex: 1,
-        paddingTop: (Platform.OS == 'ios') ? 20 : 0,
-        marginLeft: 5,
-        marginRight: 5
-    },
-    rowViewContainer: {
-        fontSize: 20,
-        paddingTop: 10,
-        paddingBottom: 10,
-        width: '95%'
-    },
-    textViewContainer: {
-        textAlignVertical: 'center',
-        width: '5%',
-        textAlign: 'right'
-    },
-    ActivityIndicatorStyle: {
-        flex: 1,
-        justifyContent: 'center'
-    }
-});

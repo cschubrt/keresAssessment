@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import styles from './components/styles';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import NetInfo from "@react-native-community/netinfo";
 
@@ -10,7 +11,7 @@ class Home extends Component {
             links: [
                 { title: 'Keres Assessment Server', link: 'https://cschubert.serviceseval.com/keres_framework' }
             ],
-            connection_Status: "",
+            connection_Status: '',
             connection: true
         }
     }
@@ -75,7 +76,7 @@ class Home extends Component {
             );
         }
         return (
-            <View style={{ flex: 1, justifyContent: 'space-between', padding: 10 }}>
+            <View style={styles.viewContainer}>
                 <View>
                     <ScrollView keyboardShouldPersistTaps="handled">
 
@@ -101,27 +102,5 @@ class Home extends Component {
         )
     }
 }
-
-const styles = StyleSheet.create({
-    button: {
-        margin: 10,
-        backgroundColor: '#133156',
-        borderRadius: 5,
-        padding: 10,
-        paddingLeft: 20,
-        paddingRight: 20
-    },
-    text: {
-        color: '#fff',
-        textAlign: 'center',
-        width: '100%',
-        padding: 2,
-        fontSize: 17
-    },
-    ActivityIndicatorStyle: {
-        flex: 1,
-        justifyContent: 'center'
-    }
-})
 
 export default Home

@@ -1,7 +1,8 @@
 // GET USERS FROM SERVER DB
 
 import React from 'react';
-import { View, ActivityIndicator, Text, StyleSheet } from 'react-native';
+import styles from './components/styles';
+import { View, ActivityIndicator, Text } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
 
@@ -17,13 +18,7 @@ export default class UpdateApp extends React.Component {
     deleteUsers = () => {
         db.transaction(tx => {
             tx.executeSql(
-                'DELETE FROM users_table', [], (tx, results) => {
-                    if (results.rowsAffected > 0) {
-                        console.log('Results', results.rowsAffected);
-                    } else {
-                        console.log('No Results', results.rowsAffected);;
-                    }
-                }
+                'DELETE FROM users_table', [], (tx, results) => { }
             );
         });
     };
@@ -101,10 +96,3 @@ export default class UpdateApp extends React.Component {
     }
 
 }
-
-const styles = StyleSheet.create({
-    ActivityIndicatorStyle: {
-        flex: 1,
-        justifyContent: 'center'
-    }
-});

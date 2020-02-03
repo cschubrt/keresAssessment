@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from './components/styles';
 import ValidationComponent from '../vals';
 import { sha256 } from 'react-native-sha256';
 import { openDatabase } from 'react-native-sqlite-storage';
@@ -12,15 +13,14 @@ export default class LoginForm extends ValidationComponent {
     this.state = {
       Username: "",
       Password: "",
-      user_name: "",
-      text: ""
+      user_name: ""
     };
   }
 
   _onPressButton = () => {
     this.validate({
-      // Username: { required: true },
-      // Password: { required: true },
+    //   Username: { required: true },
+    //   Password: { required: true },
     });
     this.props.navigation.navigate('AssessmentHome');
     if (this.isFormValid()) {
@@ -54,7 +54,7 @@ export default class LoginForm extends ValidationComponent {
 
   render() {
     return (
-      <View style={{ flex: 1, justifyContent: 'space-between', padding: 10 }}>
+      <View style={styles.viewContainer}>
         <ScrollView keyboardShouldPersistTaps="handled">
           <KeyboardAvoidingView>
 
@@ -77,29 +77,3 @@ export default class LoginForm extends ValidationComponent {
   }
 
 }
-
-const styles = StyleSheet.create({
-  button: {
-    backgroundColor: '#133156',
-    borderRadius: 5,
-    padding: 10,
-    width: '100%'
-  },
-  text: {
-    color: '#fff',
-    textAlign: 'center',
-    width: '100%',
-    padding: 2,
-    paddingLeft: 75,
-    paddingRight: 75,
-    fontSize: 17
-  },
-  textAlert: {
-    color: 'red',
-    textAlign: 'left',
-    width: '100%',
-    paddingBottom: 15,
-    paddingLeft: 5,
-    fontSize: 14,
-  },
-})

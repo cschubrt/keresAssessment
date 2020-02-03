@@ -27,3 +27,7 @@ yarn add @react-native-community/netinfo
 -- cd ios && pod install && cd ..
 
 react-native-table-component
+
+yarn add react-native-fontawesome
+
+yarn add date-fns

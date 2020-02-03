@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { openDatabase } from 'react-native-sqlite-storage';
-var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
+import styles from '../components/styles';
 import NetInfo from "@react-native-community/netinfo";
+import { openDatabase } from 'react-native-sqlite-storage';
+import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
 
 export default class AssessmentHome extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            isLoading: false
+            isLoading: true
         };
     }
 
@@ -20,23 +21,22 @@ export default class AssessmentHome extends Component {
                 this.getAgency();
                 this.getAssessment();
                 this.setState({
-                    connection_Status: "Online",
                     connection: true
                 })
             } else {
                 this.setState({
-                    connection_Status: "Offline",
-                    connection: false
+                    connection: false,
+                    isLoading: false
                 })
             }
         });
     }
 
-    insertAssessment = (site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor) => {
+    insertAssessment = (agency_id, site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor) => {
         db.transaction(function (tx) {
             tx.executeSql(
-                'INSERT INTO assessment_table(site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor) VALUES (?,?,?,?,?,?);',
-                [site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor],
+                'INSERT INTO assessment_table(agency_id, site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor) VALUES (?,?,?,?,?,?,?);',
+                [agency_id, site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor],
                 (tx, results) => { }
             );
         });
@@ -44,7 +44,7 @@ export default class AssessmentHome extends Component {
 
     getAssessment() {
         try {
-            fetch('https://cschubert.serviceseval.com/keres_framework/app/getAssessment.php', {
+            fetch('https://cschubert.serviceseval.com/keres_framework/app/getAssessments.php', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -60,7 +60,7 @@ export default class AssessmentHome extends Component {
                         if (obj.hasOwnProperty(key)) {
                             var val = obj[key];
                             //insert clients from server DB
-                            this.insertAssessment(val['site_id'], val['master_id'], val['building_id'], val['assessment_name'], val['assessment_date'], val['name_of_assessor']);
+                            this.insertAssessment(val['agency_id'], val['site_id'], val['master_id'], val['building_id'], val['assessment_name'], val['assessment_date'], val['name_of_assessor']);
                         }
                     }
                 }).catch((error) => {
@@ -80,9 +80,7 @@ export default class AssessmentHome extends Component {
             tx.executeSql(
                 'INSERT INTO client_table(client_id, client_desc) VALUES (?,?);',
                 [client_id, client_desc],
-                (tx, results) => {
-                    console.log('Results', results.rowsAffected);
-                }
+                (tx, results) => { }
             );
         });
     };
@@ -125,8 +123,7 @@ export default class AssessmentHome extends Component {
             tx.executeSql(
                 'INSERT INTO agency_table(agency_id, client_id, agency_name) VALUES (?,?,?);',
                 [agency_id, client_id, agency_name],
-                (tx, results) => {
-                }
+                (tx, results) => { }
             );
         });
     };
@@ -178,7 +175,7 @@ export default class AssessmentHome extends Component {
             );
         }
         return (
-            <View style={{ flex: 1, justifyContent: 'space-between', padding: 10 }}>
+            <View style={styles.viewContainer}>
                 <View style={styles.list}>
 
                     <Text style={{ textAlign: 'center', fontSize: 25, color: '#40546b', paddingTop: 10 }}>Keres Assessment</Text>
@@ -192,35 +189,3 @@ export default class AssessmentHome extends Component {
         )
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        width: '100%'
-    },
-    buttonList: {
-        flex: 1,
-        justifyContent: 'center'
-    },
-    button: {
-        margin: 10,
-        backgroundColor: '#133156',
-        borderRadius: 5,
-        padding: 10
-    },
-    text: {
-        color: '#fff',
-        textAlign: 'center',
-        width: '100%',
-        padding: 2,
-        paddingLeft: 75,
-        paddingRight: 75,
-        fontSize: 17
-    },
-    ActivityIndicatorStyle: {
-        flex: 1,
-        justifyContent: 'center'
-    }
-})
