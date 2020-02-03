@@ -4,7 +4,7 @@ import ValidationComponent from '../vals';
 import { sha256 } from 'react-native-sha256';
 import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView } from 'react-native';
 
 export default class LoginForm extends ValidationComponent {
 
@@ -22,7 +22,7 @@ export default class LoginForm extends ValidationComponent {
     //   Username: { required: true },
     //   Password: { required: true },
     });
-    this.props.navigation.navigate('AssessmentHome');
+    this.props.navigation.navigate('AssessmentHome', {user_name: this.state.Username});
     if (this.isFormValid()) {
       this.getUser();
     }
@@ -42,7 +42,7 @@ export default class LoginForm extends ValidationComponent {
               this.setState({
                 user_name: results.rows.item(0).user_name,
               });
-              this.props.navigation.navigate('AssessmentHome');
+              this.props.navigation.navigate('AssessmentHome', {user_name: this.state.user_name});
             } else {
               //alert('Login Failed');
             }

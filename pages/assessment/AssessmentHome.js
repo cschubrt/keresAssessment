@@ -10,7 +10,8 @@ export default class AssessmentHome extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoading: true
+            isLoading: true,
+            user_name: this.props.navigation.state.params.user_name,
         };
     }
 
@@ -19,7 +20,6 @@ export default class AssessmentHome extends Component {
             if (connected.isConnected == true) {
                 this.startClients();
                 this.getAgency();
-                //this.getAssessment();
                 this.setState({
                     connection: true
                 })
@@ -31,49 +31,6 @@ export default class AssessmentHome extends Component {
             }
         });
     }
-
-    /*insertAssessment = (agency_id, site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor) => {
-        db.transaction(function (tx) {
-            tx.executeSql(
-                'INSERT INTO assessment_table(agency_id, site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor) VALUES (?,?,?,?,?,?,?);',
-                [agency_id, site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor],
-                (tx, results) => { }
-            );
-        });
-    };*/
-
-    /*getAssessment() {
-        try {
-            fetch('https://cschubert.serviceseval.com/keres_framework/app/getAssessments.php', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    key: 'xxxx'
-                })
-            }).then((response) => response.json())
-                .then((responseJson) => {
-                    var obj = responseJson;
-                    for (var key in obj) {
-                        if (obj.hasOwnProperty(key)) {
-                            var val = obj[key];
-                            //insert clients from server DB
-                            this.insertAssessment(val['agency_id'], val['site_id'], val['master_id'], val['building_id'], val['assessment_name'], val['assessment_date'], val['name_of_assessor']);
-                        }
-                    }
-                }).catch((error) => {
-                    console.error(error);
-                });
-            this.setState({
-                isLoading: false
-            })
-        }
-        catch (error) {
-            console.error(error);
-        }
-    }*/
 
     insertClient = (client_id, client_desc) => {
         db.transaction(function (tx) {
@@ -162,7 +119,7 @@ export default class AssessmentHome extends Component {
     }
 
     handlePress(prs) {
-        this.props.navigation.navigate(prs);
+        this.props.navigation.navigate(prs, {user_name: this.state.user_name});
     }
 
     LoadingIndicatorView() {
@@ -181,7 +138,7 @@ export default class AssessmentHome extends Component {
             <View style={styles.viewContainer}>
                 <View style={styles.list}>
 
-                    <Text style={{ textAlign: 'center', fontSize: 25, color: '#40546b', paddingTop: 10 }}>Keres Assessment</Text>
+        <Text style={{ textAlign: 'center', fontSize: 25, color: '#40546b', paddingTop: 10 }}>Keres Assessment</Text>
 
                     <TouchableOpacity style={styles.button} onPress={() => this.handlePress('ListView')}>
                         <Text style={styles.text}>Client List</Text>

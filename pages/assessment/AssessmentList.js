@@ -5,7 +5,7 @@ import NetInfo from "@react-native-community/netinfo";
 import { openDatabase } from 'react-native-sqlite-storage';
 import { Table, Row, Rows } from 'react-native-table-component';
 import FontAwesome, { SolidIcons } from 'react-native-fontawesome';
-import { View, Text, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, ActivityIndicator, ScrollView  } from 'react-native';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
 
 export default class AssessmentList extends Component {
@@ -14,9 +14,10 @@ export default class AssessmentList extends Component {
     this.state = {
       isLoading: true,
       tableData: [[]],
-      tableHead: ['Assessment', 'Date', 'Assessor', 'Status'],
+      tableHead: ['Assessment', 'Date', 'Assessor', 'Status', ''],
       agency_name: this.props.navigation.state.params.agency_name,
       agency_id: this.props.navigation.state.params.agency_id,
+      user_name: this.props.navigation.state.params.user_name,
     }
   }
 
@@ -46,15 +47,28 @@ export default class AssessmentList extends Component {
       },
       body: JSON.stringify({
         master_id: master_id,
+        user_name: this.state.user_name,
         key: 'xxxx'
       })
     }).then((response) => response.json())
       .then((responseJson) => {
         var obj = responseJson;
+        //console.log(obj);
         for (var key in obj) {
           if (obj.hasOwnProperty(key)) {
             var val = obj[key];
-            this.insertAssessment(val['agency_id'], val['site_id'], val['master_id'], val['building_id'], val['assessment_name'], val['assessment_date'], val['name_of_assessor']);
+            this.insertAssessment(
+              val['agency_id'],
+              val['site_id'],
+              val['master_id'],
+              val['building_id'],
+              val['assessment_name'],
+              val['assessment_date'],
+              val['name_of_assessor'],
+              val['notes'],
+              val['parametric'],
+              val['building_classification']
+            );
           }
         }
       }).catch((error) => {
@@ -62,13 +76,14 @@ export default class AssessmentList extends Component {
       });
   }
 
-  insertAssessment = (agency_id, site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor) => {
+  insertAssessment = (agency_id, site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor, notes, parametric, building_classification) => {
     db.transaction(function (tx) {
+      tx.executeSql('DELETE FROM assessment_table', [], (tx, results) => { console.log(results.rowsAffected) });
       tx.executeSql(
-        'INSERT INTO assessment_table(agency_id, site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor, downloaded) VALUES (?,?,?,?,?,?,?,?);',
-        [agency_id, site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor, 1],
+        'INSERT INTO assessment_table(agency_id, site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor, notes, parametric, building_classification, downloaded) VALUES (?,?,?,?,?,?,?,?,?,?,?);',
+        [agency_id, site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor, notes, parametric, building_classification, 1],
         (tx, results) => {
-          if (results.rows.length > 0) {
+          if (results.rowsAffected > 0) {
             alert('Assessment Downloaded');
           } else {
             alert('Assessment Download Failed');
@@ -78,12 +93,35 @@ export default class AssessmentList extends Component {
     });
   };
 
-  getAssessmentByAgency() {
-    const editIcon = values => (
-      <TouchableOpacity onPress={() => this.addAssessment(values)}>
-        <Text style={{ color: '#000', textAlign: 'right', paddingRight: 10 }}><FontAwesome icon={SolidIcons.download} /></Text>
-      </TouchableOpacity>
+  uploadAssessment(values) {
+    Alert.alert('Alert', 'Press Ok To Update Assessment',
+      [
+        { text: 'Ok', onPress: () => this.UpdateBca(values) },
+        { text: 'Cancel', onPress: () => console.log('Cancel Pressed') },
+      ],
+      { cancelable: false }
     );
+  }
+
+  addLink(values) {
+    return <TouchableOpacity onPress={() => this.addAssessment(values)}>
+      <Text style={{ color: '#000', textAlign: 'center', paddingRight: 10 }}><FontAwesome icon={SolidIcons.download} /></Text>
+    </TouchableOpacity>
+  }
+
+  checkedValue(values) {
+    return <TouchableOpacity onPress={() => this.uploadAssessment(values)}>
+      <Text style={{ color: '#000', textAlign: 'center', paddingRight: 10 }}><FontAwesome icon={SolidIcons.upload} /></Text>
+    </TouchableOpacity>
+  }
+
+  goTo(values) {
+    return <TouchableOpacity onPress={() => this.props.navigation.navigate('page', {master_id: values})}>
+      <Text style={{ color: '#000', textAlign: 'right', paddingRight: 15 }}><FontAwesome icon={SolidIcons.chevronRight} /></Text>
+    </TouchableOpacity>
+  }
+
+  getAssessmentByAgency() {
     try {
       fetch('https://cschubert.serviceseval.com/keres_framework/app/getAssessmentByAgency.php', {
         method: 'POST',
@@ -92,6 +130,7 @@ export default class AssessmentList extends Component {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          user_name: this.state.user_name,
           agency_id: this.state.agency_id,
           key: 'xxxx'
         })
@@ -106,12 +145,12 @@ export default class AssessmentList extends Component {
                   val['assessment_name'],
                   format(new Date(val['assessment_date']), "MM/dd/yyyy"),
                   val['name_of_assessor'],
-                  editIcon(val['master_id'])
+                  (val['checked_out_by'] === this.state.user_name ? this.checkedValue(val['master_id']) : this.addLink(val['master_id'])),
+                  this.goTo(val['master_id'])
                 ]
               ]);
               this.setState({
                 tableData: joined,
-                isLoading: false
               });
             }
           }
@@ -130,12 +169,12 @@ export default class AssessmentList extends Component {
   getAssessments() {
     const editIcon = values => (
       <TouchableOpacity onPress={() => this.addAssessment(values)}>
-        <Text style={{ color: '#000', textAlign: 'right', paddingRight: 10 }}><FontAwesome icon={SolidIcons.download} /></Text>
+        <Text style={{ color: '#000', textAlign: 'right', paddingRight: 10 }}><FontAwesome icon={SolidIcons.check} /></Text>
       </TouchableOpacity>
     );
     try {
       db.transaction(tx => {
-        tx.executeSql('SELECT * FROM assessment_table WHERE downloaded = 1 AND agency_id = ?', [this.state.agency_id], (tx, results) => {
+        tx.executeSql('SELECT * FROM assessment_table WHERE downloaded = 1 AND agency_id = ? ORDER BY assessment_name', [this.state.agency_id], (tx, results) => {
           var len = results.rows.length;
           if (len > 0) {
             for (let i = 0; i < len; i++) {
@@ -185,11 +224,13 @@ export default class AssessmentList extends Component {
     }
     return (
       <View style={styles.tableContainer}>
-        <Text style={styles.textBlack}>{state.agency_name}</Text>
-        <Table borderStyle={{ borderWidth: 1, borderColor: '#000' }}>
-          <Row data={state.tableHead} style={styles.head} textStyle={styles.headerText} />
-          <Rows data={state.tableData} textStyle={styles.cellText} />
-        </Table>
+        <ScrollView keyboardShouldPersistTaps="handled">
+          <Text style={styles.textBlack}>{state.agency_name}</Text>
+          <Table borderStyle={{ borderWidth: 1, borderColor: '#000' }}>
+            <Row data={state.tableHead} flexArr={[2, 1, 2, 1, 1]} style={styles.head} textStyle={styles.headerText} />
+            <Rows data={state.tableData} flexArr={[2, 1, 2, 1, 1]} textStyle={styles.cellText} />
+          </Table>
+        </ScrollView>
       </View>
     )
   }

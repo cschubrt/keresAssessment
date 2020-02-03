@@ -11,7 +11,8 @@ export default class AgencyList extends Component {
         super(props);
         this.state = {
             isLoading: true,
-            client_id: this.props.navigation.state.params.client_id
+            client_id: this.props.navigation.state.params.client_id,
+            user_name: this.props.navigation.state.params.user_name,
         }
     }
 
@@ -35,10 +36,11 @@ export default class AgencyList extends Component {
         }
     }
 
-    clickFunction = (agency_id, agency_name) => {
+    clickFunction = (agency_id, agency_name, user_name) => {
         this.props.navigation.navigate('AssessmentList', {
             agency_id: agency_id,
-            agency_name: agency_name
+            agency_name: agency_name,
+            user_name: user_name
         });
     }
 
@@ -77,7 +79,8 @@ export default class AgencyList extends Component {
                             <Text style={styles.rowViewContainer}
                                 onPress={this.clickFunction.bind(
                                     this, item.agency_id,
-                                    item.agency_name
+                                    item.agency_name,
+                                    this.state.user_name
                                 )} >
                                 {item.agency_name}
                             </Text>

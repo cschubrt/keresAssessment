@@ -10,7 +10,8 @@ export default class ListView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoading: true
+            isLoading: true,
+            user_name: this.props.navigation.state.params.user_name,
         }
     }
 
@@ -34,10 +35,11 @@ export default class ListView extends Component {
         }
     }
 
-    clickFunction = (client_id, client_desc) => {
+    clickFunction = (client_id, client_desc, user_name) => {
         this.props.navigation.navigate('AgencyList', {
             client_id: client_id,
-            client_desc: client_desc
+            client_desc: client_desc,
+            user_name: user_name
         });
     }
 
@@ -76,7 +78,8 @@ export default class ListView extends Component {
                             <Text style={styles.rowViewContainer}
                                 onPress={this.clickFunction.bind(
                                     this, item.client_id,
-                                    item.client_desc
+                                    item.client_desc,
+                                    this.state.user_name
                                 )} >
                                 {item.client_desc}
                             </Text>
