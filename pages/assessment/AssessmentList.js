@@ -116,7 +116,7 @@ export default class AssessmentList extends Component {
   }
 
   goTo(values) {
-    return <TouchableOpacity onPress={() => this.props.navigation.navigate('page', {master_id: values})}>
+    return <TouchableOpacity onPress={() => this.props.navigation.navigate('TabScreen', {master_id: values})}>
       <Text style={{ color: '#000', textAlign: 'right', paddingRight: 15 }}><FontAwesome icon={SolidIcons.chevronRight} /></Text>
     </TouchableOpacity>
   }
@@ -137,6 +137,7 @@ export default class AssessmentList extends Component {
       }).then((response) => response.json())
         .then((responseJson) => {
           var obj = responseJson;
+          //console.log(responseJson);
           for (var key in obj) {
             if (obj.hasOwnProperty(key)) {
               var val = obj[key];

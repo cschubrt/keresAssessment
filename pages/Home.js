@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styles from './components/styles';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import NetInfo from "@react-native-community/netinfo";
 
 class Home extends Component {

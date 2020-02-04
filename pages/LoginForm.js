@@ -22,7 +22,7 @@ export default class LoginForm extends ValidationComponent {
     //   Username: { required: true },
     //   Password: { required: true },
     });
-    this.props.navigation.navigate('AssessmentHome', {user_name: this.state.Username});
+    this.props.navigation.navigate('AssessmentHome', {user_name: this.state.Username.trim()});
     if (this.isFormValid()) {
       this.getUser();
     }
