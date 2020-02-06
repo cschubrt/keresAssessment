@@ -68,11 +68,21 @@ const styles = StyleSheet.create({
         color: '#000',
     },
     textBlack: {
+        width: '75%',
         color: '#fff',
-        width: '100%',
+        fontSize: 17,
+    },
+    textBlackRight: {
+        textAlign: 'right',
+        width: '25%',
+        color: '#fff',
+        fontSize: 17,
+    },
+    ViewBlack: {
+        flex: 1,
         backgroundColor: '#333',
-        padding: 5,
-        fontSize: 17
+        flexDirection: 'row',
+        padding: 5
     },
     TextInputStyleClass: {
         fontSize: 19,

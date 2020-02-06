@@ -12,11 +12,11 @@ export default class Info extends ValidationComponent {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true,
+      isLoading: false,
       success: false,
-      agents: '',
-      sites: '',
-      buildings: '',
+      agents: false,
+      sites: false,
+      buildings: false,
       agency_id: '',
       site_id: '',
       building_id: '',
@@ -26,31 +26,6 @@ export default class Info extends ValidationComponent {
       building_classification: '',
       notes: '',
       master_id: this.props.navigation.state.params.master_id
-    }
-    try {
-      db.transaction(tx => {
-        tx.executeSql('SELECT * FROM assessment_table WHERE master_id = ?', [this.state.master_id], (tx, results) => {
-          var len = results.rows.length;
-          if (len > 0) {
-            this.setState({
-              agency_id: results.rows.item(0).agency_id,
-              site_id: results.rows.item(0).site_id,
-              building_id: results.rows.item(0).building_id,
-              assessment_name: results.rows.item(0).assessment_name,
-              name_of_assessor: results.rows.item(0).name_of_assessor,
-              assessment_date: format(new Date(results.rows.item(0).assessment_date), "MM/dd/yyyy"),
-              building_classification: results.rows.item(0).building_classification,
-              notes: results.rows.item(0).notes
-            });
-          }
-        });
-      });
-      this.setState({
-        isLoading: false
-      });
-    }
-    catch (error) {
-      console.error(error);
     }
   }
 
@@ -108,6 +83,7 @@ export default class Info extends ValidationComponent {
         for (let i = 0; i < results.rows.length; ++i) {
           temp.push(results.rows.item(i));
         }
+        //return temp;
         this.setState({
           agents: temp
         });
@@ -163,9 +139,6 @@ export default class Info extends ValidationComponent {
           }
         });
       });
-      this.setState({
-        isLoading: false
-      });
     }
     catch (error) {
       console.error(error);
@@ -173,18 +146,39 @@ export default class Info extends ValidationComponent {
   }
 
   componentDidMount() {
+    this.getAgency();
     this.getAssessment();
   }
 
+  isequal() {
+    if (this.state.agents == false || this.state.sites == false || this.state.buildings == false) {
+      return true;
+    }
+    return false;
+  }
+
+  shouldComponentUpdate(prevState, nextState) {
+    if ((prevState != nextState)) {
+      return true;
+    }
+    return false;
+  }
+
+  checkSet() {
+    if (this.state.sites == false) {
+      this.getSite();
+    }
+    if (this.state.buildings == false) {
+      this.getBuilding();
+    }
+  }
+
   render() {
-    this.getAgency();
-    this.getSite();
-    this.getBuilding();
+    this.checkSet();
     const state = this.state;
     const agnt = state.agents;
     const site = state.sites;
     const building = state.buildings;
-    console.log(state.agnt);
     return (
       <View style={styles.viewContainer}>
         <ScrollView keyboardShouldPersistTaps="handled">

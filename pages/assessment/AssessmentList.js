@@ -14,6 +14,7 @@ export default class AssessmentList extends Component {
     this.state = {
       isLoading: true,
       tableData: [[]],
+      connection_Status: '',
       tableHead: ['Assessment', 'Date', 'Assessor', 'Status', ''],
       agency_name: this.props.navigation.state.params.agency_name,
       agency_id: this.props.navigation.state.params.agency_id,
@@ -25,13 +26,15 @@ export default class AssessmentList extends Component {
     NetInfo.fetch().then(connected => {
       if (connected.isConnected == true) {
         this.setState({
-          connection: true
+          connection: true,
+          connection_Status: "Online",
         })
         this.getAssessmentByAgency()
       } else {
         this.setState({
           connection: false,
-          isLoading: false
+          isLoading: false,
+          connection_Status: "Offline",
         })
         this.getAssessments();
       }
@@ -228,7 +231,10 @@ export default class AssessmentList extends Component {
     return (
       <View style={styles.tableContainer}>
         <ScrollView keyboardShouldPersistTaps="handled">
-          <Text style={styles.textBlack}>{state.agency_name}</Text>
+          <View style={styles.ViewBlack}>
+            <Text style={styles.textBlack}>{state.agency_name}</Text>
+            <Text style={styles.textBlackRight}>{this.state.connection_Status}</Text>
+          </View>
           <Table borderStyle={{ borderWidth: 1, borderColor: '#000' }}>
             <Row data={state.tableHead} flexArr={[2, 1, 2, 1, 1]} style={styles.head} textStyle={styles.headerText} />
             <Rows data={state.tableData} flexArr={[2, 1, 2, 1, 1]} textStyle={styles.cellText} />
