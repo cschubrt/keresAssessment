@@ -1,8 +1,6 @@
 import React from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
-//import createNativeStackNavigator from 'react-native-screens/createNativeStackNavigator';
 import Home from '../pages/Home';
 import Browser from '../pages/Browser';
 import LoginForm from '../pages/LoginForm';
@@ -12,47 +10,14 @@ import AssessmentHome from '../pages/assessment/AssessmentHome';
 import ListView from '../pages/assessment/ListView';
 import AgencyList from '../pages/assessment/AgencyList';
 import AssessmentList from '../pages/assessment/AssessmentList';
-import Tabs from '../pages/tabs/index';
-
-import FirstPage from '../pages/tabs/TabHome';
-import SecondPage from '../pages/tabs/SecondPage';
-import Three from '../pages/tabs/TabHome';
-import Four from '../pages/tabs/SecondPage';
-import Five from '../pages/tabs/TabHome';
-import SixSix from '../pages/tabs/SecondPage';
-
-const TabScreen = createMaterialTopTabNavigator(
-    {
-      info: { screen: FirstPage },
-      observations: { screen: SecondPage },
-      'validation': { screen: Three },
-      'bulding': { screen: Four },
-      'site': { screen: Five },
-      'tower': { screen: SixSix },
-      'tank': { screen: Five }
-    },
-    {
-      tabBarPosition: 'top',
-      swipeEnabled: true,
-      scrollEnabled: true,
-      animationEnabled: true,
-      allowFontScaling: true,
-      tabBarOptions: {
-        activeTintColor: '#FFFFFF',
-        inactiveTintColor: '#F8F8F8',
-        style: {
-          backgroundColor: '#40546b',
-        },
-        labelStyle: {
-          textAlign: 'left',
-        },
-        indicatorStyle: {
-          borderBottomColor: '#87B56A',
-          borderBottomWidth: 2,
-        },
-      },
-    }
-  );
+import FormIndex from '../pages/assessment/form/index';
+import Info from '../pages/assessment/form/Info';
+import Observations from '../pages/assessment/form/Observations';
+import ValidationData from '../pages/assessment/form/ValidationData';
+import BuildingData from '../pages/assessment/form/BuildingData';
+import SiteData from '../pages/assessment/form/SiteData';
+import TowerData from '../pages/assessment/form/TowerData';
+import TankData from '../pages/assessment/form/TankData';
 
 const HomeStack = createStackNavigator({
     Home: {
@@ -104,6 +69,62 @@ const HomeStack = createStackNavigator({
             headerTintColor: '#40546b'
         })
     },
+    FormIndex: {
+        screen: FormIndex,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Assessment',
+            headerTintColor: '#40546b'
+        })
+    },
+    Info: {
+        screen: Info,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Info',
+            headerTintColor: '#40546b'
+        })
+    },
+    Observations: {
+        screen: Observations,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Observations',
+            headerTintColor: '#40546b'
+        })
+    },
+    ValidationData: {
+        screen: ValidationData,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Validation Data',
+            headerTintColor: '#40546b'
+        })
+    },
+    BuildingData: {
+        screen: BuildingData,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Building Data',
+            headerTintColor: '#40546b'
+        })
+    },
+    SiteData: {
+        screen: SiteData,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Site Data',
+            headerTintColor: '#40546b'
+        })
+    },
+    TowerData: {
+        screen: TowerData,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Tower Data',
+            headerTintColor: '#40546b'
+        })
+    },
+    TankData: {
+        screen: TankData,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Tank Data',
+            headerTintColor: '#40546b'
+        })
+    },
     UpdateApp: {
         screen: UpdateApp,
         navigationOptions: ({ navigation }) => ({
@@ -117,17 +138,7 @@ const HomeStack = createStackNavigator({
             title: 'ViewAllUser Data',
             headerTintColor: '#40546b'
         })
-    },
-    TabScreen: {
-        screen: TabScreen,
-        navigationOptions: {
-          headerStyle: {
-            backgroundColor: '#fff',
-          },
-          headerTintColor: '#40546b',
-          title: 'TabExample',
-        },
-      },
+    }
 })
 
 const AppContainer = createAppContainer(HomeStack)

@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
         color: 'red',
         textAlign: 'left',
         width: '100%',
-        paddingBottom: 10,
+        paddingBottom: 1,
         paddingLeft: 5,
         fontSize: 14,
     },
@@ -75,7 +75,24 @@ const styles = StyleSheet.create({
         fontSize: 17
     },
     TextInputStyleClass: {
-        fontSize: 19
+        fontSize: 19,
+        textAlign: 'left',
+        width: '100%',
+        marginBottom: 7,
+        height: 40,
+        borderWidth: 1,
+        borderColor: '#425A78',
+        borderRadius: 5,
+    },
+    TextAreaStyleClass: {
+        fontSize: 19,
+        textAlign: 'left',
+        width: '100%',
+        marginBottom: 7,
+        height: 100,
+        borderWidth: 1,
+        borderColor: '#425A78',
+        borderRadius: 5,
     }
 })
 

@@ -19,6 +19,8 @@ export default class AssessmentHome extends Component {
         NetInfo.addEventListener(connected => {
             if (connected.isConnected == true) {
                 this.startClients();
+                this.getBuilding();
+                this.getSites();
                 this.getAgency();
                 this.setState({
                     connection: true
@@ -30,6 +32,90 @@ export default class AssessmentHome extends Component {
                 })
             }
         });
+    }
+
+    insertSite = (site_id, agency_id, site_name) => {
+        db.transaction(function (tx) {
+            tx.executeSql(
+                'INSERT INTO site_table(site_id, agency_id, site_name) VALUES (?,?,?);',
+                [site_id, agency_id, site_name],
+                (tx, results) => { }
+            );
+        });
+    };
+
+    getSites() {
+        try {
+            fetch('https://cschubert.serviceseval.com/keres_framework/app/getSites.php', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    key: 'xxxx'
+                })
+            }).then((response) => response.json())
+                .then((responseJson) => {
+                    this.setState({
+                        dataSource: responseJson
+                    })
+                    var obj = this.state.dataSource;
+                    for (var key in obj) {
+                        if (obj.hasOwnProperty(key)) {
+                            var val = obj[key];
+                            this.insertSite(val['site_id'], val['agency_id'], val['site_name']);
+                        }
+                    }
+                }).catch((error) => {
+                    console.error(error);
+                });
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
+
+    insertBuilding = (building_id, site_id, building_name) => {
+        db.transaction(function (tx) {
+            tx.executeSql(
+                'INSERT INTO building_table(building_id, site_id, building_name) VALUES (?,?,?);',
+                [building_id, site_id, building_name],
+                (tx, results) => { }
+            );
+        });
+    };
+
+    getBuilding() {
+        try {
+            fetch('https://cschubert.serviceseval.com/keres_framework/app/getBuilding.php', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    key: 'xxxx'
+                })
+            }).then((response) => response.json())
+                .then((responseJson) => {
+                    this.setState({
+                        dataSource: responseJson
+                    })
+                    var obj = this.state.dataSource;
+                    for (var key in obj) {
+                        if (obj.hasOwnProperty(key)) {
+                            var val = obj[key];
+                            this.insertBuilding(val['building_id'], val['site_id'], val['building_name']);
+                        }
+                    }
+                }).catch((error) => {
+                    console.error(error);
+                });
+        }
+        catch (error) {
+            console.error(error);
+        }
     }
 
     insertClient = (client_id, client_desc) => {

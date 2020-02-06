@@ -5,7 +5,7 @@ import NetInfo from "@react-native-community/netinfo";
 import { openDatabase } from 'react-native-sqlite-storage';
 import { Table, Row, Rows } from 'react-native-table-component';
 import FontAwesome, { SolidIcons } from 'react-native-fontawesome';
-import { View, Text, TouchableOpacity, Alert, ActivityIndicator, ScrollView  } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, ActivityIndicator, ScrollView } from 'react-native';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
 
 export default class AssessmentList extends Component {
@@ -22,7 +22,7 @@ export default class AssessmentList extends Component {
   }
 
   componentDidMount() {
-    NetInfo.addEventListener(connected => {
+    NetInfo.fetch().then(connected => {
       if (connected.isConnected == true) {
         this.setState({
           connection: true
@@ -53,7 +53,6 @@ export default class AssessmentList extends Component {
     }).then((response) => response.json())
       .then((responseJson) => {
         var obj = responseJson;
-        //console.log(obj);
         for (var key in obj) {
           if (obj.hasOwnProperty(key)) {
             var val = obj[key];
@@ -78,7 +77,7 @@ export default class AssessmentList extends Component {
 
   insertAssessment = (agency_id, site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor, notes, parametric, building_classification) => {
     db.transaction(function (tx) {
-      tx.executeSql('DELETE FROM assessment_table', [], (tx, results) => { console.log(results.rowsAffected) });
+      //tx.executeSql('DELETE FROM assessment_table', [], (tx, results) => { console.log(results.rowsAffected) });
       tx.executeSql(
         'INSERT INTO assessment_table(agency_id, site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor, notes, parametric, building_classification, downloaded) VALUES (?,?,?,?,?,?,?,?,?,?,?);',
         [agency_id, site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor, notes, parametric, building_classification, 1],
@@ -115,10 +114,14 @@ export default class AssessmentList extends Component {
     </TouchableOpacity>
   }
 
-  goTo(values) {
-    return <TouchableOpacity onPress={() => this.props.navigation.navigate('TabScreen', {master_id: values})}>
+  goTo(values, assessment_name) {
+    return <TouchableOpacity onPress={() => this.props.navigation.navigate('FormIndex', { master_id: values, assessment_name: assessment_name })}>
       <Text style={{ color: '#000', textAlign: 'right', paddingRight: 15 }}><FontAwesome icon={SolidIcons.chevronRight} /></Text>
     </TouchableOpacity>
+  }
+
+  NoGoTo() {
+    return <Text style={{ color: '#000', textAlign: 'right', paddingRight: 15 }}><FontAwesome icon={SolidIcons.times} /></Text>
   }
 
   getAssessmentByAgency() {
@@ -147,7 +150,7 @@ export default class AssessmentList extends Component {
                   format(new Date(val['assessment_date']), "MM/dd/yyyy"),
                   val['name_of_assessor'],
                   (val['checked_out_by'] === this.state.user_name ? this.checkedValue(val['master_id']) : this.addLink(val['master_id'])),
-                  this.goTo(val['master_id'])
+                  (val['checked_out_by'] === this.state.user_name ? this.goTo(val['master_id'], val['assessment_name']) : this.NoGoTo()),
                 ]
               ]);
               this.setState({
@@ -169,9 +172,7 @@ export default class AssessmentList extends Component {
 
   getAssessments() {
     const editIcon = values => (
-      <TouchableOpacity onPress={() => this.addAssessment(values)}>
-        <Text style={{ color: '#000', textAlign: 'right', paddingRight: 10 }}><FontAwesome icon={SolidIcons.check} /></Text>
-      </TouchableOpacity>
+      <Text style={{ color: '#000', textAlign: 'right', paddingRight: 10 }}><FontAwesome icon={SolidIcons.check} /></Text>
     );
     try {
       db.transaction(tx => {
@@ -184,7 +185,8 @@ export default class AssessmentList extends Component {
                   results.rows.item(i).assessment_name,
                   format(new Date(results.rows.item(i).assessment_date), "MM/dd/yyyy"),
                   results.rows.item(i).name_of_assessor,
-                  editIcon(results.rows.item(i).master_id)
+                  editIcon(results.rows.item(i).master_id),
+                  this.goTo(results.rows.item(i).master_id, results.rows.item(i).assessment_name)
                 ]
               ]);
               this.setState({

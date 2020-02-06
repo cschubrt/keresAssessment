@@ -31,7 +31,6 @@ react-native-table-component
 yarn add react-native-fontawesome
 
 yarn add date-fns
+#yarn add react-navigation-tabs
 
-yarn add react-navigation-tabs
-
-yarn add react-native-reanimated
+#yarn add react-native-reanimated
