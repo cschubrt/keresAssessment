@@ -5,7 +5,7 @@ import styles from '../../components/styles';
 import ValidationComponent from '../../../vals';
 import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
-import { View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Picker,Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Picker, Alert } from 'react-native';
 
 export default class Info extends ValidationComponent {
 
@@ -13,6 +13,7 @@ export default class Info extends ValidationComponent {
     super(props);
     this.state = {
       isLoading: true,
+      success: false,
       agents: '',
       sites: '',
       buildings: '',
@@ -26,6 +27,31 @@ export default class Info extends ValidationComponent {
       notes: '',
       master_id: this.props.navigation.state.params.master_id
     }
+    try {
+      db.transaction(tx => {
+        tx.executeSql('SELECT * FROM assessment_table WHERE master_id = ?', [this.state.master_id], (tx, results) => {
+          var len = results.rows.length;
+          if (len > 0) {
+            this.setState({
+              agency_id: results.rows.item(0).agency_id,
+              site_id: results.rows.item(0).site_id,
+              building_id: results.rows.item(0).building_id,
+              assessment_name: results.rows.item(0).assessment_name,
+              name_of_assessor: results.rows.item(0).name_of_assessor,
+              assessment_date: format(new Date(results.rows.item(0).assessment_date), "MM/dd/yyyy"),
+              building_classification: results.rows.item(0).building_classification,
+              notes: results.rows.item(0).notes
+            });
+          }
+        });
+      });
+      this.setState({
+        isLoading: false
+      });
+    }
+    catch (error) {
+      console.error(error);
+    }
   }
 
   _onPressButton = () => {
@@ -37,8 +63,6 @@ export default class Info extends ValidationComponent {
       site_id: { required: true },
       building_id: { required: true }
     });
-
-    console.log(this.isFormValid());
     if (this.isFormValid()) {
       this.update();
     }
@@ -61,7 +85,7 @@ export default class Info extends ValidationComponent {
           this.state.master_id
         ],
         (tx, results) => {
-          console.log(results.rowsAffected);
+          //console.log(results.rowsAffected);
           if (results.rowsAffected > 0) {
             Alert.alert('Success', 'Assessment updated successfully',
               [
@@ -93,7 +117,7 @@ export default class Info extends ValidationComponent {
 
   getSite() {
     db.transaction(tx => {
-      tx.executeSql('SELECT site_id, site_name FROM site_table', [], (tx, results) => {
+      tx.executeSql('SELECT site_id, site_name FROM site_table WHERE agency_id = ?', [this.state.agency_id], (tx, results) => {
         var temp = [];
         for (let i = 0; i < results.rows.length; ++i) {
           temp.push(results.rows.item(i));
@@ -107,19 +131,20 @@ export default class Info extends ValidationComponent {
 
   getBuilding() {
     db.transaction(tx => {
-      tx.executeSql('SELECT building_id, building_name FROM building_table', [], (tx, results) => {
+      tx.executeSql('SELECT building_id, building_name FROM building_table WHERE site_id = ?', [this.state.site_id], (tx, results) => {
         var temp = [];
         for (let i = 0; i < results.rows.length; ++i) {
           temp.push(results.rows.item(i));
         }
         this.setState({
-          buildings: temp
+          buildings: temp,
+          success: true,
         });
       });
     });
   }
 
-  componentDidMount() {
+  getAssessment() {
     try {
       db.transaction(tx => {
         tx.executeSql('SELECT * FROM assessment_table WHERE master_id = ?', [this.state.master_id], (tx, results) => {
@@ -147,6 +172,10 @@ export default class Info extends ValidationComponent {
     }
   }
 
+  componentDidMount() {
+    this.getAssessment();
+  }
+
   render() {
     this.getAgency();
     this.getSite();
@@ -155,7 +184,7 @@ export default class Info extends ValidationComponent {
     const agnt = state.agents;
     const site = state.sites;
     const building = state.buildings;
-    //console.log(state.building_id);
+    console.log(state.agnt);
     return (
       <View style={styles.viewContainer}>
         <ScrollView keyboardShouldPersistTaps="handled">
@@ -239,7 +268,7 @@ export default class Info extends ValidationComponent {
             <TextInput
               ref="notes"
               multiline={true}
-              numberOfLines={10}
+              numberOfLines={5}
               onChangeText={(notes) => this.setState({ notes })}
               value={this.state.notes}
               style={styles.TextAreaStyleClass}
