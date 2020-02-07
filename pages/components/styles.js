@@ -69,18 +69,18 @@ const styles = StyleSheet.create({
     },
     textBlack: {
         width: '75%',
-        color: '#fff',
+        color: '#000',
         fontSize: 17,
     },
     textBlackRight: {
         textAlign: 'right',
         width: '25%',
-        color: '#fff',
+        color: '#000',
         fontSize: 17,
     },
     ViewBlack: {
         flex: 1,
-        backgroundColor: '#333',
+        backgroundColor: '#fff',
         flexDirection: 'row',
         padding: 5
     },
