@@ -216,6 +216,8 @@ export default class Info extends ValidationComponent {
             <Mytext text="Agency *" />
             {this.isFieldInError('agency_id') && this.getErrorsInField('agency_id').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
             <Picker
+              style={styles.picker}
+              itemStyle={styles.pickerItem}
               selectedValue={state.agency_id}
               onValueChange={(itemValue, itemIndex) => this.setState({ agency_id: itemValue })} >
               <Picker.Item value="" label="Make Selection" />
@@ -227,6 +229,8 @@ export default class Info extends ValidationComponent {
             <Mytext text="Site *" />
             {this.isFieldInError('site_id') && this.getErrorsInField('site_id').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
             <Picker
+              style={styles.picker}
+              itemStyle={styles.pickerItem}
               selectedValue={state.site_id}
               onValueChange={(itemValue, itemIndex) => this.setState({ site_id: itemValue })} >
               <Picker.Item value="" label="Make Selection" />
@@ -238,6 +242,8 @@ export default class Info extends ValidationComponent {
             <Mytext text="Building *" />
             {this.isFieldInError('building_id') && this.getErrorsInField('building_id').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
             <Picker
+              style={styles.picker}
+              itemStyle={styles.pickerItem}
               selectedValue={state.building_id}
               onValueChange={(itemValue, itemIndex) => this.setState({ building_id: itemValue })} >
               <Picker.Item value="" label="Make Selection" />
@@ -248,6 +254,8 @@ export default class Info extends ValidationComponent {
 
             <Mytext text="Building Classification" />
             <Picker
+              style={styles.picker}
+              itemStyle={styles.pickerItem}
               selectedValue={state.building_classification}
               onValueChange={(itemValue, itemIndex) => this.setState({ building_classification: itemValue })} >
               <Picker.Item value="" label="Make Selection" />

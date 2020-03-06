@@ -6,7 +6,7 @@ import Browser from '../pages/Browser';
 import LoginForm from '../pages/LoginForm';
 import UpdateApp from '../pages/UpdateApp';
 import ViewAllUser from '../pages/ViewAllUser';
-import AssessmentHome from '../pages/assessment/AssessmentHome';
+import AssessmentHome from '../pages/assessment/Index';
 import ListView from '../pages/assessment/ListView';
 import AgencyList from '../pages/assessment/AgencyList';
 import AssessmentList from '../pages/assessment/AssessmentList';

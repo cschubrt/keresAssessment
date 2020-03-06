@@ -103,6 +103,15 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#425A78',
         borderRadius: 5,
+    },
+    picker: {
+        borderWidth: 1,
+        borderColor: '#737CA1',
+        borderRadius: 5,
+        height: (Platform.OS == 'ios') ? 88 : 44
+    },
+    pickerItem: {
+        height: (Platform.OS == 'ios') ? 88 : 44
     }
 })
 

@@ -9,7 +9,7 @@ class Home extends Component {
         super(props);
         this.state = {
             links: [
-                { title: 'Keres Assessment Server', link: 'https://cschubert.serviceseval.com/keres_framework' }
+                { title: 'Keres Assessment Server', link: 'https://cschubert.serviceseval.com/keres_fca' }
             ],
             connection_Status: '',
             connection: true

@@ -46,7 +46,7 @@ export default class AssessmentHome extends Component {
 
     getSites() {
         try {
-            fetch('https://cschubert.serviceseval.com/keres_framework/app/getSites.php', {
+            fetch('https://cschubert.serviceseval.com/keres_fca/app/getSites.php', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -88,7 +88,7 @@ export default class AssessmentHome extends Component {
 
     getBuilding() {
         try {
-            fetch('https://cschubert.serviceseval.com/keres_framework/app/getBuilding.php', {
+            fetch('https://cschubert.serviceseval.com/keres_fca/app/getBuilding.php', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -130,7 +130,7 @@ export default class AssessmentHome extends Component {
 
     startClients() {
         try {
-            fetch('https://cschubert.serviceseval.com/keres_framework/app/getClient.php', {
+            fetch('https://cschubert.serviceseval.com/keres_fca/app/getClient.php', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -173,7 +173,7 @@ export default class AssessmentHome extends Component {
 
     getAgency() {
         try {
-            fetch('https://cschubert.serviceseval.com/keres_framework/app/getAgency.php', {
+            fetch('https://cschubert.serviceseval.com/keres_fca/app/getAgency.php', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',

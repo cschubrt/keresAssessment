@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import styles from '../components/styles';
 import { openDatabase } from 'react-native-sqlite-storage';
-var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { View, Text, FlatList, ActivityIndicator } from 'react-native';
-import FontAwesome, { SolidIcons } from 'react-native-fontawesome';
+var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
 
 export default class ListView extends Component {
 
@@ -83,7 +84,7 @@ export default class ListView extends Component {
                                 )} >
                                 {item.client_desc}
                             </Text>
-                            <Text style={styles.textViewList}><FontAwesome icon={SolidIcons.chevronRight} /></Text>
+                            <Text style={styles.textViewList}><FontAwesomeIcon icon={faChevronRight} /></Text>
                         </View>}
                 />
             </View>

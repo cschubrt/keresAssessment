@@ -28,10 +28,13 @@ yarn add @react-native-community/netinfo
 
 react-native-table-component
 
-yarn add react-native-fontawesome
-
 yarn add date-fns
 
 #yarn add react-navigation-tabs
 
 #yarn add react-native-reanimated
+
+yarn add @fortawesome/fontawesome-svg-core
+yarn add @fortawesome/free-solid-svg-icons
+yarn add @fortawesome/react-native-fontawesome
+yarn add react-native-svg

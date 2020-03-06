@@ -37,7 +37,7 @@ export default class UpdateApp extends React.Component {
 
     async componentDidMount() {
         try {
-            await fetch('https://cschubert.serviceseval.com/keres_framework/app/fetchUser.php', {
+            await fetch('https://cschubert.serviceseval.com/keres_fca/app/fetchUser.php', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',

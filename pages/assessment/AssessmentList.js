@@ -4,9 +4,10 @@ import { format } from "date-fns";
 import NetInfo from "@react-native-community/netinfo";
 import { openDatabase } from 'react-native-sqlite-storage';
 import { Table, Row, Rows } from 'react-native-table-component';
-import FontAwesome, { SolidIcons } from 'react-native-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { View, Text, TouchableOpacity, Alert, ActivityIndicator, ScrollView } from 'react-native';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
+import { faChevronRight, faDownload, faUpload, faTimes, faCheck } from '@fortawesome/free-solid-svg-icons';
 
 export default class AssessmentList extends Component {
   constructor(props) {
@@ -42,7 +43,7 @@ export default class AssessmentList extends Component {
   }
 
   addAssessment = (master_id) => {
-    fetch('https://cschubert.serviceseval.com/keres_framework/app/getAssessment.php', {
+    fetch('https://cschubert.serviceseval.com/keres_fca/app/getAssessment.php', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -80,7 +81,6 @@ export default class AssessmentList extends Component {
 
   insertAssessment = (agency_id, site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor, notes, parametric, building_classification) => {
     db.transaction(function (tx) {
-      //tx.executeSql('DELETE FROM assessment_table', [], (tx, results) => { console.log(results.rowsAffected) });
       tx.executeSql(
         'INSERT INTO assessment_table(agency_id, site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor, notes, parametric, building_classification, downloaded) VALUES (?,?,?,?,?,?,?,?,?,?,?);',
         [agency_id, site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor, notes, parametric, building_classification, 1],
@@ -99,7 +99,7 @@ export default class AssessmentList extends Component {
     Alert.alert('Alert', 'Press Ok To Update Assessment',
       [
         { text: 'Ok', onPress: () => this.UpdateBca(values) },
-        { text: 'Cancel', onPress: () => console.log('Cancel Pressed') },
+        { text: 'Cancel' },
       ],
       { cancelable: false }
     );
@@ -107,29 +107,29 @@ export default class AssessmentList extends Component {
 
   addLink(values) {
     return <TouchableOpacity onPress={() => this.addAssessment(values)}>
-      <Text style={{ color: '#000', textAlign: 'center', paddingRight: 10 }}><FontAwesome icon={SolidIcons.download} /></Text>
+      <Text style={{ color: '#000', textAlign: 'center', paddingRight: 10 }}><FontAwesomeIcon icon={faDownload} /></Text>
     </TouchableOpacity>
   }
 
   checkedValue(values) {
     return <TouchableOpacity onPress={() => this.uploadAssessment(values)}>
-      <Text style={{ color: '#000', textAlign: 'center', paddingRight: 10 }}><FontAwesome icon={SolidIcons.upload} /></Text>
+      <Text style={{ color: '#000', textAlign: 'center', paddingRight: 10 }}><FontAwesomeIcon icon={faUpload} /></Text>
     </TouchableOpacity>
   }
 
   goTo(values, assessment_name) {
     return <TouchableOpacity onPress={() => this.props.navigation.navigate('FormIndex', { master_id: values, assessment_name: assessment_name })}>
-      <Text style={{ color: '#000', textAlign: 'right', paddingRight: 15 }}><FontAwesome icon={SolidIcons.chevronRight} /></Text>
+      <Text style={{ color: '#000', textAlign: 'right', paddingRight: 15 }}><FontAwesomeIcon icon={faChevronRight} /></Text>
     </TouchableOpacity>
   }
 
   NoGoTo() {
-    return <Text style={{ color: '#000', textAlign: 'right', paddingRight: 15 }}><FontAwesome icon={SolidIcons.times} /></Text>
+    return <Text style={{ color: '#000', textAlign: 'right', paddingRight: 15 }}><FontAwesomeIcon icon={faTimes} /></Text>
   }
 
   getAssessmentByAgency() {
     try {
-      fetch('https://cschubert.serviceseval.com/keres_framework/app/getAssessmentByAgency.php', {
+      fetch('https://cschubert.serviceseval.com/keres_fca/app/getAssessmentByAgency.php', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -156,6 +156,8 @@ export default class AssessmentList extends Component {
                   (val['checked_out_by'] === this.state.user_name ? this.goTo(val['master_id'], val['assessment_name']) : this.NoGoTo()),
                 ]
               ]);
+              //console.log(val['checked_out_by']);
+              //console.log(this.state.user_name);
               this.setState({
                 tableData: joined,
               });
@@ -175,7 +177,7 @@ export default class AssessmentList extends Component {
 
   getAssessments() {
     const editIcon = values => (
-      <Text style={{ color: '#000', textAlign: 'right', paddingRight: 10 }}><FontAwesome icon={SolidIcons.check} /></Text>
+      <Text style={{ color: '#000', textAlign: 'right', paddingRight: 10 }}><FontAwesomeIcon icon={faCheck} /></Text>
     );
     try {
       db.transaction(tx => {

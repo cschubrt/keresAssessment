@@ -3,7 +3,8 @@ import styles from '../components/styles';
 import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
 import { View, Text, FlatList, ActivityIndicator } from 'react-native';
-import FontAwesome, { SolidIcons } from 'react-native-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
 export default class AgencyList extends Component {
 
@@ -84,7 +85,7 @@ export default class AgencyList extends Component {
                                 )} >
                                 {item.agency_name}
                             </Text>
-                            <Text style={styles.textViewList}><FontAwesome icon={SolidIcons.chevronRight} /></Text>
+                            <Text style={styles.textViewList}><FontAwesomeIcon icon={faChevronRight} /></Text>
                         </View>}
                 />
             </View>
