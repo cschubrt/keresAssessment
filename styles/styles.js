@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     button: {
         marginTop: 12,
         backgroundColor: '#425A78',
-        borderRadius: 5,
+        borderRadius: 3,
         padding: 10,
         width: '100%'
     },
@@ -34,8 +34,8 @@ const styles = StyleSheet.create({
         color: '#fff',
         textAlign: 'center',
         width: '100%',
-        padding: 3,
-        fontSize: 17
+        padding: 1,
+        fontSize: 20
     },
     ActivityIndicatorStyle: {
         flex: 1,
@@ -47,7 +47,8 @@ const styles = StyleSheet.create({
         width: '100%',
         paddingBottom: 1,
         paddingLeft: 5,
-        fontSize: 14,
+        paddingTop: 2,
+        fontSize: 17,
     },
     tableContainer: {
         flex: 1,
@@ -89,10 +90,10 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         width: '100%',
         marginBottom: 7,
-        height: 40,
+        height: 41,
         borderWidth: 1,
         borderColor: '#425A78',
-        borderRadius: 5,
+        borderRadius: 3,
     },
     TextAreaStyleClass: {
         fontSize: 19,
@@ -102,16 +103,22 @@ const styles = StyleSheet.create({
         height: 100,
         borderWidth: 1,
         borderColor: '#425A78',
-        borderRadius: 5,
+        borderRadius: 3,
     },
     picker: {
         borderWidth: 1,
         borderColor: '#737CA1',
-        borderRadius: 5,
+        borderRadius: 3,
         height: (Platform.OS == 'ios') ? 88 : 44
     },
     pickerItem: {
         height: (Platform.OS == 'ios') ? 88 : 44
+    },
+    header: {
+        color: '#133156',
+        fontSize: 27,
+        textAlign: 'center',
+        paddingBottom: 10
     }
 })
 

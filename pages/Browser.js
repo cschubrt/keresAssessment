@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import styles from './components/styles';
+import Loader from './components/Loader';
 import { WebView } from 'react-native-webview';
-import { ActivityIndicator } from 'react-native';
 
 class Browser extends Component {
-    
-    LoadingIndicatorView() {
-        return <ActivityIndicator color='#009b88' size='large' style={styles.ActivityIndicatorStyle} />
+
+    LoadingIndicator() {
+        return <Loader />
     }
+
     render() {
         const { params } = this.props.navigation.state
 

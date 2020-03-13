@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import styles from '../components/styles';
+import styles from '../../styles/styles';
 import { format } from "date-fns";
+import Loader from '../components/Loader';
 import NetInfo from "@react-native-community/netinfo";
 import { openDatabase } from 'react-native-sqlite-storage';
 import { Table, Row, Rows } from 'react-native-table-component';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { View, Text, TouchableOpacity, Alert, ActivityIndicator, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, ScrollView } from 'react-native';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
 import { faChevronRight, faDownload, faUpload, faTimes, faCheck } from '@fortawesome/free-solid-svg-icons';
 
@@ -217,19 +218,12 @@ export default class AssessmentList extends Component {
     Alert.alert(`This is row ${index + 1}`);
   }
 
-  LoadingIndicatorView() {
-    return <ActivityIndicator color='#009b88' size='large' style={styles.ActivityIndicatorStyle} />
-  }
-
   render() {
     const state = this.state;
     if (this.state.isLoading) {
-      return (
-        <View style={{ flex: 1, paddingTop: 20 }}>
-          {this.LoadingIndicatorView()}
-        </View>
-      );
+      return (<Loader />);
     }
+
     return (
       <View style={styles.tableContainer}>
         <ScrollView keyboardShouldPersistTaps="handled">

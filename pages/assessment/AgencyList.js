@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import styles from '../components/styles';
+import styles from '../../styles/styles';
+import Loader from '../components/Loader';
+import { View, Text, FlatList } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
-var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
-import { View, Text, FlatList, ActivityIndicator } from 'react-native';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
 
 export default class AgencyList extends Component {
 
@@ -57,18 +58,11 @@ export default class AgencyList extends Component {
         );
     }
 
-    LoadingIndicatorView() {
-        return <ActivityIndicator color='#009b88' size='large' style={styles.ActivityIndicatorStyle} />
-    }
-
     render() {
         if (this.state.isLoading) {
-            return (
-                <View style={{ flex: 1, paddingTop: 20 }}>
-                    {this.LoadingIndicatorView()}
-                </View>
-            );
+            return (<Loader />);
         }
+
         return (
             <View style={styles.listContainer}>
                 <FlatList

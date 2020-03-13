@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './components/styles';
+import styles from '../styles/styles';
 import ValidationComponent from '../vals';
 import { sha256 } from 'react-native-sha256';
 import { openDatabase } from 'react-native-sqlite-storage';
@@ -11,26 +11,25 @@ export default class LoginForm extends ValidationComponent {
   constructor(props) {
     super(props);
     this.state = {
-      Username: "cschubert",
-      Password: "",
+      username: "cschubert",
+      password: "FAtchick22",
       user_name: ""
     };
   }
 
   _onPressButton = () => {
     this.validate({
-    //   Username: { required: true },
-    //   Password: { required: true },
+      username: { required: true },
+      password: { required: true },
     });
-    this.props.navigation.navigate('AssessmentHome', {user_name: this.state.Username.trim()});
     if (this.isFormValid()) {
       this.getUser();
     }
   }
 
   getUser = () => {
-    var user_email = this.state.Username.trim();
-    var user_password = this.state.Password.trim();
+    var user_email = this.state.username.trim();
+    var user_password = this.state.password.trim();
     sha256(user_password).then(hash => {
       db.transaction(tx => {
         tx.executeSql(
@@ -42,9 +41,9 @@ export default class LoginForm extends ValidationComponent {
               this.setState({
                 user_name: results.rows.item(0).user_name,
               });
-              this.props.navigation.navigate('AssessmentHome', {user_name: this.state.user_name});
+              this.props.navigation.navigate('AssessmentHome', { user_name: this.state.user_name });
             } else {
-              //alert('Login Failed');
+              alert('Login Failed');
             }
           }
         );
@@ -58,13 +57,13 @@ export default class LoginForm extends ValidationComponent {
         <ScrollView keyboardShouldPersistTaps="handled">
           <KeyboardAvoidingView>
 
-            <Text style={{ color: '#133156', fontSize: 27, textAlign: 'center', paddingBottom: 10 }}>Login</Text>
+            <Text style={styles.header}>Login</Text>
 
-            <TextInput autoCapitalize="none" placeholder="Username" ref="Username" onChangeText={(Username) => this.setState({ Username })} value={this.state.Username} style={styles.TextInputStyleClass} />
-            {this.isFieldInError('Username') && this.getErrorsInField('Username').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
+            {this.isFieldInError('username') && this.getErrorsInField('username').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
+            <TextInput autoCapitalize="none" placeholder="username" ref="username" onChangeText={(username) => this.setState({ username })} value={this.state.username} style={styles.TextInputStyleClass} />
 
-            <TextInput autoCapitalize="none" placeholder="Password" ref="Password" onChangeText={(Password) => this.setState({ Password })} value={this.state.Password} style={styles.TextInputStyleClass} />
-            {this.isFieldInError('Password') && this.getErrorsInField('Password').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
+            {this.isFieldInError('password') && this.getErrorsInField('password').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
+            <TextInput autoCapitalize="none" placeholder="password" ref="password" onChangeText={(password) => this.setState({ password })} value={this.state.password} style={styles.TextInputStyleClass} />
 
             <TouchableOpacity style={styles.button} onPress={this._onPressButton}>
               <Text style={styles.text}>Submit</Text>

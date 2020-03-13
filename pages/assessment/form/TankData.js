@@ -1,7 +1,7 @@
 import React from 'react';
 import { format } from "date-fns";
 import Mytext from '../../components/Mytext';
-import styles from '../../components/styles';
+import styles from '../../../styles/styles';
 import ValidationComponent from '../../../vals';
 import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });

@@ -1,7 +1,7 @@
 // GET USERS FROM SERVER DB
 
 import React from 'react';
-import styles from './components/styles';
+import styles from '../styles/styles';
 import { View, ActivityIndicator, Text } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });

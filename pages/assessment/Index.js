@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import styles from '../components/styles';
+import styles from '../../styles/styles';
+import Loader from '../components/Loader';
 import NetInfo from "@react-native-community/netinfo";
 import { openDatabase } from 'react-native-sqlite-storage';
-import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
 
 export default class AssessmentHome extends Component {
@@ -205,26 +206,19 @@ export default class AssessmentHome extends Component {
     }
 
     handlePress(prs) {
-        this.props.navigation.navigate(prs, {user_name: this.state.user_name});
-    }
-
-    LoadingIndicatorView() {
-        return <ActivityIndicator color='#009b88' size='large' style={styles.ActivityIndicatorStyle} />
+        this.props.navigation.navigate(prs, { user_name: this.state.user_name });
     }
 
     render() {
         if (this.state.isLoading) {
-            return (
-                <View style={{ flex: 1, paddingTop: 20 }}>
-                    {this.LoadingIndicatorView()}
-                </View>
-            );
+            return (<Loader />);
         }
+
         return (
             <View style={styles.viewContainer}>
                 <View style={styles.list}>
 
-        <Text style={{ textAlign: 'center', fontSize: 25, color: '#40546b', paddingTop: 10 }}>Keres Assessment</Text>
+                    <Text style={{ textAlign: 'center', fontSize: 25, color: '#40546b', paddingTop: 10 }}>Keres Assessment</Text>
 
                     <TouchableOpacity style={styles.button} onPress={() => this.handlePress('ListView')}>
                         <Text style={styles.text}>Client List</Text>

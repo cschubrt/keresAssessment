@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import styles from '../components/styles';
+import styles from '../../styles/styles';
+import Loader from '../components/Loader';
 import { openDatabase } from 'react-native-sqlite-storage';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { View, Text, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList } from 'react-native';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
 
 export default class ListView extends Component {
@@ -56,18 +57,11 @@ export default class ListView extends Component {
         );
     }
 
-    LoadingIndicatorView() {
-        return <ActivityIndicator color='#009b88' size='large' style={styles.ActivityIndicatorStyle} />
-    }
-
     render() {
         if (this.state.isLoading) {
-            return (
-                <View style={{ flex: 1, paddingTop: 20 }}>
-                    {this.LoadingIndicatorView()}
-                </View>
-            );
+            return (<Loader />);
         }
+
         return (
             <View style={styles.listContainer}>
                 <FlatList

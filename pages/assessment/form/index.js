@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styles from '../../components/styles';
+import styles from '../../../styles/styles';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 
 class FormIndex extends Component {

@@ -4,21 +4,12 @@ import { View, TextInput } from 'react-native';
 
 const Mytextinput = props => {
     return (
-        <View
-            style={{
-                textAlign: 'center',
-                width: '100%',
-                marginBottom: 7,
-                height: 40,
-                borderWidth: 1,
-                borderColor: '#333',
-                borderRadius: 5,
-            }}>
-
+        <View>
             <TextInput
+                autoCapitalize={props.autoCapitalize}
                 underlineColorAndroid="transparent"
                 placeholder={props.placeholder}
-                placeholderTextColor="#707070"
+                placeholderTextColor="#333"
                 keyboardType={props.keyboardType}
                 onChangeText={props.onChangeText}
                 returnKeyType={props.returnKeyType}

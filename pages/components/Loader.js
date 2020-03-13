@@ -1,18 +1,9 @@
-import styles from '../components/styles';
-import { ActivityIndicator } from 'react-native';
+import React from 'react';
+import styles from '../../styles/styles';
+import { View, ActivityIndicator } from 'react-native';
 
-const YourComponent = () => {
-    
-    const LoadingIndicatorView = () => {
-        return <ActivityIndicator color='#009b88' size='large' style={styles.ActivityIndicatorStyle} />
-    }
-  
-    if (this.state.isLoading) {
-        return (
-            <View style={{ flex: 1, paddingTop: 20 }}>
-                {this.LoadingIndicatorView()}
-            </View>
-        );
-    }
-    
-  };
+const LoadingIndicatorView = props => {
+    return <View style={{ flex: 1, paddingTop: 20 }}><ActivityIndicator color='#009b88' size='large' style={styles.ActivityIndicatorStyle} /></View>;
+};
+
+export default LoadingIndicatorView;

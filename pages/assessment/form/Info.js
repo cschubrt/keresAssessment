@@ -1,7 +1,8 @@
 import React from 'react';
 import { format } from "date-fns";
 import Mytext from '../../components/Mytext';
-import styles from '../../components/styles';
+import MyPicker from '../../components/MyPicker';
+import styles from '../../../styles/styles';
 import ValidationComponent from '../../../vals';
 import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
@@ -60,7 +61,6 @@ export default class Info extends ValidationComponent {
           this.state.master_id
         ],
         (tx, results) => {
-          //console.log(results.rowsAffected);
           if (results.rowsAffected > 0) {
             Alert.alert('Success', 'Assessment updated successfully',
               [
@@ -82,8 +82,8 @@ export default class Info extends ValidationComponent {
         var temp = [];
         for (let i = 0; i < results.rows.length; ++i) {
           temp.push(results.rows.item(i));
+          //temp.push({ label: results.rows.item(i).agency_name, value: results.rows.item(i).agency_id });
         }
-        //return temp;
         this.setState({
           agents: temp
         });
@@ -179,6 +179,7 @@ export default class Info extends ValidationComponent {
     const agnt = state.agents;
     const site = state.sites;
     const building = state.buildings;
+
     return (
       <View style={styles.viewContainer}>
         <ScrollView keyboardShouldPersistTaps="handled">

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { format } from "date-fns";
 import Mytext from '../../components/Mytext';
 import MyPicker from './StatePicker';
-import styles from '../../components/styles';
+import styles from '../../../styles/styles';
 import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
 import { View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Picker, Alert } from 'react-native';

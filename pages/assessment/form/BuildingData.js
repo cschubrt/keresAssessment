@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../components/styles';
+import styles from '../../../styles/styles';
 import ValidationComponent from '../../../vals';
 import { sha256 } from 'react-native-sha256';
 import { openDatabase } from 'react-native-sqlite-storage';
