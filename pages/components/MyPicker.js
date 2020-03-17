@@ -17,7 +17,7 @@ const MyPicker = props => {
                 value={props.value}
                 useNativeAndroidPickerStyle={false}
                 style={pickerSelectStyles}
-                dropdownTextHighlightStyle={{ color: '#737CA1' }}
+                dropdownTextHighlightStyle={{ color: '#425A78' }}
                 items={theItems}
                 Icon={() => {
                     return <View style={{ paddingTop: 15, paddingRight: 10 }}><FontAwesomeIcon icon={faChevronDown} style={{ color: 'grey' }} /></View>;

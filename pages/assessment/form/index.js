@@ -22,7 +22,7 @@ class FormIndex extends Component {
                 <View>
                     <ScrollView keyboardShouldPersistTaps="handled">
 
-                        <Text style={{ textAlign: 'center', fontSize: 23, color: '#40546b', paddingTop: 30 }}>
+                        <Text style={{ textAlign: 'center', fontSize: 27, color: '#40546b', paddingTop: 30 }}>
                             {this.state.assessment_name}
                         </Text>
 

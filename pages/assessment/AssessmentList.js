@@ -43,7 +43,51 @@ export default class AssessmentList extends Component {
     });
   }
 
+  getObservation = (master_id) => {
+    try {
+      fetch('https://cschubert.serviceseval.com/keres_fca/app/getObservation.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          master_id: master_id,
+          key: 'xxxx'
+        })
+      }).then((response) => response.json())
+        .then((responseJson) => {
+          this.setState({
+            observationSource: responseJson
+          })
+          //console.log(this.state.observationSource);
+          if (this.state.observationSource.length > 0) {
+            this.insertObservation(this.state.observationSource);
+          }
+        }).catch((error) => {
+          console.error(error);
+        });
+    }
+    catch (error) {
+      console.error(error);
+    }
+  }
+
+  insertObservation = (src) => {
+    console.log(src[0].observations_id);
+    db.transaction(function (tx) {
+      tx.executeSql(
+        'INSERT INTO observations_table(observations_id, master_id, ac_id, map_id, notes_desc, review_desc, tech_desc, gao_notes, kdp_notes, site_contact) VALUES (?,?,?,?,?,?,?,?,?,?);',
+        [src[0].observations_id, src[0].master_id, src[0].ac_id, src[0].map_id, src[0].notes_desc, src[0].review_desc, src[0].tech_desc, src[0].gao_notes, src[0].kdp_notes, src[0].site_contact],
+        (tx, results) => {
+          console.log(results);
+        }
+      );
+    });
+  };
+
   addAssessment = (master_id) => {
+    var checkit = false;
     fetch('https://cschubert.serviceseval.com/keres_fca/app/getAssessment.php', {
       method: 'POST',
       headers: {
@@ -61,7 +105,7 @@ export default class AssessmentList extends Component {
         for (var key in obj) {
           if (obj.hasOwnProperty(key)) {
             var val = obj[key];
-            this.insertAssessment(
+            checkit = this.insertAssessment(
               val['agency_id'],
               val['site_id'],
               val['master_id'],
@@ -75,6 +119,8 @@ export default class AssessmentList extends Component {
             );
           }
         }
+        this.getObservation(master_id);
+        alert('Assessment Downloaded');
       }).catch((error) => {
         console.error(error);
       });
@@ -86,11 +132,11 @@ export default class AssessmentList extends Component {
         'INSERT INTO assessment_table(agency_id, site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor, notes, parametric, building_classification, downloaded) VALUES (?,?,?,?,?,?,?,?,?,?,?);',
         [agency_id, site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor, notes, parametric, building_classification, 1],
         (tx, results) => {
+          //console.log('insertAssessment');
           if (results.rowsAffected > 0) {
-            alert('Assessment Downloaded');
-          } else {
-            alert('Assessment Download Failed');
+            return true;
           }
+          return false;
         }
       );
     });
@@ -104,28 +150,6 @@ export default class AssessmentList extends Component {
       ],
       { cancelable: false }
     );
-  }
-
-  addLink(values) {
-    return <TouchableOpacity onPress={() => this.addAssessment(values)}>
-      <Text style={{ color: '#000', textAlign: 'center', paddingRight: 10 }}><FontAwesomeIcon icon={faDownload} /></Text>
-    </TouchableOpacity>
-  }
-
-  checkedValue(values) {
-    return <TouchableOpacity onPress={() => this.uploadAssessment(values)}>
-      <Text style={{ color: '#000', textAlign: 'center', paddingRight: 10 }}><FontAwesomeIcon icon={faUpload} /></Text>
-    </TouchableOpacity>
-  }
-
-  goTo(values, assessment_name) {
-    return <TouchableOpacity onPress={() => this.props.navigation.navigate('FormIndex', { master_id: values, assessment_name: assessment_name })}>
-      <Text style={{ color: '#000', textAlign: 'right', paddingRight: 15 }}><FontAwesomeIcon icon={faChevronRight} /></Text>
-    </TouchableOpacity>
-  }
-
-  NoGoTo() {
-    return <Text style={{ color: '#000', textAlign: 'right', paddingRight: 15 }}><FontAwesomeIcon icon={faTimes} /></Text>
   }
 
   getAssessmentByAgency() {
@@ -144,7 +168,6 @@ export default class AssessmentList extends Component {
       }).then((response) => response.json())
         .then((responseJson) => {
           var obj = responseJson;
-          //console.log(responseJson);
           for (var key in obj) {
             if (obj.hasOwnProperty(key)) {
               var val = obj[key];
@@ -157,8 +180,6 @@ export default class AssessmentList extends Component {
                   (val['checked_out_by'] === this.state.user_name ? this.goTo(val['master_id'], val['assessment_name']) : this.NoGoTo()),
                 ]
               ]);
-              //console.log(val['checked_out_by']);
-              //console.log(this.state.user_name);
               this.setState({
                 tableData: joined,
               });
@@ -214,16 +235,54 @@ export default class AssessmentList extends Component {
     }
   }
 
-  _alertIndex(index) {
-    Alert.alert(`This is row ${index + 1}`);
+  addLink(values) {
+    return <TouchableOpacity onPress={() => this.addAssessment(values)}>
+      <Text style={{ color: '#000', textAlign: 'center', paddingRight: 10 }}><FontAwesomeIcon icon={faDownload} /></Text>
+    </TouchableOpacity>
   }
+
+  checkedValue(values) {
+    return <TouchableOpacity onPress={() => this.uploadAssessment(values)}>
+      <Text style={{ color: '#000', textAlign: 'center', paddingRight: 10 }}><FontAwesomeIcon icon={faUpload} /></Text>
+    </TouchableOpacity>
+  }
+
+  goTo(values, assessment_name) {
+    return <TouchableOpacity onPress={() => this.props.navigation.navigate('FormIndex', { master_id: values, assessment_name: assessment_name })}>
+      <Text style={{ color: '#000', textAlign: 'right', paddingRight: 15 }}><FontAwesomeIcon icon={faChevronRight} /></Text>
+    </TouchableOpacity>
+  }
+
+  NoGoTo() {
+    return <Text style={{ color: '#000', textAlign: 'right', paddingRight: 15 }}><FontAwesomeIcon icon={faTimes} /></Text>
+  }
+
+  deleteit = () => {
+    db.transaction(function (tx) {
+      tx.executeSql(
+        'delete from assessment_table;',[],(tx, results) => { console.log('1', results); },
+      );
+      tx.executeSql(
+        'delete from observations_table;',[],(tx, results) => { console.log('2', results); }
+      );
+    });
+  };
+
+  selectit = () => {
+    db.transaction(function (tx) {
+      tx.executeSql(
+        'select * from observations_table where observations_id is not null;',
+        [],
+        (tx, results) => { console.log('3', results.rows.item(0).master_id); }
+      );
+    });
+  };
 
   render() {
     const state = this.state;
     if (this.state.isLoading) {
       return (<Loader />);
     }
-
     return (
       <View style={styles.tableContainer}>
         <ScrollView keyboardShouldPersistTaps="handled">
@@ -236,6 +295,13 @@ export default class AssessmentList extends Component {
             <Rows data={state.tableData} flexArr={[2, 1, 2, 1, 1]} textStyle={styles.cellText} />
           </Table>
         </ScrollView>
+
+        <TouchableOpacity style={styles.button} onPress={this.selectit}>
+          <Text style={styles.text}>Select</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={this.deleteit}>
+          <Text style={styles.text}>Delete</Text>
+        </TouchableOpacity>
       </View>
     )
   }

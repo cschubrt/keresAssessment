@@ -59,7 +59,7 @@ export default class Home extends Component {
                 'INSERT INTO users_table(user_name, user_pass) VALUES (?,?);',
                 [user_name, user_password],
                 (tx, results) => {
-                    console.log('Results', results.rowsAffected);
+                    //console.log('Results', results.rowsAffected);
                 }
             );
         });
