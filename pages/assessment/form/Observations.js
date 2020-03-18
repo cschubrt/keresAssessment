@@ -69,7 +69,6 @@ export default class Observations extends ValidationComponent {
   }
 
   render() {
-    console.log('test');
     const state = this.state;
     const yesNo =
       [
