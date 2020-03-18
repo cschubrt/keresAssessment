@@ -70,14 +70,14 @@ const styles = StyleSheet.create({
     },
     textBlack: {
         width: '75%',
-        color: '#000',
-        fontSize: 17,
+        color: '#133156',
+        fontSize: 20,
     },
     textBlackRight: {
         textAlign: 'right',
         width: '25%',
-        color: '#000',
-        fontSize: 17,
+        color: '#133156',
+        fontSize: 19,
     },
     ViewBlack: {
         flex: 1,
@@ -92,8 +92,8 @@ const styles = StyleSheet.create({
         marginBottom: 7,
         height: 41,
         borderWidth: 1,
-        borderColor: '#425A78',
-        borderRadius: 3,
+        borderColor: '#D0D0D0',
+        borderRadius: 2,
     },
     TextAreaStyleClass: {
         fontSize: 19,
@@ -102,8 +102,9 @@ const styles = StyleSheet.create({
         marginBottom: 7,
         height: 100,
         borderWidth: 1,
-        borderColor: '#425A78',
-        borderRadius: 3,
+        borderColor: '#D0D0D0',
+        borderRadius: 2,
+        textAlignVertical: 'top'
     },
     picker: {
         borderWidth: 1,

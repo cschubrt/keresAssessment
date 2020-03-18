@@ -149,9 +149,7 @@ export default class Home extends Component {
             <View style={styles.viewContainer}>
                 <ScrollView keyboardShouldPersistTaps="handled">
 
-                    <Text style={{ textAlign: 'center', fontSize: 25, color: '#40546b', paddingTop: 30 }}>
-                        Status {this.state.connection_Status}
-                    </Text>
+                <Text style={styles.header}>Status {this.state.connection_Status}</Text>
 
                     {this.keresButton()}
 

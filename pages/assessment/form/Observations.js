@@ -1,5 +1,4 @@
 import React from 'react';
-import { format } from "date-fns";
 import styles from '../../../styles/styles';
 import Mytext from '../../components/Mytext';
 import Loader from '../../components/Loader';
@@ -7,15 +6,16 @@ import ValidationComponent from '../../../vals';
 import MyPicker from '../../components/MyPicker';
 import Mytextinput from '../../components/Mytextinput';
 import { openDatabase } from 'react-native-sqlite-storage';
+import { Item, Picker, Icon, Input, Label } from 'native-base';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
-import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView } from 'react-native';
 
 export default class Observations extends ValidationComponent {
 
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true,
+      isLoading: false,
       observations_id: false,
       ac_id: '',
       map_id: '',
@@ -38,7 +38,7 @@ export default class Observations extends ValidationComponent {
       //assessment_name: { required: true }
     });
     if (this.isFormValid()) {
-      this.updateAssessment();
+      //this.updateAssessment();
     }
   }
 
@@ -66,51 +66,106 @@ export default class Observations extends ValidationComponent {
     catch (error) {
       console.error(error);
     }
-    this.setState({
-      isLoading: false
-    });
-  }
-
-  shouldComponentUpdate(prevState, nextState) {
-    if ((prevState != nextState)) {
-      return true;
-    }
-    return false;
   }
 
   render() {
-    console.log(this.state.map_id);
+    console.log('test');
     const state = this.state;
     const yesNo =
       [
-        { value: 1, label: 'Yes' },
-        { value: 2, label: 'No' }
+        { value: '1', label: 'Yes' },
+        { value: '2', label: 'No' }
       ];
 
-    if (this.state.isLoading) {
-      return (<Loader />);
-    }
     return (
       <View style={styles.viewContainer}>
         <ScrollView keyboardShouldPersistTaps="handled">
           <KeyboardAvoidingView>
 
-            <Text style={{ color: '#133156', fontSize: 27, textAlign: 'center', paddingBottom: 10 }}>Observations</Text>
-
             <Mytext text="ASSESSMENT COMPLETE" />
-            <MyPicker
-              placeholder={{ label: 'Make Selection', value: null, color: 'grey', }}
-              value={state.ac_id}
-              onValueChange={(itemValue, itemIndex) => this.setState({ ac_id: itemValue })}
-              items={yesNo}
-            />
+            <Item picker>
+              <Picker
+                mode="dropdown"
+                iosIcon={<Icon name="arrowdown" />}
+                style={{ width: undefined }}
+                placeholder="Make Selection"
+                placeholderStyle={{ color: "#bfc6ea" }}
+                placeholderIconColor="#007aff"
+                selectedValue={this.state.ac_id}
+                onValueChange={(itemValue) => this.setState({ ac_id: itemValue })}
+              >
+                {Object.keys(yesNo).map((key) => {
+                  return (<Picker.Item label={yesNo[key].label} value={yesNo[key].value} key={key} />)
+                })}
+              </Picker>
+            </Item>
 
             <Mytext text="MUSEUM ARTIFACTS PRESENT" />
-            <MyPicker
-              placeholder={{ label: 'Make Selection', value: null, color: 'grey', }}
-              value={state.map_id}
-              onValueChange={(itemValue, itemIndex) => this.setState({ map_id: itemValue })}
-              items={yesNo}
+            <Item picker>
+              <Picker
+                mode="dropdown"
+                iosIcon={<Icon name="arrowdown" />}
+                style={{ marginBottom: 10 }}
+                placeholder="Make Selection"
+                placeholderStyle={{ color: "#bfc6ea" }}
+                placeholderIconColor="#007aff"
+                selectedValue={this.state.map_id}
+                onValueChange={(itemValue) => this.setState({ map_id: itemValue })}
+                items={yesNo}
+              >
+                {Object.keys(yesNo).map((key) => {
+                  return (<Picker.Item label={yesNo[key].label} value={yesNo[key].value} key={key} />)
+                })}
+              </Picker>
+            </Item>
+
+
+            <Mytext text="NOTES" />
+            <Mytextinput
+              onChangeText={(notes_desc) => this.setState({ notes_desc })}
+              value={state.notes_desc}
+              style={styles.TextInputStyleClass}
+            />
+
+            <Mytext text="REVIEWER" />
+            <Mytextinput
+              onChangeText={(review_desc) => this.setState({ review_desc })}
+              value={state.review_desc}
+              style={styles.TextInputStyleClass}
+            />
+
+            <Mytext text="TECHNICIAN" />
+            <Mytextinput
+              onChangeText={(tech_desc) => this.setState({ tech_desc })}
+              value={state.tech_desc}
+              style={styles.TextInputStyleClass}
+            />
+
+            <Mytext text="KEY DISCUSSION POINTS" />
+            <Mytextinput
+              multiline={true}
+              numberOfLines={5}
+              onChangeText={(kdp_notes) => this.setState({ kdp_notes })}
+              value={state.kdp_notes}
+              style={styles.TextAreaStyleClass}
+            />
+
+            <Mytext text="Site Contact" />
+            <Mytextinput
+              multiline={true}
+              numberOfLines={5}
+              onChangeText={(site_contact) => this.setState({ site_contact })}
+              value={state.site_contact}
+              style={styles.TextAreaStyleClass}
+            />
+
+            <Mytext text="GENERAL ASSESSOR OBSERVATIONS" />
+            <Mytextinput
+              multiline={true}
+              numberOfLines={5}
+              onChangeText={(gao_notes) => this.setState({ gao_notes })}
+              value={state.gao_notes}
+              style={styles.TextAreaStyleClass}
             />
 
             <TouchableOpacity style={styles.button} onPress={this.onPressButton}>

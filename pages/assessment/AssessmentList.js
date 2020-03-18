@@ -121,6 +121,7 @@ export default class AssessmentList extends Component {
         }
         this.getObservation(master_id);
         alert('Assessment Downloaded');
+        window.location.reload(false);
       }).catch((error) => {
         console.error(error);
       });

@@ -203,9 +203,7 @@ export default class Info extends ValidationComponent {
         <ScrollView keyboardShouldPersistTaps="handled">
           <KeyboardAvoidingView>
 
-            <Text style={{ color: '#133156', fontSize: 27, textAlign: 'center', paddingBottom: 10 }}>Info</Text>
-
-            <Mytext text="Assessment Name *" />
+            <Mytext text="Assessment Name" />
             {this.isFieldInError('assessment_name') && this.getErrorsInField('assessment_name').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
             <Mytextinput
               onChangeText={(assessment_name) => this.setState({ assessment_name })}
@@ -213,7 +211,7 @@ export default class Info extends ValidationComponent {
               style={styles.TextInputStyleClass}
             />
 
-            <Mytext text="Assessor Name *" />
+            <Mytext text="Assessor Name" />
             {this.isFieldInError('name_of_assessor') && this.getErrorsInField('name_of_assessor').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
             <Mytextinput
               onChangeText={(name_of_assessor) => this.setState({ name_of_assessor })}
@@ -221,7 +219,7 @@ export default class Info extends ValidationComponent {
               style={styles.TextInputStyleClass}
             />
 
-            <Mytext text="Date *" />
+            <Mytext text="Date" />
             {this.isFieldInError('assessment_date') && this.getErrorsInField('assessment_date').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
             <Mytextinput
               onChangeText={(assessment_date) => this.setState({ assessment_date })}
@@ -229,7 +227,7 @@ export default class Info extends ValidationComponent {
               style={styles.TextInputStyleClass}
             />
 
-            <Mytext text="Agency *" />
+            <Mytext text="Agency" />
             {this.isFieldInError('agency_id') && this.getErrorsInField('agency_id').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
             <MyPicker
               placeholder={{ label: 'Make Selection', value: null, color: 'grey', }}
@@ -238,7 +236,7 @@ export default class Info extends ValidationComponent {
               items={state.agents}
             />
 
-            <Mytext text="Site *" />
+            <Mytext text="Site" />
             {this.isFieldInError('site_id') && this.getErrorsInField('site_id').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
             <MyPicker
               placeholder={{ label: 'Make Selection', value: null, color: 'grey', }}
@@ -247,7 +245,7 @@ export default class Info extends ValidationComponent {
               items={state.sites}
             />
 
-            <Mytext text="Building *" />
+            <Mytext text="Building" />
             {this.isFieldInError('building_id') && this.getErrorsInField('building_id').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
             <MyPicker
               placeholder={{ label: 'Make Selection', value: null, color: 'grey', }}

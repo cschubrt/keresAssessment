@@ -19,124 +19,178 @@ import SiteData from '../pages/assessment/form/SiteData';
 import TowerData from '../pages/assessment/form/TowerData';
 import TankData from '../pages/assessment/form/TankData';
 
+let textColor = '#133156';
+let headerColor = '#F0F0F0';
+
 const HomeStack = createStackNavigator({
     Home: {
         screen: Home,
         navigationOptions: ({ navigation }) => ({
             title: 'Home',
-            headerTintColor: '#133156'
+            headerTintColor: textColor,
+            headerStyle: {
+                backgroundColor: headerColor
+            }
         })
     },
     Browser: {
         screen: Browser,
         navigationOptions: ({ navigation }) => ({
             title: navigation.state.params.title,
-            headerTintColor: '#40546b'
+            headerTintColor: textColor,
+            headerStyle: {
+                backgroundColor: headerColor
+            }
         })
     },
     LoginForm: {
         screen: LoginForm,
         navigationOptions: ({ navigation }) => ({
-            title: 'Login Form',
-            headerTintColor: '#40546b'
+            title: 'Login',
+            headerTintColor: textColor,
+            headerStyle: {
+                backgroundColor: headerColor
+            }
         })
     },
     AssessmentHome: {
         screen: AssessmentHome,
         navigationOptions: ({ navigation }) => ({
-            title: 'Start',
-            headerTintColor: '#40546b'
+            title: 'Assessments',
+            headerTintColor: textColor,
+            headerStyle: {
+                backgroundColor: headerColor
+            }
         })
     },
     ListView: {
         screen: ListView,
         navigationOptions: ({ navigation }) => ({
             title: 'Clients',
-            headerTintColor: '#40546b'
+            headerTintColor: textColor,
+            headerStyle: {
+                backgroundColor: headerColor
+            }
         })
     },
     AgencyList: {
         screen: AgencyList,
         navigationOptions: ({ navigation }) => ({
             title: 'Agencies',
-            headerTintColor: '#40546b'
+            headerTintColor: textColor,
+            headerStyle: {
+                backgroundColor: headerColor
+            }
         })
     },
     AssessmentList: {
         screen: AssessmentList,
         navigationOptions: ({ navigation }) => ({
             title: 'Assessment List',
-            headerTintColor: '#40546b'
+            headerTintColor: textColor,
+            headerStyle: {
+                backgroundColor: headerColor
+            }
         })
     },
     FormIndex: {
         screen: FormIndex,
         navigationOptions: ({ navigation }) => ({
             title: 'Assessment',
-            headerTintColor: '#40546b'
+            headerTintColor: textColor,
+            headerStyle: {
+                backgroundColor: headerColor
+            }
         })
     },
     Info: {
         screen: Info,
         navigationOptions: ({ navigation }) => ({
             title: 'Info',
-            headerTintColor: '#40546b'
+            headerTintColor: textColor,
+            headerStyle: {
+                backgroundColor: headerColor
+            }
         })
     },
     Observations: {
         screen: Observations,
         navigationOptions: ({ navigation }) => ({
             title: 'Observations',
-            headerTintColor: '#40546b'
+            headerTintColor: textColor,
+            headerStyle: {
+                backgroundColor: headerColor
+            }
         })
     },
     ValidationData: {
         screen: ValidationData,
         navigationOptions: ({ navigation }) => ({
             title: 'Validation Data',
-            headerTintColor: '#40546b'
+            headerTintColor: textColor,
+            headerStyle: {
+                backgroundColor: headerColor
+            }
         })
     },
     BuildingData: {
         screen: BuildingData,
         navigationOptions: ({ navigation }) => ({
             title: 'Building Data',
-            headerTintColor: '#40546b'
+            headerTintColor: textColor,
+            headerStyle: {
+                backgroundColor: headerColor
+            }
         })
     },
     SiteData: {
         screen: SiteData,
         navigationOptions: ({ navigation }) => ({
             title: 'Site Data',
-            headerTintColor: '#40546b'
+            headerTintColor: textColor,
+            headerStyle: {
+                backgroundColor: headerColor
+            }
         })
     },
     TowerData: {
         screen: TowerData,
         navigationOptions: ({ navigation }) => ({
             title: 'Tower Data',
-            headerTintColor: '#40546b'
+            headerTintColor: textColor,
+            headerStyle: {
+                backgroundColor: headerColor
+            }
         })
     },
     TankData: {
         screen: TankData,
         navigationOptions: ({ navigation }) => ({
             title: 'Tank Data',
-            headerTintColor: '#40546b'
+            headerTintColor: textColor,
+            headerStyle: {
+                backgroundColor: headerColor
+            }
         })
     },
     UpdateApp: {
         screen: UpdateApp,
         navigationOptions: ({ navigation }) => ({
             title: 'Update',
-            headerTintColor: '#40546b'
+            headerTintColor: textColor,
+            headerStyle: {
+                backgroundColor: headerColor
+            }
         })
     },
     ViewAllUser: {
         screen: ViewAllUser,
         navigationOptions: ({ navigation }) => ({
             title: 'ViewAllUser Data',
-            headerTintColor: '#40546b'
+            headerTintColor: textColor,
+            headerStyle: {
+                backgroundColor: headerColor
+            }
         })
     }
 })

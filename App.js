@@ -5,5 +5,5 @@ import { enableScreens } from 'react-native-screens';
 enableScreens();
 
 export default function App() {
-  return <AppContainer />
+  return (<AppContainer />)
 }
