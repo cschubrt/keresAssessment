@@ -1,14 +1,12 @@
 import React from 'react';
 import styles from '../../../styles/styles';
 import Mytext from '../../components/Mytext';
-import Loader from '../../components/Loader';
 import ValidationComponent from '../../../vals';
-import MyPicker from '../../components/MyPicker';
+import MyPicker2 from '../../components/Picker2';
 import Mytextinput from '../../components/Mytextinput';
 import { openDatabase } from 'react-native-sqlite-storage';
-import { Item, Picker, Icon, Input, Label } from 'native-base';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
-import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
 
 export default class Observations extends ValidationComponent {
 
@@ -25,7 +23,8 @@ export default class Observations extends ValidationComponent {
       gao_notes: '',
       kdp_notes: '',
       site_contact: '',
-      master_id: this.props.navigation.state.params.master_id
+      master_id: this.props.navigation.state.params.master_id,
+      assessment_name: this.props.navigation.state.params.assessment_name
     }
   }
 
@@ -34,12 +33,32 @@ export default class Observations extends ValidationComponent {
   }
 
   onPressButton = () => {
-    this.validate({
-      //assessment_name: { required: true }
-    });
     if (this.isFormValid()) {
-      //this.updateAssessment();
+      this.updateObservation();
     }
+  }
+
+  updateObservation() {
+    var that = this;
+    const state = this.state;
+    db.transaction(function (tx) {
+      tx.executeSql(
+        'UPDATE observations_table SET ac_id = ?, map_id = ?, notes_desc = ?, review_desc = ?, tech_desc = ?, gao_notes = ?, kdp_notes = ?, site_contact = ? WHERE master_id = ?',
+        [state.ac_id, state.map_id, state.notes_desc, state.review_desc, state.tech_desc, state.gao_notes, state.kdp_notes, state.site_contact, state.master_id],
+        (tx, results) => {
+          if (results.rowsAffected > 0) {
+            Alert.alert('Success', 'Observations updated successfully',
+              [
+                { text: 'Ok', onPress: () => that.props.navigation.navigate('FormIndex', { master_id: state.master_id, assessment_name: state.assessment_name }) },
+              ],
+              { cancelable: false }
+            );
+          } else {
+            alert('Observations Update Failed');
+          }
+        }
+      );
+    });
   }
 
   getObservation() {
@@ -82,42 +101,18 @@ export default class Observations extends ValidationComponent {
           <KeyboardAvoidingView>
 
             <Mytext text="ASSESSMENT COMPLETE" />
-            <Item picker>
-              <Picker
-                mode="dropdown"
-                iosIcon={<Icon name="arrowdown" />}
-                style={{ width: undefined }}
-                placeholder="Make Selection"
-                placeholderStyle={{ color: "#bfc6ea" }}
-                placeholderIconColor="#007aff"
-                selectedValue={this.state.ac_id}
-                onValueChange={(itemValue) => this.setState({ ac_id: itemValue })}
-              >
-                {Object.keys(yesNo).map((key) => {
-                  return (<Picker.Item label={yesNo[key].label} value={yesNo[key].value} key={key} />)
-                })}
-              </Picker>
-            </Item>
+            <MyPicker2
+              selectedValue={this.state.ac_id}
+              onValueChange={(itemValue) => this.setState({ ac_id: itemValue })}
+              items={yesNo}
+            />
 
             <Mytext text="MUSEUM ARTIFACTS PRESENT" />
-            <Item picker>
-              <Picker
-                mode="dropdown"
-                iosIcon={<Icon name="arrowdown" />}
-                style={{ marginBottom: 10 }}
-                placeholder="Make Selection"
-                placeholderStyle={{ color: "#bfc6ea" }}
-                placeholderIconColor="#007aff"
-                selectedValue={this.state.map_id}
-                onValueChange={(itemValue) => this.setState({ map_id: itemValue })}
-                items={yesNo}
-              >
-                {Object.keys(yesNo).map((key) => {
-                  return (<Picker.Item label={yesNo[key].label} value={yesNo[key].value} key={key} />)
-                })}
-              </Picker>
-            </Item>
-
+            <MyPicker2
+              selectedValue={this.state.map_id}
+              onValueChange={(itemValue) => this.setState({ map_id: itemValue })}
+              items={yesNo}
+            />
 
             <Mytext text="NOTES" />
             <Mytextinput

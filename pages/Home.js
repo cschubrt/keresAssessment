@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styles from '../styles/styles';
 import Loader from './components/Loader';
+//import Footer from './components/Footer';
 import NetInfo from "@react-native-community/netinfo";
 import { openDatabase } from 'react-native-sqlite-storage';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
@@ -149,7 +150,7 @@ export default class Home extends Component {
             <View style={styles.viewContainer}>
                 <ScrollView keyboardShouldPersistTaps="handled">
 
-                <Text style={styles.header}>Status {this.state.connection_Status}</Text>
+                    <Text style={styles.header}>Status {this.state.connection_Status}</Text>
 
                     {this.keresButton()}
 

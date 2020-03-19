@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styles from '../../styles/styles';
 import { format } from "date-fns";
 import Loader from '../components/Loader';
+import RenderIf from '../components/RenderIf';
 import NetInfo from "@react-native-community/netinfo";
 import { openDatabase } from 'react-native-sqlite-storage';
 import { Table, Row, Rows } from 'react-native-table-component';
@@ -14,8 +15,9 @@ export default class AssessmentList extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      online: false,
       isLoading: true,
-      tableData: [[]],
+      tableData: [],
       connection_Status: '',
       tableHead: ['Assessment', 'Date', 'Assessor', 'Status', ''],
       agency_name: this.props.navigation.state.params.agency_name,
@@ -25,8 +27,9 @@ export default class AssessmentList extends Component {
   }
 
   componentDidMount() {
+    this.isAvailable();
     NetInfo.fetch().then(connected => {
-      if (connected.isConnected == true) {
+      if (connected.isConnected == true && this.state.online) {
         this.setState({
           connection: true,
           connection_Status: "Online",
@@ -41,6 +44,22 @@ export default class AssessmentList extends Component {
         this.getAssessments();
       }
     });
+  }
+
+  isAvailable = () => {
+    const timeout = new Promise((resolve, reject) => {
+      setTimeout(reject, 8000);
+    });
+    const request = fetch('https://cschubert.serviceseval.com');
+
+    return Promise
+      .race([timeout, request])
+      .then(this.setit())
+      .catch(error => console.log('No connection to Server'));
+  }
+
+  setit() {
+    this.setState({ online: true });
   }
 
   getObservation = (master_id) => {
@@ -60,9 +79,10 @@ export default class AssessmentList extends Component {
           this.setState({
             observationSource: responseJson
           })
-          //console.log(this.state.observationSource);
           if (this.state.observationSource.length > 0) {
             this.insertObservation(this.state.observationSource);
+          } else {
+            this.addObservation(master_id);
           }
         }).catch((error) => {
           console.error(error);
@@ -74,7 +94,6 @@ export default class AssessmentList extends Component {
   }
 
   insertObservation = (src) => {
-    console.log(src[0].observations_id);
     db.transaction(function (tx) {
       tx.executeSql(
         'INSERT INTO observations_table(observations_id, master_id, ac_id, map_id, notes_desc, review_desc, tech_desc, gao_notes, kdp_notes, site_contact) VALUES (?,?,?,?,?,?,?,?,?,?);',
@@ -121,7 +140,6 @@ export default class AssessmentList extends Component {
         }
         this.getObservation(master_id);
         alert('Assessment Downloaded');
-        window.location.reload(false);
       }).catch((error) => {
         console.error(error);
       });
@@ -133,7 +151,6 @@ export default class AssessmentList extends Component {
         'INSERT INTO assessment_table(agency_id, site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor, notes, parametric, building_classification, downloaded) VALUES (?,?,?,?,?,?,?,?,?,?,?);',
         [agency_id, site_id, master_id, building_id, assessment_name, assessment_date, name_of_assessor, notes, parametric, building_classification, 1],
         (tx, results) => {
-          //console.log('insertAssessment');
           if (results.rowsAffected > 0) {
             return true;
           }
@@ -187,14 +204,14 @@ export default class AssessmentList extends Component {
             }
           }
         }).catch((error) => {
-          console.error(error);
+          //console.log(error);
         });
       this.setState({
         isLoading: false
       })
     }
     catch (error) {
-      console.error(error);
+      console.log(error);
     }
   }
 
@@ -261,10 +278,10 @@ export default class AssessmentList extends Component {
   deleteit = () => {
     db.transaction(function (tx) {
       tx.executeSql(
-        'delete from assessment_table;',[],(tx, results) => { console.log('1', results); },
+        'delete from assessment_table;', [], (tx, results) => { console.log('1', results); },
       );
       tx.executeSql(
-        'delete from observations_table;',[],(tx, results) => { console.log('2', results); }
+        'delete from observations_table;', [], (tx, results) => { console.log('2', results); }
       );
     });
   };
@@ -291,10 +308,12 @@ export default class AssessmentList extends Component {
             <Text style={styles.textBlack}>{state.agency_name}</Text>
             <Text style={styles.textBlackRight}>{this.state.connection_Status}</Text>
           </View>
-          <Table borderStyle={{ borderWidth: 1, borderColor: '#000' }}>
-            <Row data={state.tableHead} flexArr={[2, 1, 2, 1, 1]} style={styles.head} textStyle={styles.headerText} />
-            <Rows data={state.tableData} flexArr={[2, 1, 2, 1, 1]} textStyle={styles.cellText} />
-          </Table>
+          {RenderIf(state.tableData.length > 0,
+            <Table borderStyle={{ borderWidth: 1, borderColor: '#888' }}>
+              <Row data={state.tableHead} flexArr={[2, 1, 2, 1, 1]} style={styles.head} textStyle={styles.headerText} />
+              <Rows data={state.tableData} flexArr={[2, 1, 2, 1, 1]} textStyle={styles.cellText} />
+            </Table>
+          )}
         </ScrollView>
 
         <TouchableOpacity style={styles.button} onPress={this.selectit}>
@@ -306,4 +325,5 @@ export default class AssessmentList extends Component {
       </View>
     )
   }
+
 }

@@ -9,7 +9,7 @@ const Mytextinput = props => {
                 autoCapitalize={props.autoCapitalize}
                 underlineColorAndroid="transparent"
                 placeholder={props.placeholder}
-                placeholderTextColor="#333"
+                placeholderTextColor="#606060"
                 keyboardType={props.keyboardType}
                 onChangeText={props.onChangeText}
                 returnKeyType={props.returnKeyType}

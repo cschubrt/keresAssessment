@@ -7,7 +7,7 @@ import LoginForm from '../pages/LoginForm';
 import UpdateApp from '../pages/UpdateApp';
 import ViewAllUser from '../pages/ViewAllUser';
 import AssessmentHome from '../pages/assessment/Index';
-import ListView from '../pages/assessment/ListView';
+import ClientList from '../pages/assessment/ClientList';
 import AgencyList from '../pages/assessment/AgencyList';
 import AssessmentList from '../pages/assessment/AssessmentList';
 import FormIndex from '../pages/assessment/form/index';
@@ -19,7 +19,7 @@ import SiteData from '../pages/assessment/form/SiteData';
 import TowerData from '../pages/assessment/form/TowerData';
 import TankData from '../pages/assessment/form/TankData';
 
-let textColor = '#133156';
+let textColor = '#404040';
 let headerColor = '#F0F0F0';
 
 const HomeStack = createStackNavigator({
@@ -63,8 +63,8 @@ const HomeStack = createStackNavigator({
             }
         })
     },
-    ListView: {
-        screen: ListView,
+    ClientList: {
+        screen: ClientList,
         navigationOptions: ({ navigation }) => ({
             title: 'Clients',
             headerTintColor: textColor,

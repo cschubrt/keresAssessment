@@ -213,14 +213,13 @@ export default class AssessmentHome extends Component {
         if (this.state.isLoading) {
             return (<Loader />);
         }
-
         return (
             <View style={styles.viewContainer}>
                 <View style={styles.list}>
 
-                    <Text style={{ textAlign: 'center', fontSize: 25, color: '#40546b', paddingTop: 10 }}>Keres Assessment</Text>
+                    <Text style={{ textAlign: 'center', fontSize: 25, color: '#404040', paddingTop: 10 }}>Keres Assessment</Text>
 
-                    <TouchableOpacity style={styles.button} onPress={() => this.handlePress('ListView')}>
+                    <TouchableOpacity style={styles.button} onPress={() => this.handlePress('ClientList')}>
                         <Text style={styles.text}>Client List</Text>
                     </TouchableOpacity>
 

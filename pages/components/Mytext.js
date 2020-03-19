@@ -8,10 +8,10 @@ const Mytext = props => {
 
 const styles = StyleSheet.create({
     text: {
-        color: '#133156',
+        color: '#000',
         fontSize: 18,
         marginTop: 10,
-        marginBottom: 7,
+        marginBottom: 0,
     },
 });
 

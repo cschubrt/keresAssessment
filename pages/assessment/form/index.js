@@ -13,7 +13,7 @@ class FormIndex extends Component {
     }
 
     handlePress(prs) {
-        this.props.navigation.navigate(prs, { master_id: this.state.master_id });
+        this.props.navigation.navigate(prs, { master_id: this.state.master_id, assessment_name: this.state.assessment_name });
     }
 
     render() {
@@ -22,7 +22,7 @@ class FormIndex extends Component {
                 <View>
                     <ScrollView keyboardShouldPersistTaps="handled">
 
-                        <Text style={{ textAlign: 'center', fontSize: 27, color: '#40546b', paddingTop: 30 }}>
+                        <Text style={{ textAlign: 'center', fontSize: 27, color: '#404040', paddingTop: 30 }}>
                             {this.state.assessment_name}
                         </Text>
 

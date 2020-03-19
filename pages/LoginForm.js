@@ -57,8 +57,6 @@ export default class LoginForm extends ValidationComponent {
         <ScrollView keyboardShouldPersistTaps="handled">
           <KeyboardAvoidingView>
 
-            <Text style={styles.header}>Login</Text>
-
             {this.isFieldInError('username') && this.getErrorsInField('username').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
             <TextInput autoCapitalize="none" placeholder="username" ref="username" onChangeText={(username) => this.setState({ username })} value={this.state.username} style={styles.TextInputStyleClass} />
 

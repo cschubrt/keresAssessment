@@ -5,6 +5,7 @@ import Mytext from '../../components/Mytext';
 import Loader from '../../components/Loader';
 import ValidationComponent from '../../../vals';
 import MyPicker from '../../components/MyPicker';
+import MyPicker2 from '../../components/Picker2';
 import Mytextinput from '../../components/Mytextinput';
 import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
@@ -229,36 +230,32 @@ export default class Info extends ValidationComponent {
 
             <Mytext text="Agency" />
             {this.isFieldInError('agency_id') && this.getErrorsInField('agency_id').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
-            <MyPicker
-              placeholder={{ label: 'Make Selection', value: null, color: 'grey', }}
-              value={state.agency_id}
-              onValueChange={(itemValue, itemIndex) => this.setSite(itemValue)}
+            <MyPicker2
+              selectedValue={state.agency_id}
+              onValueChange={(itemValue) => this.setSite(itemValue)}
               items={state.agents}
             />
 
             <Mytext text="Site" />
             {this.isFieldInError('site_id') && this.getErrorsInField('site_id').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
-            <MyPicker
-              placeholder={{ label: 'Make Selection', value: null, color: 'grey', }}
-              value={state.site_id}
-              onValueChange={(itemValue, itemIndex) => this.setBuilding(itemValue)}
+            <MyPicker2
+              selectedValue={state.site_id}
+              onValueChange={(itemValue) => this.setBuilding(itemValue)}
               items={state.sites}
             />
 
             <Mytext text="Building" />
             {this.isFieldInError('building_id') && this.getErrorsInField('building_id').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
-            <MyPicker
-              placeholder={{ label: 'Make Selection', value: null, color: 'grey', }}
-              value={state.building_id}
-              onValueChange={(itemValue, itemIndex) => this.setState({ building_id: itemValue })}
+            <MyPicker2
+              selectedValue={state.building_id}
+              onValueChange={(itemValue) => this.setState({ building_id: itemValue })}
               items={state.buildings}
             />
 
             <Mytext text="Building Classification" />
-            <MyPicker
-              placeholder={{ label: 'Make Selection', value: null, color: 'grey', }}
-              value={state.building_classification}
-              onValueChange={(itemValue, itemIndex) => this.setState({ building_classification: itemValue })}
+            <MyPicker2
+              selectedValue={state.building_classification}
+              onValueChange={(itemValue) => this.setState({ building_classification: itemValue })}
               items={buildingClass}
             />
 

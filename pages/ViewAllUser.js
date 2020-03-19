@@ -4,6 +4,8 @@ import React from 'react';
 import { FlatList, Text, View } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
+import { Item, Picker, Icon, Input, Label } from 'native-base';
+import MyPicker2 from '../pages/components/Picker2';
 
 export default class ViewAllUser extends React.Component {
 
@@ -11,6 +13,7 @@ export default class ViewAllUser extends React.Component {
         super(props);
         this.state = {
             FlatListItems: [],
+            ac_id: null
         };
         db.transaction(tx => {
             tx.executeSql('SELECT * FROM users_table', [], (tx, results) => {
@@ -32,8 +35,19 @@ export default class ViewAllUser extends React.Component {
     };
 
     render() {
+        const yesNo =
+            [
+                { value: '1', label: 'Yes' },
+                { value: '2', label: 'No' }
+            ];
         return (
             <View>
+                <MyPicker2
+                    selectedValue={this.state.ac_id}
+                    onValueChange={(itemValue) => this.setState({ ac_id: itemValue })}
+                    items={yesNo}
+                />
+
                 <FlatList
                     data={this.state.FlatListItems}
                     ItemSeparatorComponent={this.ListViewItemSeparator}
