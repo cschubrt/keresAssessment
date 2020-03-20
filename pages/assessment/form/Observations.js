@@ -14,7 +14,6 @@ export default class Observations extends ValidationComponent {
     super(props);
     this.state = {
       isLoading: false,
-      observations_id: false,
       ac_id: '',
       map_id: '',
       notes_desc: '',
@@ -68,7 +67,6 @@ export default class Observations extends ValidationComponent {
           var len = results.rows.length;
           if (len > 0) {
             this.setState({
-              observations_id: results.rows.item(0).observations_id,
               ac_id: results.rows.item(0).ac_id,
               map_id: results.rows.item(0).map_id,
               notes_desc: results.rows.item(0).notes_desc,

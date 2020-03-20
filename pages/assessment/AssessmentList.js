@@ -55,7 +55,7 @@ export default class AssessmentList extends Component {
     return Promise
       .race([timeout, request])
       .then(this.setit())
-      .catch(error => console.log('No connection to Server'));
+      .catch(error => console.log('No Connection to Server'));
   }
 
   setit() {
@@ -93,12 +93,61 @@ export default class AssessmentList extends Component {
     }
   }
 
-  insertObservation = (src) => {
+  addObservation(master_id) {
     db.transaction(function (tx) {
       tx.executeSql(
-        'INSERT INTO observations_table(observations_id, master_id, ac_id, map_id, notes_desc, review_desc, tech_desc, gao_notes, kdp_notes, site_contact) VALUES (?,?,?,?,?,?,?,?,?,?);',
-        [src[0].observations_id, src[0].master_id, src[0].ac_id, src[0].map_id, src[0].notes_desc, src[0].review_desc, src[0].tech_desc, src[0].gao_notes, src[0].kdp_notes, src[0].site_contact],
-        (tx, results) => {
+        'INSERT INTO observations_table(master_id) VALUES (?);',
+        [master_id],
+        (tx, results) => { }
+      );
+    });
+  };
+
+  insertObservation(src) {
+    db.transaction(function (tx) {
+      tx.executeSql(
+        'INSERT INTO observations_table(master_id, ac_id, map_id, notes_desc, review_desc, tech_desc, gao_notes, kdp_notes, site_contact) VALUES (?,?,?,?,?,?,?,?,?);',
+        [src[0].master_id, src[0].ac_id, src[0].map_id, src[0].notes_desc, src[0].review_desc, src[0].tech_desc, src[0].gao_notes, src[0].kdp_notes, src[0].site_contact],
+        (tx, results) => { }
+      );
+    });
+  };
+
+  getValidation = (master_id) => {
+    try {
+      fetch('https://cschubert.serviceseval.com/keres_fca/app/getValidation.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          master_id: master_id,
+          key: 'xxxx'
+        })
+      }).then((response) => response.json())
+        .then((responseJson) => {
+          this.setState({
+            validationSource: responseJson
+          })
+          if (this.state.validationSource.length > 0) {
+            this.insertValidation(this.state.validationSource);
+          }
+        }).catch((error) => {
+          console.log(error);
+        });
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+
+  insertValidation(src) {
+    db.transaction(function (tx) {
+      tx.executeSql(
+        'INSERT INTO validation_data_table(inspection_desc,inspection_date,siteid,location,location_number,structure_number,location_id,type_id,use_desc,status_id,description,yr_built,condition_desc,condition_date,latitude,longitude,footprint,maintained_id,maintained_by_id,owned_by_id,occupancy_date,project_number,remarks) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);',
+        [src[0].inspection_desc, src[0].inspection_date, src[0].siteid, src[0].location, src[0].location_number, src[0].structure_number, src[0].location_id, src[0].type_id, src[0].use_desc, src[0].status_id, src[0].description, src[0].yr_built, src[0].condition_desc, src[0].condition_date, src[0].latitude, src[0].longitude, src[0].footprint, src[0].maintained_id, src[0].maintained_by_id, src[0].owned_by_id, src[0].occupancy_date, src[0].project_number, src[0].remarks],
+        (tx, results) => { 
           console.log(results);
         }
       );
@@ -139,7 +188,11 @@ export default class AssessmentList extends Component {
           }
         }
         this.getObservation(master_id);
+        this.getValidation(master_id);
+        
         alert('Assessment Downloaded');
+        this.setState({ tableData: [] });
+        this.getAssessmentByAgency()
       }).catch((error) => {
         console.error(error);
       });
@@ -204,7 +257,7 @@ export default class AssessmentList extends Component {
             }
           }
         }).catch((error) => {
-          //console.log(error);
+          console.log(error);
         });
       this.setState({
         isLoading: false
@@ -278,10 +331,10 @@ export default class AssessmentList extends Component {
   deleteit = () => {
     db.transaction(function (tx) {
       tx.executeSql(
-        'delete from assessment_table;', [], (tx, results) => { console.log('1', results); },
+        'delete from assessment_table;', [], (tx, results) => { console.log('assessment_table', results); },
       );
       tx.executeSql(
-        'delete from observations_table;', [], (tx, results) => { console.log('2', results); }
+        'delete from observations_table;', [], (tx, results) => { console.log('observations_table', results); }
       );
     });
   };
@@ -289,9 +342,9 @@ export default class AssessmentList extends Component {
   selectit = () => {
     db.transaction(function (tx) {
       tx.executeSql(
-        'select * from observations_table where observations_id is not null;',
+        'select * from observations_table where master_id is not null;',
         [],
-        (tx, results) => { console.log('3', results.rows.item(0).master_id); }
+        (tx, results) => { console.log('select', results.rows.item(0).master_id); }
       );
     });
   };

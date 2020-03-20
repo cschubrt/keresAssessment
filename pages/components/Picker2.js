@@ -3,10 +3,10 @@ import { Item, Picker, Icon } from 'native-base';
 
 
 const MyPicker2 = props => {
-
-    const theItems = props.items ? props.items : [{ label: '', value: false }];
+    //console.log(props.selectedValue);
+    const theItems = props.items ? props.items : [{ label: '', value: '' }];
     return (
-        <Item picker>
+        <Item style={{marginBottom: 10}} picker>
             <Picker
                 mode="dropdown"
                 iosIcon={<Icon name="arrowdown" />}

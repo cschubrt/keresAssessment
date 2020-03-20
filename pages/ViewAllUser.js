@@ -4,7 +4,6 @@ import React from 'react';
 import { FlatList, Text, View } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
-import { Item, Picker, Icon, Input, Label } from 'native-base';
 import MyPicker2 from '../pages/components/Picker2';
 
 export default class ViewAllUser extends React.Component {

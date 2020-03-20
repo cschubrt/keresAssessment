@@ -195,6 +195,7 @@ export default class Info extends ValidationComponent {
         { value: '4', label: 'Tank' },
         { value: '5', label: 'Tower' }
       ];
+      console.log(state.agency_id);
 
     if (this.state.isLoading) {
       return (<Loader />);
