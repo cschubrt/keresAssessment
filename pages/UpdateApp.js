@@ -28,9 +28,7 @@ export default class UpdateApp extends React.Component {
             tx.executeSql(
                 'INSERT INTO users_table(user_name, user_pass) VALUES (?,?);',
                 [user_name, user_password],
-                (tx, results) => {
-                    console.log('Results', results.rowsAffected);
-                }
+                (tx, results) => { }
             );
         });
     };
@@ -54,7 +52,6 @@ export default class UpdateApp extends React.Component {
                     })
                     this.deleteUsers();
                     var obj = this.state.dataSource;
-                    //console.log(obj);
                     for (var key in obj) {
                         if (obj.hasOwnProperty(key)) {
                             var val = obj[key];

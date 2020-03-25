@@ -59,9 +59,7 @@ export default class Home extends Component {
             tx.executeSql(
                 'INSERT INTO users_table(user_name, user_pass) VALUES (?,?);',
                 [user_name, user_password],
-                (tx, results) => {
-                    //console.log('Results', results.rowsAffected);
-                }
+                (tx, results) => { }
             );
         });
     };
@@ -103,11 +101,11 @@ export default class Home extends Component {
                         }
                     }
                 }).catch((error) => {
-                    console.error(error);
+                    console.log(error);
                 });
         }
         catch (error) {
-            console.error(error);
+            console.log(error);
         }
     }
 

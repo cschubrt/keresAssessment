@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
         fontSize: 19,
         textAlign: 'left',
         width: '100%',
-        marginBottom: 7,
+        marginBottom: 25,
         height: 41,
         borderWidth: 1,
         borderColor: '#D0D0D0',

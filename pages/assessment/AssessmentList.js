@@ -29,7 +29,7 @@ export default class AssessmentList extends Component {
   componentDidMount() {
     this.isAvailable();
     NetInfo.fetch().then(connected => {
-      if (connected.isConnected == true && this.state.online) {
+      if (connected.isConnected == true) {
         this.setState({
           connection: true,
           connection_Status: "Online",
@@ -62,6 +62,91 @@ export default class AssessmentList extends Component {
     this.setState({ online: true });
   }
 
+  getBuildingData = (master_id) => {
+    try {
+      fetch('https://cschubert.serviceseval.com/keres_fca/app/getBuildingData.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          master_id: master_id,
+          key: '58PvahBTd'
+        })
+      }).then((response) => response.json())
+        .then((responseJson) => {
+          this.setState({
+            observationSource: responseJson
+          })
+          //console.log('length', this.state.observationSource.length);
+          if (this.state.observationSource.length > 0) {
+            this.insertBuildingData(this.state.observationSource);
+          }
+        }).catch((error) => {
+          console.log(error);
+        });
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+
+  insertBuildingData(src) {
+    db.transaction(function (tx) {
+      tx.executeSql(
+        'INSERT INTO building_data_table(master_id,portable_id,structure_use_id,replacement_cost_desc,replacement_yr_desc,life_span,room_number,floor_lvls,basment_lvls,maintained_date,historical_id,designed_desc,org_name,org_type,high_grade_lvl,low_grade_lvl,pending_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);',
+        [src[0].master_id, src[0].portable_id, src[0].structure_use_id, src[0].replacement_cost_desc, src[0].replacement_yr_desc, src[0].life_span, src[0].room_number, src[0].floor_lvls, src[0].basment_lvls, src[0].maintained_date, src[0].historical_id, src[0].designed_desc, src[0].org_name, src[0].org_type, src[0].high_grade_lvl, src[0].low_grade_lvl, src[0].pending_id],
+        (tx, results) => {
+          //console.log('building_data_table',results) 
+        }
+      );
+    });
+  };
+
+  getSiteData = (master_id) => {
+    try {
+      fetch('https://cschubert.serviceseval.com/keres_fca/app/getSiteData.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          master_id: master_id,
+          key: '58PvahBTd'
+        })
+      }).then((response) => response.json())
+        .then((responseJson) => {
+          this.setState({
+            siteDataSource: responseJson
+          })
+          console.log('length', this.state.siteDataSource.length);
+          if (this.state.siteDataSource.length > 0) {
+            this.insertSiteData(this.state.siteDataSource);
+          }
+        }).catch((error) => {
+          console.log(error);
+        });
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+
+  insertSiteData() {
+    const state = this.state;
+    db.transaction(function (tx) {
+      tx.executeSql(
+        'INSERT INTO site_data_table(master_id,flower_area_sf,gate_and_ditch_area,gate_and_ditch_area_irrigated,nat_area,pump_and_ditch,pump_and_ditch_irrigated,push_mower_area,riding_mower_area,rough_mower,sprinkler_coverage_auto,sprinkler_coverage_manual,shrub_area,total_asphalt,total_concrete,total_curbs,total_fences,total_gravel,small_trees,tall_trees,trimming) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);',
+        [state.master_id,state.flower_area_sf,state.gate_and_ditch_area,state.gate_and_ditch_area_irrigated,state.nat_area,state.pump_and_ditch,state.pump_and_ditch_irrigated,state.push_mower_area,state.riding_mower_area,state.rough_mower,state.sprinkler_coverage_auto,state.sprinkler_coverage_manual,state.shrub_area,state.total_asphalt,state.total_concrete,state.total_curbs,state.total_fences,state.total_gravel,state.small_trees,state.tall_trees,state.trimming],
+        (tx, results) => {
+          console.log('site_data_table',results) 
+        }
+      );
+    });
+  };
+
   getObservation = (master_id) => {
     try {
       fetch('https://cschubert.serviceseval.com/keres_fca/app/getObservation.php', {
@@ -72,7 +157,7 @@ export default class AssessmentList extends Component {
         },
         body: JSON.stringify({
           master_id: master_id,
-          key: 'xxxx'
+          key: '58PvahBTd'
         })
       }).then((response) => response.json())
         .then((responseJson) => {
@@ -85,11 +170,11 @@ export default class AssessmentList extends Component {
             this.addObservation(master_id);
           }
         }).catch((error) => {
-          console.error(error);
+          console.log(error);
         });
     }
     catch (error) {
-      console.error(error);
+      console.log(error);
     }
   }
 
@@ -123,7 +208,7 @@ export default class AssessmentList extends Component {
         },
         body: JSON.stringify({
           master_id: master_id,
-          key: 'xxxx'
+          key: '58PvahBTd'
         })
       }).then((response) => response.json())
         .then((responseJson) => {
@@ -145,11 +230,9 @@ export default class AssessmentList extends Component {
   insertValidation(src) {
     db.transaction(function (tx) {
       tx.executeSql(
-        'INSERT INTO validation_data_table(inspection_desc,inspection_date,siteid,location,location_number,structure_number,location_id,type_id,use_desc,status_id,description,yr_built,condition_desc,condition_date,latitude,longitude,footprint,maintained_id,maintained_by_id,owned_by_id,occupancy_date,project_number,remarks) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);',
-        [src[0].inspection_desc, src[0].inspection_date, src[0].siteid, src[0].location, src[0].location_number, src[0].structure_number, src[0].location_id, src[0].type_id, src[0].use_desc, src[0].status_id, src[0].description, src[0].yr_built, src[0].condition_desc, src[0].condition_date, src[0].latitude, src[0].longitude, src[0].footprint, src[0].maintained_id, src[0].maintained_by_id, src[0].owned_by_id, src[0].occupancy_date, src[0].project_number, src[0].remarks],
-        (tx, results) => { 
-          console.log(results);
-        }
+        'INSERT INTO validation_data_table(master_id,inspection_desc,inspection_date,siteid,location,location_number,structure_number,location_id,type_id,use_desc,status_id,description,yr_built,condition_desc,condition_date,latitude,longitude,footprint,maintained_id,maintained_by_id,owned_by_id,occupancy_date,project_number,remarks,occupency_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);',
+        [src[0].master_id, src[0].inspection_desc, src[0].inspection_date, src[0].siteid, src[0].location, src[0].location_number, src[0].structure_number, src[0].location_id, src[0].type_id, src[0].use_desc, src[0].status_id, src[0].description, src[0].yr_built, src[0].condition_desc, src[0].condition_date, src[0].latitude, src[0].longitude, src[0].footprint, src[0].maintained_id, src[0].maintained_by_id, src[0].owned_by_id, src[0].occupancy_date, src[0].project_number, src[0].remarks, src[0].occupency_id],
+        (tx, results) => { }
       );
     });
   };
@@ -165,7 +248,7 @@ export default class AssessmentList extends Component {
       body: JSON.stringify({
         master_id: master_id,
         user_name: this.state.user_name,
-        key: 'xxxx'
+        key: '58PvahBTd'
       })
     }).then((response) => response.json())
       .then((responseJson) => {
@@ -189,7 +272,9 @@ export default class AssessmentList extends Component {
         }
         this.getObservation(master_id);
         this.getValidation(master_id);
-        
+        this.getBuildingData(master_id);
+        this.getSiteData(master_id);
+
         alert('Assessment Downloaded');
         this.setState({ tableData: [] });
         this.getAssessmentByAgency()
@@ -234,7 +319,7 @@ export default class AssessmentList extends Component {
         body: JSON.stringify({
           user_name: this.state.user_name,
           agency_id: this.state.agency_id,
-          key: 'xxxx'
+          key: '58PvahBTd'
         })
       }).then((response) => response.json())
         .then((responseJson) => {
@@ -275,8 +360,7 @@ export default class AssessmentList extends Component {
     try {
       db.transaction(tx => {
         tx.executeSql('SELECT * FROM assessment_table WHERE downloaded = 1 AND agency_id = ? ORDER BY assessment_name', [this.state.agency_id], (tx, results) => {
-          var len = results.rows.length;
-          if (len > 0) {
+          if (results.rows.length > 0) {
             for (let i = 0; i < len; i++) {
               var joined = this.state.tableData.concat([
                 [
@@ -372,9 +456,11 @@ export default class AssessmentList extends Component {
         <TouchableOpacity style={styles.button} onPress={this.selectit}>
           <Text style={styles.text}>Select</Text>
         </TouchableOpacity>
+
         <TouchableOpacity style={styles.button} onPress={this.deleteit}>
           <Text style={styles.text}>Delete</Text>
         </TouchableOpacity>
+
       </View>
     )
   }

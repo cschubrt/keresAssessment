@@ -88,7 +88,6 @@ export default class Info extends ValidationComponent {
         tx.executeSql('SELECT agency_id, agency_name FROM agency_table', [], (tx, results) => {
           var temp = [];
           for (let i = 0; i < results.rows.length; ++i) {
-            //temp.push(results.rows.item(i));
             temp.push({ label: results.rows.item(i).agency_name, value: results.rows.item(i).agency_id });
           }
           this.setState({
@@ -104,7 +103,6 @@ export default class Info extends ValidationComponent {
       tx.executeSql('SELECT site_id, site_name FROM site_table WHERE agency_id = ?', [this.state.agency_id], (tx, results) => {
         var temp = [];
         for (let i = 0; i < results.rows.length; ++i) {
-          //temp.push(results.rows.item(i));
           temp.push({ label: results.rows.item(i).site_name, value: results.rows.item(i).site_id });
         }
         this.setState({
@@ -119,7 +117,6 @@ export default class Info extends ValidationComponent {
       tx.executeSql('SELECT building_id, building_name FROM building_table WHERE site_id = ?', [this.state.site_id], (tx, results) => {
         var temp = [];
         for (let i = 0; i < results.rows.length; ++i) {
-          //temp.push(results.rows.item(i));
           temp.push({ label: results.rows.item(i).building_name, value: results.rows.item(i).building_id });
         }
         this.setState({
@@ -195,7 +192,6 @@ export default class Info extends ValidationComponent {
         { value: '4', label: 'Tank' },
         { value: '5', label: 'Tower' }
       ];
-      console.log(state.agency_id);
 
     if (this.state.isLoading) {
       return (<Loader />);
@@ -209,7 +205,7 @@ export default class Info extends ValidationComponent {
             {this.isFieldInError('assessment_name') && this.getErrorsInField('assessment_name').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
             <Mytextinput
               onChangeText={(assessment_name) => this.setState({ assessment_name })}
-              value={this.state.assessment_name}
+              value={state.assessment_name}
               style={styles.TextInputStyleClass}
             />
 
@@ -217,7 +213,7 @@ export default class Info extends ValidationComponent {
             {this.isFieldInError('name_of_assessor') && this.getErrorsInField('name_of_assessor').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
             <Mytextinput
               onChangeText={(name_of_assessor) => this.setState({ name_of_assessor })}
-              value={this.state.name_of_assessor}
+              value={state.name_of_assessor}
               style={styles.TextInputStyleClass}
             />
 
@@ -225,7 +221,7 @@ export default class Info extends ValidationComponent {
             {this.isFieldInError('assessment_date') && this.getErrorsInField('assessment_date').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
             <Mytextinput
               onChangeText={(assessment_date) => this.setState({ assessment_date })}
-              value={this.state.assessment_date}
+              value={state.assessment_date}
               style={styles.TextInputStyleClass}
             />
 
@@ -265,7 +261,7 @@ export default class Info extends ValidationComponent {
               multiline={true}
               numberOfLines={5}
               onChangeText={(notes) => this.setState({ notes })}
-              value={this.state.notes}
+              value={state.notes}
               style={styles.TextAreaStyleClass}
             />
 

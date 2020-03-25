@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from '../../../styles/styles';
 import Mytext from '../../components/Mytext';
+import Loader from '../../components/Loader';
 import ValidationComponent from '../../../vals';
 import MyPicker2 from '../../components/Picker2';
 import Mytextinput from '../../components/Mytextinput';
@@ -13,7 +14,7 @@ export default class Observations extends ValidationComponent {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: false,
+      isLoading: true,
       ac_id: '',
       map_id: '',
       notes_desc: '',
@@ -74,14 +75,15 @@ export default class Observations extends ValidationComponent {
               tech_desc: results.rows.item(0).tech_desc,
               gao_notes: results.rows.item(0).gao_notes,
               kdp_notes: results.rows.item(0).kdp_notes,
-              site_contact: results.rows.item(0).site_contact
+              site_contact: results.rows.item(0).site_contact,
+              isLoading: false
             });
           }
         });
       });
     }
     catch (error) {
-      console.error(error);
+      console.log(error);
     }
   }
 
@@ -93,6 +95,9 @@ export default class Observations extends ValidationComponent {
         { value: '2', label: 'No' }
       ];
 
+    if (this.state.isLoading) {
+      return (<Loader />);
+    }
     return (
       <View style={styles.viewContainer}>
         <ScrollView keyboardShouldPersistTaps="handled">

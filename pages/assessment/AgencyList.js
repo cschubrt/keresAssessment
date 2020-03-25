@@ -22,7 +22,7 @@ export default class AgencyList extends Component {
 
     async componentDidMount() {
         try {
-            db.transaction(tx => {
+            await db.transaction(tx => {
                 tx.executeSql('SELECT * FROM agency_table WHERE client_id = ?', [this.state.client_id], (tx, results) => {
                     if (results.rows.length > 0) {
                         var temp = [];
@@ -68,7 +68,6 @@ export default class AgencyList extends Component {
         if (this.state.isLoading) {
             return (<Loader />);
         }
-
         return (
             <View style={styles.listContainer}>
                 {RenderIf(this.state.dataSource,

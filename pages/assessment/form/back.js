@@ -1,146 +1,143 @@
 import React from 'react';
-import { format } from "date-fns";
-import Mytext from '../../components/Mytext';
-//import MyPicker from '../../components/MyPicker';
 import styles from '../../../styles/styles';
+import Mytext from '../../components/Mytext';
+import Loader from '../../components/Loader';
 import ValidationComponent from '../../../vals';
+import MyPicker2 from '../../components/Picker2';
+import Mytextinput from '../../components/Mytextinput';
 import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
-import { View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Picker, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
 
-export default class Info extends ValidationComponent {
+export default class Observations extends ValidationComponent {
 
   constructor(props) {
     super(props);
     this.state = {
       isLoading: false,
-      success: false,
-      agents: false,
-      sites: false,
-      buildings: false,
-      agency_id: '',
-      site_id: '',
-      building_id: '',
-      assessment_name: '',
-      name_of_assessor: '',
-      assessment_date: '',
-      building_classification: '',
-      notes: '',
-      master_id: this.props.navigation.state.params.master_id
+      isInsert: true,
+      inspection_desc: '',
+      inspection_date: '',
+      siteid: '',
+      location: '',
+      location_number: '',
+      structure_number: '',
+      location_id: '',
+      type_id: '',
+      use_desc: '',
+      status_id: '',
+      description: '',
+      yr_built: '',
+      condition_desc: '',
+      condition_date: '',
+      latitude: '',
+      longitude: '',
+      footprint: '',
+      maintained_id: '',
+      maintained_by_id: '',
+      owned_by_id: '',
+      occupancy_date: '',
+      occupency_id: '',
+      project_number: '',
+      remarks: '',
+      locations: false,
+      master_id: this.props.navigation.state.params.master_id,
+      assessment_name: this.props.navigation.state.params.assessment_name
     }
   }
 
   componentDidMount() {
-    this.getAssessment();
+    this.getObservation();
   }
 
-  _onPressButton = () => {
-    this.validate({
-      assessment_name: { required: true },
-      name_of_assessor: { required: true },
-      assessment_date: { required: true, date: 'MM/DD/YYYY' },
-      agency_id: { required: true },
-      site_id: { required: true },
-      building_id: { required: true }
-    });
+  onPressButton = () => {
     if (this.isFormValid()) {
-      this.update();
+      if (this.state.isInsert) {
+        this.insertValidation();
+      } else {
+        this.updateObservation();
+      }
     }
   }
 
-  update = () => {
+  insertValidation() {
     var that = this;
-    db.transaction((tx) => {
+    const state = this.state;
+    db.transaction(function (tx) {
       tx.executeSql(
-        'UPDATE assessment_table SET agency_id= ?, site_id= ?, building_id= ?, assessment_name= ?, name_of_assessor= ?, assessment_date= ?, building_classification= ?, notes= ? WHERE master_id= ?',
-        [
-          this.state.agency_id,
-          this.state.site_id,
-          this.state.building_id,
-          this.state.assessment_name,
-          this.state.name_of_assessor,
-          this.state.assessment_date,
-          this.state.building_classification,
-          this.state.notes,
-          this.state.master_id
-        ],
+        'INSERT INTO validation_data_table(master_id,inspection_desc,inspection_date,siteid,location,location_number,structure_number,location_id,type_id,use_desc,status_id,description,yr_built,condition_desc,condition_date,latitude,longitude,footprint,maintained_id,maintained_by_id,owned_by_id,occupancy_date,project_number,remarks,occupency_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);',
+        [state.master_id, state.inspection_desc, state.inspection_date, state.siteid, state.location, state.location_number, state.structure_number, state.location_id, state.type_id, state.use_desc, state.status_id, state.description, state.yr_built, state.condition_desc, state.condition_date, state.latitude, state.longitude, state.footprint, state.maintained_id, state.maintained_by_id, state.owned_by_id, state.occupancy_date, state.project_number, state.remarks, state.occupency_id],
         (tx, results) => {
           if (results.rowsAffected > 0) {
-            Alert.alert('Success', 'Assessment updated successfully',
+            Alert.alert('Success', 'Validation added successfully',
               [
-                { text: 'Ok', onPress: () => that.props.navigation.navigate('FormIndex', { master_id: this.state.master_id, assessment_name: this.state.assessment_name }) },
+                { text: 'Ok', onPress: () => that.props.navigation.navigate('FormIndex', { master_id: state.master_id, assessment_name: state.assessment_name }) },
               ],
               { cancelable: false }
             );
           } else {
-            alert('Assessment Update Failed');
+            alert('Validation add Failed');
           }
         }
       );
     });
   };
 
-  getAgency() {
-    if (this.state.agents === false) {
-      db.transaction(tx => {
-        tx.executeSql('SELECT agency_id, agency_name FROM agency_table', [], (tx, results) => {
-          var temp = [];
-          for (let i = 0; i < results.rows.length; ++i) {
-            temp.push(results.rows.item(i));
-            //temp.push({ label: results.rows.item(i).agency_name, value: results.rows.item(i).agency_id });
+  updateObservation() {
+    var that = this;
+    const state = this.state;
+    db.transaction(function (tx) {
+      tx.executeSql(
+        'UPDATE validation_data_table SET inspection_desc = ?,inspection_date = ?,siteid = ?,location = ?,location_number = ?,structure_number = ?,location_id = ?,type_id = ?,use_desc = ?,status_id = ?,description = ?,yr_built = ?,condition_desc = ?,condition_date = ?,latitude = ?,longitude = ?,footprint = ?,maintained_id = ?,maintained_by_id = ?,owned_by_id = ?,occupancy_date = ?,project_number = ?,remarks = ?, occupency_id = ? WHERE master_id = ?',
+        [state.inspection_desc, state.inspection_date, state.siteid, state.location, state.location_number, state.structure_number, state.location_id, state.type_id, state.use_desc, state.status_id, state.description, state.yr_built, state.condition_desc, state.condition_date, state.latitude, state.longitude, state.footprint, state.maintained_id, state.maintained_by_id, state.owned_by_id, state.occupancy_date, state.project_number, state.remarks, state.occupency_id, state.master_id],
+        (tx, results) => {
+          if (results.rowsAffected > 0) {
+            Alert.alert('Success', 'Validation updated successfully',
+              [
+                { text: 'Ok', onPress: () => that.props.navigation.navigate('FormIndex', { master_id: state.master_id, assessment_name: state.assessment_name }) },
+              ],
+              { cancelable: false }
+            );
+          } else {
+            alert('Validation Update Failed');
           }
-          this.setState({
-            agents: temp
-          });
-        });
-      });
-    }
-  }
-
-  getSite() {
-    db.transaction(tx => {
-      tx.executeSql('SELECT site_id, site_name FROM site_table WHERE agency_id = ?', [this.state.agency_id], (tx, results) => {
-        var temp = [];
-        for (let i = 0; i < results.rows.length; ++i) {
-          temp.push(results.rows.item(i));
         }
-        this.setState({
-          sites: temp
-        });
-      });
+      );
     });
   }
 
-  getBuilding() {
-    db.transaction(tx => {
-      tx.executeSql('SELECT building_id, building_name FROM building_table WHERE site_id = ?', [this.state.site_id], (tx, results) => {
-        var temp = [];
-        for (let i = 0; i < results.rows.length; ++i) {
-          temp.push(results.rows.item(i));
-        }
-        this.setState({
-          buildings: temp,
-          success: true,
-        });
-      });
-    });
-  }
-
-  getAssessment() {
+  getObservation() {
     try {
       db.transaction(tx => {
-        tx.executeSql('SELECT * FROM assessment_table WHERE master_id = ?', [this.state.master_id], (tx, results) => {
+        tx.executeSql('SELECT * FROM validation_data_table WHERE master_id = ?', [this.state.master_id], (tx, results) => {
           var len = results.rows.length;
           if (len > 0) {
             this.setState({
-              agency_id: results.rows.item(0).agency_id,
-              site_id: results.rows.item(0).site_id,
-              building_id: results.rows.item(0).building_id,
-              assessment_name: results.rows.item(0).assessment_name,
-              name_of_assessor: results.rows.item(0).name_of_assessor,
-              assessment_date: format(new Date(results.rows.item(0).assessment_date), "MM/dd/yyyy"),
-              building_classification: results.rows.item(0).building_classification,
-              notes: results.rows.item(0).notes
+              inspection_desc: results.rows.item(0).inspection_desc,
+              inspection_date: results.rows.item(0).inspection_date,
+              siteid: results.rows.item(0).siteid,
+              location: results.rows.item(0).location,
+              location_number: results.rows.item(0).location_number,
+              structure_number: results.rows.item(0).structure_number,
+              location_id: results.rows.item(0).location_id,
+              type_id: results.rows.item(0).type_id,
+              use_desc: results.rows.item(0).use_desc,
+              status_id: results.rows.item(0).status_id,
+              description: results.rows.item(0).description,
+              yr_built: results.rows.item(0).yr_built,
+              condition_desc: results.rows.item(0).condition_desc,
+              condition_date: results.rows.item(0).condition_date,
+              latitude: results.rows.item(0).latitude,
+              longitude: results.rows.item(0).longitude,
+              footprint: results.rows.item(0).footprint,
+              maintained_id: results.rows.item(0).maintained_id,
+              maintained_by_id: results.rows.item(0).maintained_by_id,
+              owned_by_id: results.rows.item(0).owned_by_id,
+              occupancy_date: results.rows.item(0).occupancy_date,
+              project_number: results.rows.item(0).project_number,
+              remarks: results.rows.item(0).remarks,
+              occupency_id: results.rows.item(0).occupency_id,
+              isInsert: false
             });
           }
         });
@@ -151,6 +148,29 @@ export default class Info extends ValidationComponent {
     }
   }
 
+  getLocation() {
+    if (this.state.locations === false) {
+      db.transaction(tx => {
+        tx.executeSql('SELECT location_id, location_desc FROM ref_location_types', [], (tx, results) => {
+          var temp = [];
+          for (let i = 0; i < results.rows.length; ++i) {
+            //temp.push(results.rows.item(i));
+            temp.push({ label: results.rows.item(i).location_desc, value: results.rows.item(i).location_id });
+          }
+          this.setState({
+            locations: temp
+          });
+        });
+      });
+    }
+  }
+
+  checkSet() {
+    if (this.state.locations == false) {
+      this.getLocation();
+    }
+  }
+
   shouldComponentUpdate(prevState, nextState) {
     if ((prevState != nextState)) {
       return true;
@@ -158,130 +178,189 @@ export default class Info extends ValidationComponent {
     return false;
   }
 
-  checkSet() {
-    if (this.state.agents == false) {
-      this.getAgency();
-    }
-    if (this.state.sites == false) {
-      this.getSite();
-    }
-    if (this.state.buildings == false) {
-      this.getBuilding();
-    }
-  }
-
-  setSite(value) {
-    this.setState({ agency_id: value });
-    this.getSite();
-  }
-
-  setBuilding(value) {
-    this.setState({ site_id: value });
-    this.getBuilding();
-  }
-
   render() {
     this.checkSet();
     const state = this.state;
+    const yesNo =
+      [
+        { value: '1', label: 'Yes' },
+        { value: '2', label: 'No' }
+      ];
 
+    if (this.state.isLoading) {
+      return (<Loader />);
+    }
     return (
       <View style={styles.viewContainer}>
         <ScrollView keyboardShouldPersistTaps="handled">
           <KeyboardAvoidingView>
 
-            <Text style={{ color: '#133156', fontSize: 27, textAlign: 'center', paddingBottom: 10 }}>Info</Text>
-
-            <Mytext text="Assessment Name *" />
-            {this.isFieldInError('assessment_name') && this.getErrorsInField('assessment_name').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
-            <TextInput
-              ref="assessment_name"
-              onChangeText={(assessment_name) => this.setState({ assessment_name })}
-              value={this.state.assessment_name}
+            <Mytext text="INSPECTION NUMBER" />
+            <Mytextinput
+              onChangeText={(inspection_desc) => this.setState({ inspection_desc })}
+              value={state.inspection_desc}
               style={styles.TextInputStyleClass}
             />
 
-            <Mytext text="Assessor Name *" />
-            {this.isFieldInError('name_of_assessor') && this.getErrorsInField('name_of_assessor').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
-            <TextInput
-              ref="name_of_assessor"
-              onChangeText={(name_of_assessor) => this.setState({ name_of_assessor })}
-              value={this.state.name_of_assessor}
+            <Mytext text="INSPECTION DATE" />
+            <Mytextinput
+              onChangeText={(inspection_date) => this.setState({ inspection_date })}
+              value={state.inspection_date}
               style={styles.TextInputStyleClass}
             />
 
-            <Mytext text="Date *" />
-            {this.isFieldInError('assessment_date') && this.getErrorsInField('assessment_date').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
-            <TextInput autoCapitalize="none"
-              ref="assessment_date"
-              onChangeText={(assessment_date) => this.setState({ assessment_date })}
-              value={this.state.assessment_date}
+            <Mytext text="SITEID" />
+            <Mytextinput
+              onChangeText={(siteid) => this.setState({ siteid })}
+              value={state.siteid}
               style={styles.TextInputStyleClass}
             />
 
-            <Mytext text="Agency *" />
-            {this.isFieldInError('agency_id') && this.getErrorsInField('agency_id').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
-            <Picker
-              style={styles.picker}
-              itemStyle={styles.pickerItem}
-              selectedValue={state.agency_id}
-              onValueChange={(itemValue, itemIndex) => this.setSite(itemValue)} >
-              <Picker.Item value="" label="Make Selection" />
-              {Object.keys(state.agents).map((key) => {
-                return <Picker.Item label={state.agents[key].agency_name} value={state.agents[key].agency_id} key={key} />
-              })}
-            </Picker>
+            <Mytext text="LOCATION" />
+            <Mytextinput
+              onChangeText={(location) => this.setState({ location })}
+              value={state.location}
+              style={styles.TextInputStyleClass}
+            />
 
-            <Mytext text="Site *" />
-            {this.isFieldInError('site_id') && this.getErrorsInField('site_id').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
-            <Picker
-              style={styles.picker}
-              itemStyle={styles.pickerItem}
-              selectedValue={state.site_id}
-              onValueChange={(itemValue, itemIndex) => this.setBuilding(itemValue)} >
-              <Picker.Item value="" label="Make Selection" />
-              {Object.keys(state.sites).map((key) => {
-                return <Picker.Item label={state.sites[key].site_name} value={state.sites[key].site_id} key={key} />
-              })}
-            </Picker>
+            <Mytext text="LOCATION NUMBER" />
+            <Mytextinput
+              onChangeText={(location_number) => this.setState({ location_number })}
+              value={state.location_number}
+              style={styles.TextInputStyleClass}
+            />
 
-            <Mytext text="Building *" />
-            {this.isFieldInError('building_id') && this.getErrorsInField('building_id').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
-            <Picker
-              style={styles.picker}
-              itemStyle={styles.pickerItem}
-              selectedValue={state.building_id}
-              onValueChange={(itemValue, itemIndex) => this.setState({ building_id: itemValue })} >
-              <Picker.Item value="" label="Make Selection" />
-              {Object.keys(state.buildings).map((key) => {
-                return <Picker.Item label={state.buildings[key].building_name} value={state.buildings[key].building_id} key={key} />
-              })}
-            </Picker>
+            <Mytext text="STRUCTURE NUMBER" />
+            <Mytextinput
+              onChangeText={(structure_number) => this.setState({ structure_number })}
+              value={state.structure_number}
+              style={styles.TextInputStyleClass}
+            />
 
-            <Mytext text="Building Classification" />
-            <Picker
-              style={styles.picker}
-              itemStyle={styles.pickerItem}
-              selectedValue={state.building_classification}
-              onValueChange={(itemValue, itemIndex) => this.setState({ building_classification: itemValue })} >
-              <Picker.Item value="" label="Make Selection" />
-              <Picker.Item value="1" label="Building" />
-              <Picker.Item value="2" label="Grounds" />
-              <Picker.Item value="3" label="Room" />
-              <Picker.Item value="4" label="Tank" />
-              <Picker.Item value="5" label="Tower" />
-            </Picker>
+            <Mytext text="LOCATION TYPE" />
+            <MyPicker2
+              selectedValue={state.location_id}
+              onValueChange={(itemValue) => this.setState({ location_id: itemValue })}
+              items={state.locations}
+            />
 
-            <Mytext text="Notes" />
-            <TextInput
-              ref="notes"
+            <Mytext text="TYPE" />
+            <MyPicker2
+              selectedValue={state.type_id}
+              onValueChange={(itemValue) => this.setState({ type_id: itemValue })}
+              items={yesNo}
+            />
+
+            <Mytext text="USE" />
+            <Mytextinput
+              onChangeText={(use_desc) => this.setState({ use_desc })}
+              value={state.use_desc}
+              style={styles.TextInputStyleClass}
+            />
+
+            <Mytext text="STATUS" />
+            <MyPicker2
+              selectedValue={state.status_id}
+              onValueChange={(itemValue) => this.setState({ status_id: itemValue })}
+              items={yesNo}
+            />
+
+            <Mytext text="YEAR BUILT" />
+            <Mytextinput
+              onChangeText={(yr_built) => this.setState({ yr_built })}
+              value={state.yr_built}
+              style={styles.TextInputStyleClass}
+            />
+
+            <Mytext text="CONDITION (1100, 1400)" />
+            <Mytextinput
               multiline={true}
               numberOfLines={5}
-              onChangeText={(notes) => this.setState({ notes })}
-              value={this.state.notes}
+              onChangeText={(condition_desc) => this.setState({ condition_desc })}
+              value={state.condition_desc}
               style={styles.TextAreaStyleClass}
             />
 
-            <TouchableOpacity style={styles.button} onPress={this._onPressButton}>
+            <Mytext text="CONDITION DATE (1100, 1400) xx/xx/xxxx" />
+            <Mytextinput
+              onChangeText={(condition_date) => this.setState({ condition_date })}
+              value={state.condition_date}
+              style={styles.TextInputStyleClass}
+            />
+
+            <Mytext text="GPS LATITUDE (1100, 1300, 1400)" />
+            <Mytextinput
+              onChangeText={(latitude) => this.setState({ latitude })}
+              value={state.latitude}
+              style={styles.TextInputStyleClass}
+            />
+
+            <Mytext text="GPS LONGITUDE (1100, 1300, 1400)" />
+            <Mytextinput
+              onChangeText={(longitude) => this.setState({ longitude })}
+              value={state.longitude}
+              style={styles.TextInputStyleClass}
+            />
+
+            <Mytext text="FOOTPRINT AREA (1100, 1300)" />
+            <Mytextinput
+              onChangeText={(footprint) => this.setState({ footprint })}
+              value={state.footprint}
+              style={styles.TextInputStyleClass}
+            />
+
+            <Mytext text="MAINTAINED? (1100, 1400)" />
+            <MyPicker2
+              selectedValue={state.maintained_id}
+              onValueChange={(itemValue) => this.setState({ maintained_id: itemValue })}
+              items={yesNo}
+            />
+
+            <Mytext text="MAINTAINED BY" />
+            <MyPicker2
+              selectedValue={this.state.maintained_by_id}
+              onValueChange={(itemValue) => this.setState({ maintained_by_id: itemValue })}
+              items={yesNo}
+            />
+
+            <Mytext text="OWNED BY" />
+            <MyPicker2
+              selectedValue={this.state.owned_by_id}
+              onValueChange={(itemValue) => this.setState({ owned_by_id: itemValue })}
+              items={yesNo}
+            />
+
+            <Mytext text="OCCUPYING PROGRAM (1100, 1300)" />
+            <MyPicker2
+              selectedValue={state.occupency_id}
+              onValueChange={(itemValue) => this.setState({ occupency_id: itemValue })}
+              items={yesNo}
+            />
+
+            <Mytext text="ACTUAL BENEFICIARY OCCUPANCY (1100, 1300)" />
+            <Mytextinput
+              onChangeText={(occupancy_date) => this.setState({ occupancy_date })}
+              value={state.occupancy_date}
+              style={styles.TextInputStyleClass}
+            />
+
+            <Mytext text="PROJECT NUMBER" />
+            <Mytextinput
+              onChangeText={(project_number) => this.setState({ project_number })}
+              value={state.project_number}
+              style={styles.TextInputStyleClass}
+            />
+
+            <Mytext text="REMARKS" />
+            <Mytextinput
+              multiline={true}
+              numberOfLines={5}
+              onChangeText={(remarks) => this.setState({ remarks })}
+              value={state.remarks}
+              style={styles.TextAreaStyleClass}
+            />
+
+            <TouchableOpacity style={styles.button} onPress={this.onPressButton}>
               <Text style={styles.text}>Submit</Text>
             </TouchableOpacity>
 

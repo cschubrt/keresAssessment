@@ -19,7 +19,7 @@ export default class AssessmentHome extends Component {
     componentDidMount() {
         NetInfo.addEventListener(connected => {
             if (connected.isConnected == true) {
-                this.startClients();
+                this.getClient();
                 this.getBuilding();
                 this.getSites();
                 this.getAgency();
@@ -54,7 +54,7 @@ export default class AssessmentHome extends Component {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    key: 'xxxx'
+                    key: '58PvahBTd'
                 })
             }).then((response) => response.json())
                 .then((responseJson) => {
@@ -96,7 +96,7 @@ export default class AssessmentHome extends Component {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    key: 'xxxx'
+                    key: '58PvahBTd'
                 })
             }).then((response) => response.json())
                 .then((responseJson) => {
@@ -129,7 +129,7 @@ export default class AssessmentHome extends Component {
         });
     };
 
-    startClients() {
+    getClient() {
         try {
             fetch('https://cschubert.serviceseval.com/keres_fca/app/getClient.php', {
                 method: 'POST',
@@ -138,7 +138,7 @@ export default class AssessmentHome extends Component {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    key: 'xxxx'
+                    key: '58PvahBTd'
                 })
             }).then((response) => response.json())
                 .then((responseJson) => {
@@ -181,7 +181,7 @@ export default class AssessmentHome extends Component {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    key: 'xxxx'
+                    key: '58PvahBTd'
                 })
             }).then((response) => response.json())
                 .then((responseJson) => {

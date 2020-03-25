@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { View, Text, FlatList } from 'react-native';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
 
-export default class ListView extends Component {
+export default class ClientList extends Component {
 
     constructor(props) {
         super(props);
@@ -19,7 +19,7 @@ export default class ListView extends Component {
 
     async componentDidMount() {
         try {
-            db.transaction(tx => {
+            await db.transaction(tx => {
                 tx.executeSql('SELECT * FROM client_table', [], (tx, results) => {
                     var temp = [];
                     for (let i = 0; i < results.rows.length; ++i) {
@@ -61,7 +61,6 @@ export default class ListView extends Component {
         if (this.state.isLoading) {
             return (<Loader />);
         }
-
         return (
             <View style={styles.listContainer}>
                 <FlatList

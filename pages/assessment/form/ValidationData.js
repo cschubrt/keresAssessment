@@ -1,6 +1,8 @@
 import React from 'react';
+import { format } from "date-fns";
 import styles from '../../../styles/styles';
 import Mytext from '../../components/Mytext';
+import Loader from '../../components/Loader';
 import ValidationComponent from '../../../vals';
 import MyPicker2 from '../../components/Picker2';
 import Mytextinput from '../../components/Mytextinput';
@@ -8,7 +10,7 @@ import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
 import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
 
-export default class Observations extends ValidationComponent {
+export default class ValidationData extends ValidationComponent {
 
   constructor(props) {
     super(props);
@@ -40,6 +42,11 @@ export default class Observations extends ValidationComponent {
       project_number: '',
       remarks: '',
       locations: false,
+      type: false,
+      status: false,
+      maintained: false,
+      owned: false,
+      occupency: false,
       master_id: this.props.navigation.state.params.master_id,
       assessment_name: this.props.navigation.state.params.assessment_name
     }
@@ -47,10 +54,14 @@ export default class Observations extends ValidationComponent {
 
   componentDidMount() {
     this.getObservation();
-    this.setState({isLoading: false});
   }
 
   onPressButton = () => {
+    this.validate({
+      inspection_date: { date: 'MM/DD/YYYY' },
+      occupancy_date: { date: 'MM/DD/YYYY' },
+      condition_date: { date: 'MM/DD/YYYY' },
+    });
     if (this.isFormValid()) {
       if (this.state.isInsert) {
         this.insertValidation();
@@ -114,7 +125,7 @@ export default class Observations extends ValidationComponent {
           if (len > 0) {
             this.setState({
               inspection_desc: results.rows.item(0).inspection_desc,
-              inspection_date: results.rows.item(0).inspection_date,
+              inspection_date: format(new Date(results.rows.item(0).inspection_date), "MM/dd/yyyy"),
               siteid: results.rows.item(0).siteid,
               location: results.rows.item(0).location,
               location_number: results.rows.item(0).location_number,
@@ -126,7 +137,7 @@ export default class Observations extends ValidationComponent {
               description: results.rows.item(0).description,
               yr_built: results.rows.item(0).yr_built,
               condition_desc: results.rows.item(0).condition_desc,
-              condition_date: results.rows.item(0).condition_date,
+              condition_date: format(new Date(results.rows.item(0).condition_date), "MM/dd/yyyy"),
               latitude: results.rows.item(0).latitude,
               longitude: results.rows.item(0).longitude,
               footprint: results.rows.item(0).footprint,
@@ -134,24 +145,28 @@ export default class Observations extends ValidationComponent {
               maintained_by_id: results.rows.item(0).maintained_by_id,
               owned_by_id: results.rows.item(0).owned_by_id,
               occupancy_date: results.rows.item(0).occupancy_date,
-              project_number: results.rows.item(0).project_number,
+              occupancy_date: format(new Date(results.rows.item(0).occupancy_date), "MM/dd/yyyy"),
               remarks: results.rows.item(0).remarks,
               occupency_id: results.rows.item(0).occupency_id,
-              isInsert: false
+              project_number: results.rows.item(0).project_number,
+              isInsert: false,
+              isLoading: false
             });
+          } else {
+            this.setState({ isLoading: false });
           }
         });
       });
     }
     catch (error) {
-      console.error(error);
+      console.log(error);
     }
   }
 
   getLocation() {
     if (this.state.locations === false) {
       db.transaction(tx => {
-        tx.executeSql('SELECT * FROM ref_location_types', [], (tx, results) => {
+        tx.executeSql('SELECT location_id, location_desc FROM ref_location_types', [], (tx, results) => {
           var temp = [];
           for (let i = 0; i < results.rows.length; ++i) {
             temp.push({ label: results.rows.item(i).location_desc, value: results.rows.item(i).location_id });
@@ -164,9 +179,104 @@ export default class Observations extends ValidationComponent {
     }
   }
 
+  getType() {
+    if (this.state.type === false) {
+      db.transaction(tx => {
+        tx.executeSql('SELECT val_id, val_desc FROM ref_validation_types', [], (tx, results) => {
+          var temp = [];
+          for (let i = 0; i < results.rows.length; ++i) {
+            temp.push({ label: results.rows.item(i).val_desc, value: results.rows.item(i).val_id });
+          }
+          this.setState({
+            type: temp
+          });
+        });
+      });
+    }
+  }
+
+  getStatus() {
+    if (this.state.status === false) {
+      db.transaction(tx => {
+        tx.executeSql('SELECT status_id, status_desc FROM ref_status_types', [], (tx, results) => {
+          var temp = [];
+          for (let i = 0; i < results.rows.length; ++i) {
+            temp.push({ label: results.rows.item(i).status_desc, value: results.rows.item(i).status_id });
+          }
+          this.setState({
+            status: temp
+          });
+        });
+      });
+    }
+  }
+
+  getMaintained() {
+    if (this.state.maintained === false) {
+      db.transaction(tx => {
+        tx.executeSql('SELECT maintained_by_id, maintained_desc FROM ref_maintained_by', [], (tx, results) => {
+          var temp = [];
+          for (let i = 0; i < results.rows.length; ++i) {
+            temp.push({ label: results.rows.item(i).maintained_desc, value: results.rows.item(i).maintained_by_id });
+          }
+          this.setState({
+            maintained: temp
+          });
+        });
+      });
+    }
+  }
+
+  getOwnedBy() {
+    if (this.state.owned === false) {
+      db.transaction(tx => {
+        tx.executeSql('SELECT owned_by_id, maintained_desc FROM ref_owned_by', [], (tx, results) => {
+          var temp = [];
+          for (let i = 0; i < results.rows.length; ++i) {
+            temp.push({ label: results.rows.item(i).maintained_desc, value: results.rows.item(i).owned_by_id });
+          }
+          this.setState({
+            owned: temp
+          });
+        });
+      });
+    }
+  }
+
+  getOccupency() {
+    if (this.state.occupency === false) {
+      db.transaction(tx => {
+        tx.executeSql('SELECT occupency_id, occupency_desc FROM ref_occupency ORDER BY occupency_desc', [], (tx, results) => {
+          var temp = [];
+          for (let i = 0; i < results.rows.length; ++i) {
+            temp.push({ label: results.rows.item(i).occupency_desc, value: results.rows.item(i).occupency_id });
+          }
+          this.setState({
+            occupency: temp
+          });
+        });
+      });
+    }
+  }
+
   checkSet() {
     if (this.state.locations == false) {
       this.getLocation();
+    }
+    if (this.state.type == false) {
+      this.getType();
+    }
+    if (this.state.status == false) {
+      this.getStatus();
+    }
+    if (this.state.maintained == false) {
+      this.getMaintained();
+    }
+    if (this.state.owned == false) {
+      this.getOwnedBy();
+    }
+    if (this.state.occupency == false) {
+      this.getOccupency();
     }
   }
 
@@ -182,11 +292,13 @@ export default class Observations extends ValidationComponent {
     const state = this.state;
     const yesNo =
       [
-        { value: '1', label: 'Yes' },
-        { value: '2', label: 'No' }
+        { value: 1, label: 'Yes' },
+        { value: 2, label: 'No' }
       ];
-      console.log(state.location_id);
 
+    if (this.state.isLoading) {
+      return (<Loader />);
+    }
     return (
       <View style={styles.viewContainer}>
         <ScrollView keyboardShouldPersistTaps="handled">
@@ -245,7 +357,7 @@ export default class Observations extends ValidationComponent {
             <MyPicker2
               selectedValue={state.type_id}
               onValueChange={(itemValue) => this.setState({ type_id: itemValue })}
-              items={yesNo}
+              items={state.type}
             />
 
             <Mytext text="USE" />
@@ -259,7 +371,7 @@ export default class Observations extends ValidationComponent {
             <MyPicker2
               selectedValue={state.status_id}
               onValueChange={(itemValue) => this.setState({ status_id: itemValue })}
-              items={yesNo}
+              items={state.status}
             />
 
             <Mytext text="YEAR BUILT" />
@@ -278,7 +390,7 @@ export default class Observations extends ValidationComponent {
               style={styles.TextAreaStyleClass}
             />
 
-            <Mytext text="CONDITION DATE (1100, 1400) xx/xx/xxxx" />
+            <Mytext text="CONDITION DATE (1100, 1400)" />
             <Mytextinput
               onChangeText={(condition_date) => this.setState({ condition_date })}
               value={state.condition_date}
@@ -317,21 +429,21 @@ export default class Observations extends ValidationComponent {
             <MyPicker2
               selectedValue={this.state.maintained_by_id}
               onValueChange={(itemValue) => this.setState({ maintained_by_id: itemValue })}
-              items={yesNo}
+              items={state.maintained}
             />
 
             <Mytext text="OWNED BY" />
             <MyPicker2
               selectedValue={this.state.owned_by_id}
               onValueChange={(itemValue) => this.setState({ owned_by_id: itemValue })}
-              items={yesNo}
+              items={state.owned}
             />
 
             <Mytext text="OCCUPYING PROGRAM (1100, 1300)" />
             <MyPicker2
               selectedValue={state.occupency_id}
               onValueChange={(itemValue) => this.setState({ occupency_id: itemValue })}
-              items={yesNo}
+              items={state.occupency}
             />
 
             <Mytext text="ACTUAL BENEFICIARY OCCUPANCY (1100, 1300)" />
