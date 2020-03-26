@@ -134,14 +134,13 @@ export default class AssessmentList extends Component {
     }
   }
 
-  insertSiteData() {
-    const state = this.state;
+  insertSiteData(src) {
     db.transaction(function (tx) {
       tx.executeSql(
         'INSERT INTO site_data_table(master_id,flower_area_sf,gate_and_ditch_area,gate_and_ditch_area_irrigated,nat_area,pump_and_ditch,pump_and_ditch_irrigated,push_mower_area,riding_mower_area,rough_mower,sprinkler_coverage_auto,sprinkler_coverage_manual,shrub_area,total_asphalt,total_concrete,total_curbs,total_fences,total_gravel,small_trees,tall_trees,trimming) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);',
-        [state.master_id,state.flower_area_sf,state.gate_and_ditch_area,state.gate_and_ditch_area_irrigated,state.nat_area,state.pump_and_ditch,state.pump_and_ditch_irrigated,state.push_mower_area,state.riding_mower_area,state.rough_mower,state.sprinkler_coverage_auto,state.sprinkler_coverage_manual,state.shrub_area,state.total_asphalt,state.total_concrete,state.total_curbs,state.total_fences,state.total_gravel,state.small_trees,state.tall_trees,state.trimming],
+        [src[0].master_id,src[0].flower_area_sf,src[0].gate_and_ditch_area,src[0].gate_and_ditch_area_irrigated,src[0].nat_area,src[0].pump_and_ditch,src[0].pump_and_ditch_irrigated,src[0].push_mower_area,src[0].riding_mower_area,src[0].rough_mower,src[0].sprinkler_coverage_auto,src[0].sprinkler_coverage_manual,src[0].shrub_area,src[0].total_asphalt,src[0].total_concrete,src[0].total_curbs,src[0].total_fences,src[0].total_gravel,src[0].small_trees,src[0].tall_trees,src[0].trimming],
         (tx, results) => {
-          console.log('site_data_table',results) 
+          console.log('site_data_table',results)
         }
       );
     });

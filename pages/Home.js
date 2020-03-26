@@ -15,7 +15,7 @@ export default class Home extends Component {
             connection_Status: '',
             connection: true,
             links: [
-                { title: 'Keres Assessment Server', link: 'https://cschubert.serviceseval.com/keres_fca' }
+                { title: 'Keres Assessment Website', link: 'https://cschubert.serviceseval.com/keres_fca' }
             ]
         }
     }
@@ -120,14 +120,6 @@ export default class Home extends Component {
                     <Text style={styles.text}>{item.title}</Text>
                 </TouchableOpacity>
             ));
-        }
-    }
-
-    updateButton() {
-        if (this.state.connection) {
-            return <TouchableOpacity style={styles.button} onPress={() => this.handlePress('UpdateApp')}>
-                <Text style={styles.text}>Update App</Text>
-            </TouchableOpacity>
         }
     }
 

@@ -63,14 +63,14 @@ export default class SiteData extends ValidationComponent {
         [state.master_id, state.flower_area_sf, state.gate_and_ditch_area, state.gate_and_ditch_area_irrigated, state.nat_area, state.pump_and_ditch, state.pump_and_ditch_irrigated, state.push_mower_area, state.riding_mower_area, state.rough_mower, state.sprinkler_coverage_auto, state.sprinkler_coverage_manual, state.shrub_area, state.total_asphalt, state.total_concrete, state.total_curbs, state.total_fences, state.total_gravel, state.small_trees, state.tall_trees, state.trimming],
         (tx, results) => {
           if (results.rowsAffected > 0) {
-            Alert.alert('Success', 'Validation added successfully',
+            Alert.alert('Success', 'Site Data added successfully',
               [
                 { text: 'Ok', onPress: () => that.props.navigation.navigate('FormIndex', { master_id: state.master_id, assessment_name: state.assessment_name }) },
               ],
               { cancelable: false }
             );
           } else {
-            alert('Validation add Failed');
+            alert('Site Data add Failed');
           }
         }
       );
@@ -86,14 +86,14 @@ export default class SiteData extends ValidationComponent {
         [state.flower_area_sf, state.gate_and_ditch_area, state.gate_and_ditch_area_irrigated, state.nat_area, state.pump_and_ditch, state.pump_and_ditch_irrigated, state.push_mower_area, state.riding_mower_area, state.rough_mower, state.sprinkler_coverage_auto, state.sprinkler_coverage_manual, state.shrub_area, state.total_asphalt, state.total_concrete, state.total_curbs, state.total_fences, state.total_gravel, state.small_trees, state.tall_trees, state.trimming, state.master_id],
         (tx, results) => {
           if (results.rowsAffected > 0) {
-            Alert.alert('Success', 'Validation updated successfully',
+            Alert.alert('Success', 'Site Data updated successfully',
               [
                 { text: 'Ok', onPress: () => that.props.navigation.navigate('FormIndex', { master_id: state.master_id, assessment_name: state.assessment_name }) },
               ],
               { cancelable: false }
             );
           } else {
-            alert('Validation Update Failed');
+            alert('Site Data Update Failed');
           }
         }
       );
@@ -101,11 +101,9 @@ export default class SiteData extends ValidationComponent {
   }
 
   getSiteData() {
-    //console.log(this.state.master_id);
     try {
       db.transaction(tx => {
-        tx.executeSql('SELECT * FROM site_data_table WHERE master_id = ?', [this.state.master_id], (tx, results) => {
-          console.log(results.rows.length);
+        tx.executeSql('SELECT * FROM site_data_table', [], (tx, results) => {
           if (results.rows.length > 0) {
             this.setState({
               flower_area_sf: results.rows.item(0).flower_area_sf,
@@ -160,12 +158,136 @@ export default class SiteData extends ValidationComponent {
               style={styles.TextInputStyleClass}
             />
 
-
-
-            <Mytext text="XXXX" />
+            <Mytext text="GATE AND DITCH AREAS - DITCH AREA (SF)" />
             <Mytextinput
-              onChangeText={(XXXX) => this.setState({ XXXX })}
-              value={state.XXXX}
+              onChangeText={(gate_and_ditch_area) => this.setState({ gate_and_ditch_area })}
+              value={state.gate_and_ditch_area}
+              style={styles.TextInputStyleClass}
+            />
+
+            <Mytext text="GATE AND DITCH AREAS - IRRIGATED AREA (SF)" />
+            <Mytextinput
+              onChangeText={(gate_and_ditch_area_irrigated) => this.setState({ gate_and_ditch_area_irrigated })}
+              value={state.gate_and_ditch_area_irrigated}
+              style={styles.TextInputStyleClass}
+            />
+
+            <Mytext text="NATURAL AREA (SF)" />
+            <Mytextinput
+              onChangeText={(nat_area) => this.setState({ nat_area })}
+              value={state.nat_area}
+              style={styles.TextInputStyleClass}
+            />
+
+            <Mytext text="PUMP AND DITCH AREAS - DITCH AREA (SF)" />
+            <Mytextinput
+              onChangeText={(pump_and_ditch) => this.setState({ pump_and_ditch })}
+              value={state.pump_and_ditch}
+              style={styles.TextInputStyleClass}
+            />
+
+            <Mytext text="PUMP AND DITCH AREAS - IRRIGATED AREA (SF)" />
+            <Mytextinput
+              onChangeText={(pump_and_ditch_irrigated) => this.setState({ pump_and_ditch_irrigated })}
+              value={state.pump_and_ditch_irrigated}
+              style={styles.TextInputStyleClass}
+            />
+
+            <Mytext text="PUSH MOWER AREA (SF)" />
+            <Mytextinput
+              onChangeText={(push_mower_area) => this.setState({ push_mower_area })}
+              value={state.push_mower_area}
+              style={styles.TextInputStyleClass}
+            />
+
+            <Mytext text="RIDING MOWER AREA (SF)" />
+            <Mytextinput
+              onChangeText={(riding_mower_area) => this.setState({ riding_mower_area })}
+              value={state.riding_mower_area}
+              style={styles.TextInputStyleClass}
+            />
+
+            <Mytext text="ROUGH MOWER AREA (SF)" />
+            <Mytextinput
+              onChangeText={(rough_mower) => this.setState({ rough_mower })}
+              value={state.rough_mower}
+              style={styles.TextInputStyleClass}
+            />
+
+            <Mytext text="SPRINKLER COVERAGE - AUTO (SF)" />
+            <Mytextinput
+              onChangeText={(sprinkler_coverage_auto) => this.setState({ sprinkler_coverage_auto })}
+              value={state.sprinkler_coverage_auto}
+              style={styles.TextInputStyleClass}
+            />
+
+            <Mytext text="SPRINKLER COVERAGE - MANUAL (SF)" />
+            <Mytextinput
+              onChangeText={(sprinkler_coverage_manual) => this.setState({ sprinkler_coverage_manual })}
+              value={state.sprinkler_coverage_manual}
+              style={styles.TextInputStyleClass}
+            />
+
+            <Mytext text="SHRUB AREA (SF)" />
+            <Mytextinput
+              onChangeText={(shrub_area) => this.setState({ shrub_area })}
+              value={state.shrub_area}
+              style={styles.TextInputStyleClass}
+            />
+
+            <Mytext text="TOTAL ASPHALT AREA (SF)" />
+            <Mytextinput
+              onChangeText={(total_asphalt) => this.setState({ total_asphalt })}
+              value={state.total_asphalt}
+              style={styles.TextInputStyleClass}
+            />
+
+            <Mytext text="TOTAL CONCRETE AREA (SF)" />
+            <Mytextinput
+              onChangeText={(total_concrete) => this.setState({ total_concrete })}
+              value={state.total_concrete}
+              style={styles.TextInputStyleClass}
+            />
+
+            <Mytext text="TOTAL CURBS (LF)" />
+            <Mytextinput
+              onChangeText={(total_curbs) => this.setState({ total_curbs })}
+              value={state.total_curbs}
+              style={styles.TextInputStyleClass}
+            />
+
+            <Mytext text="TOTAL FENCES (LF)" />
+            <Mytextinput
+              onChangeText={(total_fences) => this.setState({ total_fences })}
+              value={state.total_fences}
+              style={styles.TextInputStyleClass}
+            />
+
+            <Mytext text="TOTAL GRAVEL AREA (SF)" />
+            <Mytextinput
+              onChangeText={(total_gravel) => this.setState({ total_gravel })}
+              value={state.total_gravel}
+              style={styles.TextInputStyleClass}
+            />
+
+            <Mytext text="NO. OF SMALL TREES" />
+            <Mytextinput
+              onChangeText={(small_trees) => this.setState({ small_trees })}
+              value={state.small_trees}
+              style={styles.TextInputStyleClass}
+            />
+
+            <Mytext text="NO. OF TALL TREES" />
+            <Mytextinput
+              onChangeText={(tall_trees) => this.setState({ tall_trees })}
+              value={state.tall_trees}
+              style={styles.TextInputStyleClass}
+            />
+
+            <Mytext text="TRIMMING (LF)" />
+            <Mytextinput
+              onChangeText={(trimming) => this.setState({ trimming })}
+              value={state.trimming}
               style={styles.TextInputStyleClass}
             />
 
