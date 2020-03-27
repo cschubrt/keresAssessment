@@ -19,7 +19,7 @@ export default class AssessmentList extends Component {
       isLoading: true,
       tableData: [],
       connection_Status: '',
-      tableHead: ['Assessment', 'Date', 'Assessor', 'Status', ''],
+      tableHead: ['Assessment', 'Date', 'Assessor', 'Status', 'Delete', ''],
       agency_name: this.props.navigation.state.params.agency_name,
       agency_id: this.props.navigation.state.params.agency_id,
       user_name: this.props.navigation.state.params.user_name,
@@ -29,7 +29,7 @@ export default class AssessmentList extends Component {
   componentDidMount() {
     this.isAvailable();
     NetInfo.fetch().then(connected => {
-      if (connected.isConnected == true) {
+      if (connected.isConnected == true && this.state.online) {
         this.setState({
           connection: true,
           connection_Status: "Online",
@@ -38,7 +38,6 @@ export default class AssessmentList extends Component {
       } else {
         this.setState({
           connection: false,
-          isLoading: false,
           connection_Status: "Offline",
         })
         this.getAssessments();
@@ -62,6 +61,58 @@ export default class AssessmentList extends Component {
     this.setState({ online: true });
   }
 
+
+
+
+
+
+  getTowerData = (master_id) => {
+    try {
+      fetch('https://cschubert.serviceseval.com/keres_fca/app/getTowerData.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          master_id: master_id,
+          key: '58PvahBTd'
+        })
+      }).then((response) => response.json())
+        .then((responseJson) => {
+          this.setState({
+            observationSource: responseJson
+          })
+          if (this.state.observationSource.length > 0) {
+            this.insertTowerData(this.state.observationSource);
+          }
+        }).catch((error) => {
+          console.log(error);
+        });
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+
+  insertTowerData(src) {
+    db.transaction(function (tx) {
+      tx.executeSql(
+        'INSERT INTO tower_data_table(master_id,gross_sqf,original_cost,useful_life,planned_replacement_year,project_number,total_fund_area,elevation,height,ice_load,wind_load,tension) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);',
+        [src[0].master_id, src[0].gross_sqf, src[0].original_cost, src[0].useful_life, src[0].planned_replacement_year, src[0].project_number, src[0].total_fund_area, src[0].elevation, src[0].height, src[0].ice_load, src[0].wind_load, src[0].tension],
+        (tx, results) => { }
+      );
+    });
+  };
+
+
+
+
+
+
+
+
+
   getBuildingData = (master_id) => {
     try {
       fetch('https://cschubert.serviceseval.com/keres_fca/app/getBuildingData.php', {
@@ -79,7 +130,6 @@ export default class AssessmentList extends Component {
           this.setState({
             observationSource: responseJson
           })
-          //console.log('length', this.state.observationSource.length);
           if (this.state.observationSource.length > 0) {
             this.insertBuildingData(this.state.observationSource);
           }
@@ -97,9 +147,7 @@ export default class AssessmentList extends Component {
       tx.executeSql(
         'INSERT INTO building_data_table(master_id,portable_id,structure_use_id,replacement_cost_desc,replacement_yr_desc,life_span,room_number,floor_lvls,basment_lvls,maintained_date,historical_id,designed_desc,org_name,org_type,high_grade_lvl,low_grade_lvl,pending_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);',
         [src[0].master_id, src[0].portable_id, src[0].structure_use_id, src[0].replacement_cost_desc, src[0].replacement_yr_desc, src[0].life_span, src[0].room_number, src[0].floor_lvls, src[0].basment_lvls, src[0].maintained_date, src[0].historical_id, src[0].designed_desc, src[0].org_name, src[0].org_type, src[0].high_grade_lvl, src[0].low_grade_lvl, src[0].pending_id],
-        (tx, results) => {
-          //console.log('building_data_table',results) 
-        }
+        (tx, results) => { }
       );
     });
   };
@@ -121,7 +169,6 @@ export default class AssessmentList extends Component {
           this.setState({
             siteDataSource: responseJson
           })
-          console.log('length', this.state.siteDataSource.length);
           if (this.state.siteDataSource.length > 0) {
             this.insertSiteData(this.state.siteDataSource);
           }
@@ -138,10 +185,8 @@ export default class AssessmentList extends Component {
     db.transaction(function (tx) {
       tx.executeSql(
         'INSERT INTO site_data_table(master_id,flower_area_sf,gate_and_ditch_area,gate_and_ditch_area_irrigated,nat_area,pump_and_ditch,pump_and_ditch_irrigated,push_mower_area,riding_mower_area,rough_mower,sprinkler_coverage_auto,sprinkler_coverage_manual,shrub_area,total_asphalt,total_concrete,total_curbs,total_fences,total_gravel,small_trees,tall_trees,trimming) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);',
-        [src[0].master_id,src[0].flower_area_sf,src[0].gate_and_ditch_area,src[0].gate_and_ditch_area_irrigated,src[0].nat_area,src[0].pump_and_ditch,src[0].pump_and_ditch_irrigated,src[0].push_mower_area,src[0].riding_mower_area,src[0].rough_mower,src[0].sprinkler_coverage_auto,src[0].sprinkler_coverage_manual,src[0].shrub_area,src[0].total_asphalt,src[0].total_concrete,src[0].total_curbs,src[0].total_fences,src[0].total_gravel,src[0].small_trees,src[0].tall_trees,src[0].trimming],
-        (tx, results) => {
-          console.log('site_data_table',results)
-        }
+        [src[0].master_id, src[0].flower_area_sf, src[0].gate_and_ditch_area, src[0].gate_and_ditch_area_irrigated, src[0].nat_area, src[0].pump_and_ditch, src[0].pump_and_ditch_irrigated, src[0].push_mower_area, src[0].riding_mower_area, src[0].rough_mower, src[0].sprinkler_coverage_auto, src[0].sprinkler_coverage_manual, src[0].shrub_area, src[0].total_asphalt, src[0].total_concrete, src[0].total_curbs, src[0].total_fences, src[0].total_gravel, src[0].small_trees, src[0].tall_trees, src[0].trimming],
+        (tx, results) => { }
       );
     });
   };
@@ -273,6 +318,7 @@ export default class AssessmentList extends Component {
         this.getValidation(master_id);
         this.getBuildingData(master_id);
         this.getSiteData(master_id);
+        this.getTowerData(master_id);
 
         alert('Assessment Downloaded');
         this.setState({ tableData: [] });
@@ -332,11 +378,12 @@ export default class AssessmentList extends Component {
                   format(new Date(val['assessment_date']), "MM/dd/yyyy"),
                   val['name_of_assessor'],
                   (val['checked_out_by'] === this.state.user_name ? this.checkedValue(val['master_id']) : this.addLink(val['master_id'])),
-                  (val['checked_out_by'] === this.state.user_name ? this.goTo(val['master_id'], val['assessment_name']) : this.NoGoTo()),
+                  (val['checked_out_by'] === this.state.user_name ? this.NoGoTo(val['master_id'], val['assessment_name']) : false),
+                  (val['checked_out_by'] === this.state.user_name ? this.goTo(val['master_id'], val['assessment_name']) : false),
                 ]
               ]);
               this.setState({
-                tableData: joined,
+                tableData: joined
               });
             }
           }
@@ -354,19 +401,20 @@ export default class AssessmentList extends Component {
 
   getAssessments() {
     const editIcon = values => (
-      <Text style={{ color: '#000', textAlign: 'right', paddingRight: 10 }}><FontAwesomeIcon icon={faCheck} /></Text>
+      <Text style={{ color: '#000', textAlign: 'center', paddingRight: 10 }}><FontAwesomeIcon icon={faCheck} /></Text>
     );
     try {
       db.transaction(tx => {
-        tx.executeSql('SELECT * FROM assessment_table WHERE downloaded = 1 AND agency_id = ? ORDER BY assessment_name', [this.state.agency_id], (tx, results) => {
+        tx.executeSql('SELECT * FROM assessment_table WHERE downloaded = 1 AND agency_id = ?', [this.state.agency_id], (tx, results) => {
           if (results.rows.length > 0) {
-            for (let i = 0; i < len; i++) {
+            for (let i = 0; i < results.rows.length; i++) {
               var joined = this.state.tableData.concat([
                 [
                   results.rows.item(i).assessment_name,
                   format(new Date(results.rows.item(i).assessment_date), "MM/dd/yyyy"),
                   results.rows.item(i).name_of_assessor,
                   editIcon(results.rows.item(i).master_id),
+                  null,
                   this.goTo(results.rows.item(i).master_id, results.rows.item(i).assessment_name)
                 ]
               ]);
@@ -391,43 +439,85 @@ export default class AssessmentList extends Component {
 
   addLink(values) {
     return <TouchableOpacity onPress={() => this.addAssessment(values)}>
-      <Text style={{ color: '#000', textAlign: 'center', paddingRight: 10 }}><FontAwesomeIcon icon={faDownload} /></Text>
+      <Text style={{ color: '#000', textAlign: 'center' }}><FontAwesomeIcon icon={faDownload} size={18} /></Text>
     </TouchableOpacity>
   }
 
   checkedValue(values) {
     return <TouchableOpacity onPress={() => this.uploadAssessment(values)}>
-      <Text style={{ color: '#000', textAlign: 'center', paddingRight: 10 }}><FontAwesomeIcon icon={faUpload} /></Text>
+      <Text style={{ color: '#000', textAlign: 'center' }}><FontAwesomeIcon icon={faUpload} size={18} /></Text>
     </TouchableOpacity>
   }
 
   goTo(values, assessment_name) {
     return <TouchableOpacity onPress={() => this.props.navigation.navigate('FormIndex', { master_id: values, assessment_name: assessment_name })}>
-      <Text style={{ color: '#000', textAlign: 'right', paddingRight: 15 }}><FontAwesomeIcon icon={faChevronRight} /></Text>
+      <Text style={{ color: '#000', textAlign: 'center' }}><FontAwesomeIcon icon={faChevronRight} size={20} /></Text>
     </TouchableOpacity>
   }
 
-  NoGoTo() {
-    return <Text style={{ color: '#000', textAlign: 'right', paddingRight: 15 }}><FontAwesomeIcon icon={faTimes} /></Text>
+  NoGoTo(master_id, assessment_name) {
+    return <TouchableOpacity onPress={() => this.deleteCheck(master_id, assessment_name)}>
+      <Text style={{ color: '#000', textAlign: 'center' }}><FontAwesomeIcon icon={faTimes} size={20} /></Text>
+    </TouchableOpacity>
+  }
+
+  deleteCheck(master_id, assessment_name) {
+    Alert.alert('Alert', 'Delete Assessment: ' + assessment_name,
+      [
+        { text: 'Ok', onPress: () => this.deleteThis(master_id) },
+        { text: 'Cancel' },
+      ],
+      { cancelable: false }
+    );
+  }
+
+  deleteThis = (master_id) => {
+    db.transaction(function (tx) {
+      tx.executeSql(
+        'delete from assessment_table WHERE master_id = ?', [master_id], (tx, results) => { }
+      );
+      tx.executeSql(
+        'delete from observations_table WHERE master_id = ?', [master_id], (tx, results) => { }
+      );
+      tx.executeSql(
+        'delete from building_data_table WHERE master_id = ?', [master_id], (tx, results) => { }
+      );
+      tx.executeSql(
+        'delete from site_data_table WHERE master_id = ?', [master_id], (tx, results) => { }
+      );
+      tx.executeSql(
+        'delete from validation_data_table WHERE master_id = ?', [master_id], (tx, results) => { }
+      );
+    });
+    if (this.state.connection) {
+      this.deleteAssessment(master_id);
+    }
+    alert('Assessment Deleted');
+    this.setState({ tableData: [] });
+    this.getAssessmentByAgency()
+  };
+
+  deleteAssessment = (master_id) => {
+    fetch('https://cschubert.serviceseval.com/keres_fca/app/deleteAssessment.php', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        master_id: master_id,
+        key: '58PvahBTd'
+      })
+    });
   }
 
   deleteit = () => {
     db.transaction(function (tx) {
       tx.executeSql(
-        'delete from assessment_table;', [], (tx, results) => { console.log('assessment_table', results); },
+        'delete from assessment_table;', [], (tx, results) => { }
       );
       tx.executeSql(
-        'delete from observations_table;', [], (tx, results) => { console.log('observations_table', results); }
-      );
-    });
-  };
-
-  selectit = () => {
-    db.transaction(function (tx) {
-      tx.executeSql(
-        'select * from observations_table where master_id is not null;',
-        [],
-        (tx, results) => { console.log('select', results.rows.item(0).master_id); }
+        'delete from observations_table;', [], (tx, results) => { }
       );
     });
   };
@@ -446,15 +536,11 @@ export default class AssessmentList extends Component {
           </View>
           {RenderIf(state.tableData.length > 0,
             <Table borderStyle={{ borderWidth: 1, borderColor: '#888' }}>
-              <Row data={state.tableHead} flexArr={[2, 1, 2, 1, 1]} style={styles.head} textStyle={styles.headerText} />
-              <Rows data={state.tableData} flexArr={[2, 1, 2, 1, 1]} textStyle={styles.cellText} />
+              <Row data={state.tableHead} flexArr={[2, 1, 2, .8, .8, .5]} style={styles.head} textStyle={styles.headerText} />
+              <Rows data={state.tableData} flexArr={[2, 1, 2, .8, .8, .5]} textStyle={styles.cellText} />
             </Table>
           )}
         </ScrollView>
-
-        <TouchableOpacity style={styles.button} onPress={this.selectit}>
-          <Text style={styles.text}>Select</Text>
-        </TouchableOpacity>
 
         <TouchableOpacity style={styles.button} onPress={this.deleteit}>
           <Text style={styles.text}>Delete</Text>

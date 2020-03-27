@@ -20,7 +20,7 @@ export default class ClientList extends Component {
     async componentDidMount() {
         try {
             await db.transaction(tx => {
-                tx.executeSql('SELECT * FROM client_table', [], (tx, results) => {
+                tx.executeSql('SELECT * FROM client_table;', [], (tx, results) => {
                     var temp = [];
                     for (let i = 0; i < results.rows.length; ++i) {
                         temp.push(results.rows.item(i));
