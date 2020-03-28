@@ -8,7 +8,7 @@ import MyPicker2 from '../../components/Picker2';
 import Mytextinput from '../../components/Mytextinput';
 import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
-import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Alert, SafeAreaView } from 'react-native';
 
 export default class ValidationData extends ValidationComponent {
 
@@ -300,182 +300,184 @@ export default class ValidationData extends ValidationComponent {
       return (<Loader />);
     }
     return (
-      <View style={styles.viewContainer}>
-        <ScrollView keyboardShouldPersistTaps="handled">
-          <KeyboardAvoidingView>
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.viewContainer}>
+          <ScrollView keyboardShouldPersistTaps="handled">
+            <KeyboardAvoidingView>
 
-            <Mytext text="INSPECTION NUMBER" />
-            <Mytextinput
-              onChangeText={(inspection_desc) => this.setState({ inspection_desc })}
-              value={state.inspection_desc}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="INSPECTION NUMBER" />
+              <Mytextinput
+                onChangeText={(inspection_desc) => this.setState({ inspection_desc })}
+                value={state.inspection_desc}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="INSPECTION DATE" />
-            <Mytextinput
-              onChangeText={(inspection_date) => this.setState({ inspection_date })}
-              value={state.inspection_date}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="INSPECTION DATE" />
+              <Mytextinput
+                onChangeText={(inspection_date) => this.setState({ inspection_date })}
+                value={state.inspection_date}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="SITEID" />
-            <Mytextinput
-              onChangeText={(siteid) => this.setState({ siteid })}
-              value={state.siteid}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="SITEID" />
+              <Mytextinput
+                onChangeText={(siteid) => this.setState({ siteid })}
+                value={state.siteid}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="LOCATION" />
-            <Mytextinput
-              onChangeText={(location) => this.setState({ location })}
-              value={state.location}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="LOCATION" />
+              <Mytextinput
+                onChangeText={(location) => this.setState({ location })}
+                value={state.location}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="LOCATION NUMBER" />
-            <Mytextinput
-              onChangeText={(location_number) => this.setState({ location_number })}
-              value={state.location_number}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="LOCATION NUMBER" />
+              <Mytextinput
+                onChangeText={(location_number) => this.setState({ location_number })}
+                value={state.location_number}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="STRUCTURE NUMBER" />
-            <Mytextinput
-              onChangeText={(structure_number) => this.setState({ structure_number })}
-              value={state.structure_number}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="STRUCTURE NUMBER" />
+              <Mytextinput
+                onChangeText={(structure_number) => this.setState({ structure_number })}
+                value={state.structure_number}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="LOCATION TYPE" />
-            <MyPicker2
-              selectedValue={state.location_id}
-              onValueChange={(itemValue) => this.setState({ location_id: itemValue })}
-              items={state.locations}
-            />
+              <Mytext text="LOCATION TYPE" />
+              <MyPicker2
+                selectedValue={state.location_id}
+                onValueChange={(itemValue) => this.setState({ location_id: itemValue })}
+                items={state.locations}
+              />
 
-            <Mytext text="TYPE" />
-            <MyPicker2
-              selectedValue={state.type_id}
-              onValueChange={(itemValue) => this.setState({ type_id: itemValue })}
-              items={state.type}
-            />
+              <Mytext text="TYPE" />
+              <MyPicker2
+                selectedValue={state.type_id}
+                onValueChange={(itemValue) => this.setState({ type_id: itemValue })}
+                items={state.type}
+              />
 
-            <Mytext text="USE" />
-            <Mytextinput
-              onChangeText={(use_desc) => this.setState({ use_desc })}
-              value={state.use_desc}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="USE" />
+              <Mytextinput
+                onChangeText={(use_desc) => this.setState({ use_desc })}
+                value={state.use_desc}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="STATUS" />
-            <MyPicker2
-              selectedValue={state.status_id}
-              onValueChange={(itemValue) => this.setState({ status_id: itemValue })}
-              items={state.status}
-            />
+              <Mytext text="STATUS" />
+              <MyPicker2
+                selectedValue={state.status_id}
+                onValueChange={(itemValue) => this.setState({ status_id: itemValue })}
+                items={state.status}
+              />
 
-            <Mytext text="YEAR BUILT" />
-            <Mytextinput
-              onChangeText={(yr_built) => this.setState({ yr_built })}
-              value={state.yr_built}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="YEAR BUILT" />
+              <Mytextinput
+                onChangeText={(yr_built) => this.setState({ yr_built })}
+                value={state.yr_built}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="CONDITION (1100, 1400)" />
-            <Mytextinput
-              multiline={true}
-              numberOfLines={5}
-              onChangeText={(condition_desc) => this.setState({ condition_desc })}
-              value={state.condition_desc}
-              style={styles.TextAreaStyleClass}
-            />
+              <Mytext text="CONDITION (1100, 1400)" />
+              <Mytextinput
+                multiline={true}
+                numberOfLines={5}
+                onChangeText={(condition_desc) => this.setState({ condition_desc })}
+                value={state.condition_desc}
+                style={styles.TextAreaStyleClass}
+              />
 
-            <Mytext text="CONDITION DATE (1100, 1400)" />
-            <Mytextinput
-              onChangeText={(condition_date) => this.setState({ condition_date })}
-              value={state.condition_date}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="CONDITION DATE (1100, 1400)" />
+              <Mytextinput
+                onChangeText={(condition_date) => this.setState({ condition_date })}
+                value={state.condition_date}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="GPS LATITUDE (1100, 1300, 1400)" />
-            <Mytextinput
-              onChangeText={(latitude) => this.setState({ latitude })}
-              value={state.latitude}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="GPS LATITUDE (1100, 1300, 1400)" />
+              <Mytextinput
+                onChangeText={(latitude) => this.setState({ latitude })}
+                value={state.latitude}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="GPS LONGITUDE (1100, 1300, 1400)" />
-            <Mytextinput
-              onChangeText={(longitude) => this.setState({ longitude })}
-              value={state.longitude}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="GPS LONGITUDE (1100, 1300, 1400)" />
+              <Mytextinput
+                onChangeText={(longitude) => this.setState({ longitude })}
+                value={state.longitude}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="FOOTPRINT AREA (1100, 1300)" />
-            <Mytextinput
-              onChangeText={(footprint) => this.setState({ footprint })}
-              value={state.footprint}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="FOOTPRINT AREA (1100, 1300)" />
+              <Mytextinput
+                onChangeText={(footprint) => this.setState({ footprint })}
+                value={state.footprint}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="MAINTAINED? (1100, 1400)" />
-            <MyPicker2
-              selectedValue={state.maintained_id}
-              onValueChange={(itemValue) => this.setState({ maintained_id: itemValue })}
-              items={yesNo}
-            />
+              <Mytext text="MAINTAINED? (1100, 1400)" />
+              <MyPicker2
+                selectedValue={state.maintained_id}
+                onValueChange={(itemValue) => this.setState({ maintained_id: itemValue })}
+                items={yesNo}
+              />
 
-            <Mytext text="MAINTAINED BY" />
-            <MyPicker2
-              selectedValue={this.state.maintained_by_id}
-              onValueChange={(itemValue) => this.setState({ maintained_by_id: itemValue })}
-              items={state.maintained}
-            />
+              <Mytext text="MAINTAINED BY" />
+              <MyPicker2
+                selectedValue={this.state.maintained_by_id}
+                onValueChange={(itemValue) => this.setState({ maintained_by_id: itemValue })}
+                items={state.maintained}
+              />
 
-            <Mytext text="OWNED BY" />
-            <MyPicker2
-              selectedValue={this.state.owned_by_id}
-              onValueChange={(itemValue) => this.setState({ owned_by_id: itemValue })}
-              items={state.owned}
-            />
+              <Mytext text="OWNED BY" />
+              <MyPicker2
+                selectedValue={this.state.owned_by_id}
+                onValueChange={(itemValue) => this.setState({ owned_by_id: itemValue })}
+                items={state.owned}
+              />
 
-            <Mytext text="OCCUPYING PROGRAM (1100, 1300)" />
-            <MyPicker2
-              selectedValue={state.occupency_id}
-              onValueChange={(itemValue) => this.setState({ occupency_id: itemValue })}
-              items={state.occupency}
-            />
+              <Mytext text="OCCUPYING PROGRAM (1100, 1300)" />
+              <MyPicker2
+                selectedValue={state.occupency_id}
+                onValueChange={(itemValue) => this.setState({ occupency_id: itemValue })}
+                items={state.occupency}
+              />
 
-            <Mytext text="ACTUAL BENEFICIARY OCCUPANCY (1100, 1300)" />
-            <Mytextinput
-              onChangeText={(occupancy_date) => this.setState({ occupancy_date })}
-              value={state.occupancy_date}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="ACTUAL BENEFICIARY OCCUPANCY (1100, 1300)" />
+              <Mytextinput
+                onChangeText={(occupancy_date) => this.setState({ occupancy_date })}
+                value={state.occupancy_date}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="PROJECT NUMBER" />
-            <Mytextinput
-              onChangeText={(project_number) => this.setState({ project_number })}
-              value={state.project_number}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="PROJECT NUMBER" />
+              <Mytextinput
+                onChangeText={(project_number) => this.setState({ project_number })}
+                value={state.project_number}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="REMARKS" />
-            <Mytextinput
-              multiline={true}
-              numberOfLines={5}
-              onChangeText={(remarks) => this.setState({ remarks })}
-              value={state.remarks}
-              style={styles.TextAreaStyleClass}
-            />
+              <Mytext text="REMARKS" />
+              <Mytextinput
+                multiline={true}
+                numberOfLines={5}
+                onChangeText={(remarks) => this.setState({ remarks })}
+                value={state.remarks}
+                style={styles.TextAreaStyleClass}
+              />
 
-            <TouchableOpacity style={styles.button} onPress={this.onPressButton}>
-              <Text style={styles.text}>Submit</Text>
-            </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={this.onPressButton}>
+                <Text style={styles.text}>Submit</Text>
+              </TouchableOpacity>
 
-          </KeyboardAvoidingView>
-        </ScrollView>
-      </View>
+            </KeyboardAvoidingView>
+          </ScrollView>
+        </View>
+      </SafeAreaView>
     );
   }
 

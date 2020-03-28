@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import styles from '../../styles/styles';
 import Loader from '../components/Loader';
 import RenderIf from '../components/RenderIf';
-import { View, Text, FlatList } from 'react-native';
 import { openDatabase } from 'react-native-sqlite-storage';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { View, Text, FlatList, SafeAreaView } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
 
@@ -69,30 +69,32 @@ export default class AgencyList extends Component {
             return (<Loader />);
         }
         return (
-            <View style={styles.listContainer}>
-                {RenderIf(this.state.dataSource,
-                    <FlatList
-                        data={this.state.dataSource}
-                        ItemSeparatorComponent={this.ListViewItemSeparator}
-                        keyExtractor={(item, index) => index.toString()}
-                        renderItem={({ item }) =>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
-                                <Text style={styles.rowViewContainer}
-                                    onPress={this.clickFunction.bind(
-                                        this, item.agency_id,
-                                        item.agency_name,
-                                        this.state.user_name
-                                    )} >
-                                    {item.agency_name}
-                                </Text>
-                                <Text style={styles.textViewList}><FontAwesomeIcon icon={faChevronRight} /></Text>
-                            </View>}
-                    />
-                )}
-                {RenderIf(!this.state.dataSource,
-                    <Text style={styles.noText}>No Results</Text>
-                )}
-            </View>
+            <SafeAreaView style={{ flex: 1 }}>
+                <View style={styles.listContainer}>
+                    {RenderIf(this.state.dataSource,
+                        <FlatList
+                            data={this.state.dataSource}
+                            ItemSeparatorComponent={this.ListViewItemSeparator}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={({ item }) =>
+                                <View style={{ flex: 1, flexDirection: 'row' }}>
+                                    <Text style={styles.rowViewContainer}
+                                        onPress={this.clickFunction.bind(
+                                            this, item.agency_id,
+                                            item.agency_name,
+                                            this.state.user_name
+                                        )} >
+                                        {item.agency_name}
+                                    </Text>
+                                    <Text style={styles.textViewList}><FontAwesomeIcon icon={faChevronRight} /></Text>
+                                </View>}
+                        />
+                    )}
+                    {RenderIf(!this.state.dataSource,
+                        <Text style={styles.noText}>No Results</Text>
+                    )}
+                </View>
+            </SafeAreaView>
         );
     }
 

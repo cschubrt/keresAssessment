@@ -8,7 +8,7 @@ import MyPicker2 from '../../components/Picker2';
 import Mytextinput from '../../components/Mytextinput';
 import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
-import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Alert, SafeAreaView } from 'react-native';
 
 export default class BuildingData extends ValidationComponent {
 
@@ -201,129 +201,131 @@ export default class BuildingData extends ValidationComponent {
       return (<Loader />);
     }
     return (
-      <View style={styles.viewContainer}>
-        <ScrollView keyboardShouldPersistTaps="handled">
-          <KeyboardAvoidingView>
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.viewContainer}>
+          <ScrollView keyboardShouldPersistTaps="handled">
+            <KeyboardAvoidingView>
 
-            <Mytext text="PORTABLE?" />
-            <MyPicker2
-              selectedValue={state.portable_id}
-              onValueChange={(itemValue) => this.setState({ portable_id: itemValue })}
-              items={yesNo}
-            />
+              <Mytext text="PORTABLE?" />
+              <MyPicker2
+                selectedValue={state.portable_id}
+                onValueChange={(itemValue) => this.setState({ portable_id: itemValue })}
+                items={yesNo}
+              />
 
-            <Mytext text="NEW STRUCTURE USE" />
-            <MyPicker2
-              selectedValue={state.structure_use_id}
-              onValueChange={(itemValue) => this.setState({ structure_use_id: itemValue })}
-              items={state.structure}
-            />
+              <Mytext text="NEW STRUCTURE USE" />
+              <MyPicker2
+                selectedValue={state.structure_use_id}
+                onValueChange={(itemValue) => this.setState({ structure_use_id: itemValue })}
+                items={state.structure}
+              />
 
-            <Mytext text="ESTIMATED REPLACEMENT COST" />
-            <Mytextinput
-              onChangeText={(replacement_cost_desc) => this.setState({ replacement_cost_desc })}
-              value={state.replacement_cost_desc}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="ESTIMATED REPLACEMENT COST" />
+              <Mytextinput
+                onChangeText={(replacement_cost_desc) => this.setState({ replacement_cost_desc })}
+                value={state.replacement_cost_desc}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="ESTIMATED REPLACEMENT YEAR" />
-            <Mytextinput
-              onChangeText={(replacement_yr_desc) => this.setState({ replacement_yr_desc })}
-              value={state.replacement_yr_desc}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="ESTIMATED REPLACEMENT YEAR" />
+              <Mytextinput
+                onChangeText={(replacement_yr_desc) => this.setState({ replacement_yr_desc })}
+                value={state.replacement_yr_desc}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="LIFE SPAN" />
-            <Mytextinput
-              onChangeText={(life_span) => this.setState({ life_span })}
-              value={state.life_span}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="LIFE SPAN" />
+              <Mytextinput
+                onChangeText={(life_span) => this.setState({ life_span })}
+                value={state.life_span}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="ROOM NUMBER" />
-            <Mytextinput
-              onChangeText={(room_number) => this.setState({ room_number })}
-              value={state.room_number}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="ROOM NUMBER" />
+              <Mytextinput
+                onChangeText={(room_number) => this.setState({ room_number })}
+                value={state.room_number}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="FLOOR LEVELS" />
-            <Mytextinput
-              onChangeText={(floor_lvls) => this.setState({ floor_lvls })}
-              value={state.floor_lvls}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="FLOOR LEVELS" />
+              <Mytextinput
+                onChangeText={(floor_lvls) => this.setState({ floor_lvls })}
+                value={state.floor_lvls}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="BASEMENT LEVELS" />
-            <Mytextinput
-              onChangeText={(basment_lvls) => this.setState({ basment_lvls })}
-              value={state.basment_lvls}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="BASEMENT LEVELS" />
+              <Mytextinput
+                onChangeText={(basment_lvls) => this.setState({ basment_lvls })}
+                value={state.basment_lvls}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="NON-MAINTAINED DATE" />
-            <Mytextinput
-              onChangeText={(maintained_date) => this.setState({ maintained_date })}
-              value={state.maintained_date}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="NON-MAINTAINED DATE" />
+              <Mytextinput
+                onChangeText={(maintained_date) => this.setState({ maintained_date })}
+                value={state.maintained_date}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="HISTORICAL STATUS" />
-            <MyPicker2
-              selectedValue={state.historical_id}
-              onValueChange={(itemValue) => this.setState({ historical_id: itemValue })}
-              items={state.historical}
-            />
+              <Mytext text="HISTORICAL STATUS" />
+              <MyPicker2
+                selectedValue={state.historical_id}
+                onValueChange={(itemValue) => this.setState({ historical_id: itemValue })}
+                items={state.historical}
+              />
 
-            <Mytext text="DESIGNED ORG. ID" />
-            <Mytextinput
-              onChangeText={(designed_desc) => this.setState({ designed_desc })}
-              value={state.designed_desc}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="DESIGNED ORG. ID" />
+              <Mytextinput
+                onChangeText={(designed_desc) => this.setState({ designed_desc })}
+                value={state.designed_desc}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="LEASE ORG. NAME" />
-            <Mytextinput
-              onChangeText={(org_name) => this.setState({ org_name })}
-              value={state.org_name}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="LEASE ORG. NAME" />
+              <Mytextinput
+                onChangeText={(org_name) => this.setState({ org_name })}
+                value={state.org_name}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="LEASE ORG. TYPE" />
-            <Mytextinput
-              onChangeText={(org_type) => this.setState({ org_type })}
-              value={state.org_type}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="LEASE ORG. TYPE" />
+              <Mytextinput
+                onChangeText={(org_type) => this.setState({ org_type })}
+                value={state.org_type}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="HIGH GRADE LEVEL" />
-            <Mytextinput
-              onChangeText={(high_grade_lvl) => this.setState({ high_grade_lvl })}
-              value={state.high_grade_lvl}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="HIGH GRADE LEVEL" />
+              <Mytextinput
+                onChangeText={(high_grade_lvl) => this.setState({ high_grade_lvl })}
+                value={state.high_grade_lvl}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="LOW GRADE LEVEL" />
-            <Mytextinput
-              onChangeText={(low_grade_lvl) => this.setState({ low_grade_lvl })}
-              value={state.low_grade_lvl}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="LOW GRADE LEVEL" />
+              <Mytextinput
+                onChangeText={(low_grade_lvl) => this.setState({ low_grade_lvl })}
+                value={state.low_grade_lvl}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="VBR CHANGES STILL PENDING?" />
-            <MyPicker2
-              selectedValue={state.pending_id}
-              onValueChange={(itemValue) => this.setState({ pending_id: itemValue })}
-              items={yesNo}
-            />
+              <Mytext text="VBR CHANGES STILL PENDING?" />
+              <MyPicker2
+                selectedValue={state.pending_id}
+                onValueChange={(itemValue) => this.setState({ pending_id: itemValue })}
+                items={yesNo}
+              />
 
-            <TouchableOpacity style={styles.button} onPress={this.onPressButton}>
-              <Text style={styles.text}>Submit</Text>
-            </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={this.onPressButton}>
+                <Text style={styles.text}>Submit</Text>
+              </TouchableOpacity>
 
-          </KeyboardAvoidingView>
-        </ScrollView>
-      </View>
+            </KeyboardAvoidingView>
+          </ScrollView>
+        </View>
+      </SafeAreaView>
     );
   }
 

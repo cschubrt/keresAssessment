@@ -4,12 +4,11 @@ import styles from '../../../styles/styles';
 import Mytext from '../../components/Mytext';
 import Loader from '../../components/Loader';
 import ValidationComponent from '../../../vals';
-import MyPicker from '../../components/MyPicker';
 import MyPicker2 from '../../components/Picker2';
 import Mytextinput from '../../components/Mytextinput';
 import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
-import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Alert, SafeAreaView } from 'react-native';
 
 export default class Info extends ValidationComponent {
 
@@ -197,81 +196,83 @@ export default class Info extends ValidationComponent {
       return (<Loader />);
     }
     return (
-      <View style={styles.viewContainer}>
-        <ScrollView keyboardShouldPersistTaps="handled">
-          <KeyboardAvoidingView>
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.viewContainer}>
+          <ScrollView keyboardShouldPersistTaps="handled">
+            <KeyboardAvoidingView>
 
-            <Mytext text="Assessment Name" />
-            {this.isFieldInError('assessment_name') && this.getErrorsInField('assessment_name').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
-            <Mytextinput
-              onChangeText={(assessment_name) => this.setState({ assessment_name })}
-              value={state.assessment_name}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="Assessment Name" />
+              {this.isFieldInError('assessment_name') && this.getErrorsInField('assessment_name').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
+              <Mytextinput
+                onChangeText={(assessment_name) => this.setState({ assessment_name })}
+                value={state.assessment_name}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="Assessor Name" />
-            {this.isFieldInError('name_of_assessor') && this.getErrorsInField('name_of_assessor').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
-            <Mytextinput
-              onChangeText={(name_of_assessor) => this.setState({ name_of_assessor })}
-              value={state.name_of_assessor}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="Assessor Name" />
+              {this.isFieldInError('name_of_assessor') && this.getErrorsInField('name_of_assessor').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
+              <Mytextinput
+                onChangeText={(name_of_assessor) => this.setState({ name_of_assessor })}
+                value={state.name_of_assessor}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="Date" />
-            {this.isFieldInError('assessment_date') && this.getErrorsInField('assessment_date').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
-            <Mytextinput
-              onChangeText={(assessment_date) => this.setState({ assessment_date })}
-              value={state.assessment_date}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="Date" />
+              {this.isFieldInError('assessment_date') && this.getErrorsInField('assessment_date').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
+              <Mytextinput
+                onChangeText={(assessment_date) => this.setState({ assessment_date })}
+                value={state.assessment_date}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="Agency" />
-            {this.isFieldInError('agency_id') && this.getErrorsInField('agency_id').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
-            <MyPicker2
-              selectedValue={state.agency_id}
-              onValueChange={(itemValue) => this.setSite(itemValue)}
-              items={state.agents}
-            />
+              <Mytext text="Agency" />
+              {this.isFieldInError('agency_id') && this.getErrorsInField('agency_id').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
+              <MyPicker2
+                selectedValue={state.agency_id}
+                onValueChange={(itemValue) => this.setSite(itemValue)}
+                items={state.agents}
+              />
 
-            <Mytext text="Site" />
-            {this.isFieldInError('site_id') && this.getErrorsInField('site_id').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
-            <MyPicker2
-              selectedValue={state.site_id}
-              onValueChange={(itemValue) => this.setBuilding(itemValue)}
-              items={state.sites}
-            />
+              <Mytext text="Site" />
+              {this.isFieldInError('site_id') && this.getErrorsInField('site_id').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
+              <MyPicker2
+                selectedValue={state.site_id}
+                onValueChange={(itemValue) => this.setBuilding(itemValue)}
+                items={state.sites}
+              />
 
-            <Mytext text="Building" />
-            {this.isFieldInError('building_id') && this.getErrorsInField('building_id').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
-            <MyPicker2
-              selectedValue={state.building_id}
-              onValueChange={(itemValue) => this.setState({ building_id: itemValue })}
-              items={state.buildings}
-            />
+              <Mytext text="Building" />
+              {this.isFieldInError('building_id') && this.getErrorsInField('building_id').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
+              <MyPicker2
+                selectedValue={state.building_id}
+                onValueChange={(itemValue) => this.setState({ building_id: itemValue })}
+                items={state.buildings}
+              />
 
-            <Mytext text="Building Classification" />
-            <MyPicker2
-              selectedValue={state.building_classification}
-              onValueChange={(itemValue) => this.setState({ building_classification: itemValue })}
-              items={buildingClass}
-            />
+              <Mytext text="Building Classification" />
+              <MyPicker2
+                selectedValue={state.building_classification}
+                onValueChange={(itemValue) => this.setState({ building_classification: itemValue })}
+                items={buildingClass}
+              />
 
-            <Mytext text="Notes" />
-            <Mytextinput
-              multiline={true}
-              numberOfLines={5}
-              onChangeText={(notes) => this.setState({ notes })}
-              value={state.notes}
-              style={styles.TextAreaStyleClass}
-            />
+              <Mytext text="Notes" />
+              <Mytextinput
+                multiline={true}
+                numberOfLines={5}
+                onChangeText={(notes) => this.setState({ notes })}
+                value={state.notes}
+                style={styles.TextAreaStyleClass}
+              />
 
-            <TouchableOpacity style={styles.button} onPress={this._onPressButton}>
-              <Text style={styles.text}>Submit</Text>
-            </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={this._onPressButton}>
+                <Text style={styles.text}>Submit</Text>
+              </TouchableOpacity>
 
-          </KeyboardAvoidingView>
-        </ScrollView>
-      </View>
+            </KeyboardAvoidingView>
+          </ScrollView>
+        </View>
+      </SafeAreaView>
     );
   }
 

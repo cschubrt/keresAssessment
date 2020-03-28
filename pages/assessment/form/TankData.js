@@ -8,7 +8,7 @@ import MyPicker2 from '../../components/Picker2';
 import Mytextinput from '../../components/Mytextinput';
 import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
-import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Alert, SafeAreaView } from 'react-native';
 
 export default class TankingData extends ValidationComponent {
 
@@ -232,150 +232,152 @@ export default class TankingData extends ValidationComponent {
       return (<Loader />);
     }
     return (
-      <View style={styles.viewContainer}>
-        <ScrollView keyboardShouldPersistTaps="handled">
-          <KeyboardAvoidingView>
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.viewContainer}>
+          <ScrollView keyboardShouldPersistTaps="handled">
+            <KeyboardAvoidingView>
 
-            <Mytext text="CLASSIFICATION" />
-            <Mytextinput
-              onChangeText={(classification) => this.setState({ classification })}
-              value={state.classification}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="CLASSIFICATION" />
+              <Mytextinput
+                onChangeText={(classification) => this.setState({ classification })}
+                value={state.classification}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="PAINTED?" />
-            <MyPicker2
-              selectedValue={state.painted_id}
-              onValueChange={(itemValue) => this.setState({ painted_id: itemValue })}
-              items={yesNo}
-            />
+              <Mytext text="PAINTED?" />
+              <MyPicker2
+                selectedValue={state.painted_id}
+                onValueChange={(itemValue) => this.setState({ painted_id: itemValue })}
+                items={yesNo}
+              />
 
-            <Mytext text="INSULATED?" />
-            <MyPicker2
-              selectedValue={state.insulated_id}
-              onValueChange={(itemValue) => this.setState({ insulated_id: itemValue })}
-              items={yesNo}
-            />
+              <Mytext text="INSULATED?" />
+              <MyPicker2
+                selectedValue={state.insulated_id}
+                onValueChange={(itemValue) => this.setState({ insulated_id: itemValue })}
+                items={yesNo}
+              />
 
-            <Mytext text="CATHODE PROTECTED?" />
-            <MyPicker2
-              selectedValue={state.cathode_protected_id}
-              onValueChange={(itemValue) => this.setState({ cathode_protected_id: itemValue })}
-              items={yesNo}
-            />
+              <Mytext text="CATHODE PROTECTED?" />
+              <MyPicker2
+                selectedValue={state.cathode_protected_id}
+                onValueChange={(itemValue) => this.setState({ cathode_protected_id: itemValue })}
+                items={yesNo}
+              />
 
-            <Mytext text="EPA REGULATED?" />
-            <MyPicker2
-              selectedValue={state.epa_regulated_id}
-              onValueChange={(itemValue) => this.setState({ epa_regulated_id: itemValue })}
-              items={yesNo}
-            />
+              <Mytext text="EPA REGULATED?" />
+              <MyPicker2
+                selectedValue={state.epa_regulated_id}
+                onValueChange={(itemValue) => this.setState({ epa_regulated_id: itemValue })}
+                items={yesNo}
+              />
 
-            <Mytext text="LEAK DETECTION?" />
-            <MyPicker2
-              selectedValue={state.leak_detection_id}
-              onValueChange={(itemValue) => this.setState({ leak_detection_id: itemValue })}
-              items={yesNo}
-            />
+              <Mytext text="LEAK DETECTION?" />
+              <MyPicker2
+                selectedValue={state.leak_detection_id}
+                onValueChange={(itemValue) => this.setState({ leak_detection_id: itemValue })}
+                items={yesNo}
+              />
 
-            <Mytext text="OUT OF SERVICE DATE" />
-            <Mytextinput
-              onChangeText={(out_of_service_date) => this.setState({ out_of_service_date })}
-              value={state.out_of_service_date}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="OUT OF SERVICE DATE" />
+              <Mytextinput
+                onChangeText={(out_of_service_date) => this.setState({ out_of_service_date })}
+                value={state.out_of_service_date}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="INSTALL DATE" />
-            <Mytextinput
-              onChangeText={(instal_date) => this.setState({ instal_date })}
-              value={state.instal_date}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="INSTALL DATE" />
+              <Mytextinput
+                onChangeText={(instal_date) => this.setState({ instal_date })}
+                value={state.instal_date}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="MANUFACTURER" />
-            <Mytextinput
-              onChangeText={(manufacturer) => this.setState({ manufacturer })}
-              value={state.manufacturer}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="MANUFACTURER" />
+              <Mytextinput
+                onChangeText={(manufacturer) => this.setState({ manufacturer })}
+                value={state.manufacturer}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="MODEL NO." />
-            <Mytextinput
-              onChangeText={(modal_no) => this.setState({ modal_no })}
-              value={state.modal_no}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="MODEL NO." />
+              <Mytextinput
+                onChangeText={(modal_no) => this.setState({ modal_no })}
+                value={state.modal_no}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="SERIAL NO." />
-            <Mytextinput
-              onChangeText={(serial_no) => this.setState({ serial_no })}
-              value={state.serial_no}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="SERIAL NO." />
+              <Mytextinput
+                onChangeText={(serial_no) => this.setState({ serial_no })}
+                value={state.serial_no}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="TANK LOCATION" />
-            <MyPicker2
-              selectedValue={state.tank_location_id}
-              onValueChange={(itemValue) => this.setState({ tank_location_id: itemValue })}
-              items={state.tank}
-            />
+              <Mytext text="TANK LOCATION" />
+              <MyPicker2
+                selectedValue={state.tank_location_id}
+                onValueChange={(itemValue) => this.setState({ tank_location_id: itemValue })}
+                items={state.tank}
+              />
 
-            <Mytext text="TANK USE" />
-            <MyPicker2
-              selectedValue={state.tank_use_id}
-              onValueChange={(itemValue) => this.setState({ tank_use_id: itemValue })}
-              items={state.tankUse}
-            />
+              <Mytext text="TANK USE" />
+              <MyPicker2
+                selectedValue={state.tank_use_id}
+                onValueChange={(itemValue) => this.setState({ tank_use_id: itemValue })}
+                items={state.tankUse}
+              />
 
-            <Mytext text="TANK TYPE" />
-            <MyPicker2
-              selectedValue={state.tank_type_id}
-              onValueChange={(itemValue) => this.setState({ tank_type_id: itemValue })}
-              items={tankType}
-            />
+              <Mytext text="TANK TYPE" />
+              <MyPicker2
+                selectedValue={state.tank_type_id}
+                onValueChange={(itemValue) => this.setState({ tank_type_id: itemValue })}
+                items={tankType}
+              />
 
-            <Mytext text="CAPACITY" />
-            <Mytextinput
-              onChangeText={(capacity) => this.setState({ capacity })}
-              value={state.capacity}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="CAPACITY" />
+              <Mytextinput
+                onChangeText={(capacity) => this.setState({ capacity })}
+                value={state.capacity}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="FUEL TYPE" />
-            <Mytextinput
-              onChangeText={(fuel_type) => this.setState({ fuel_type })}
-              value={state.fuel_type}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="FUEL TYPE" />
+              <Mytextinput
+                onChangeText={(fuel_type) => this.setState({ fuel_type })}
+                value={state.fuel_type}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="ALT. FUEL TYPE" />
-            <Mytextinput
-              onChangeText={(alt_fuel_type) => this.setState({ alt_fuel_type })}
-              value={state.alt_fuel_type}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="ALT. FUEL TYPE" />
+              <Mytextinput
+                onChangeText={(alt_fuel_type) => this.setState({ alt_fuel_type })}
+                value={state.alt_fuel_type}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="FA TYPE" />
-            <MyPicker2
-              selectedValue={state.fa_type_id}
-              onValueChange={(itemValue) => this.setState({ fa_type_id: itemValue })}
-              items={state.faType}
-            />
+              <Mytext text="FA TYPE" />
+              <MyPicker2
+                selectedValue={state.fa_type_id}
+                onValueChange={(itemValue) => this.setState({ fa_type_id: itemValue })}
+                items={state.faType}
+              />
 
-            <Mytext text="NSN" />
-            <Mytextinput
-              onChangeText={(msn) => this.setState({ msn })}
-              value={state.msn}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="NSN" />
+              <Mytextinput
+                onChangeText={(msn) => this.setState({ msn })}
+                value={state.msn}
+                style={styles.TextInputStyleClass}
+              />
 
-            <TouchableOpacity style={styles.button} onPress={this.onPressButton}>
-              <Text style={styles.text}>Submit</Text>
-            </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={this.onPressButton}>
+                <Text style={styles.text}>Submit</Text>
+              </TouchableOpacity>
 
-          </KeyboardAvoidingView>
-        </ScrollView>
-      </View>
+            </KeyboardAvoidingView>
+          </ScrollView>
+        </View>
+      </SafeAreaView>
     );
   }
 

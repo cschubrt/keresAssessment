@@ -4,7 +4,7 @@ import ValidationComponent from '../vals';
 import { sha256 } from 'react-native-sha256';
 import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
-import { View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, SafeAreaView } from 'react-native';
 
 export default class LoginForm extends ValidationComponent {
 
@@ -53,23 +53,25 @@ export default class LoginForm extends ValidationComponent {
 
   render() {
     return (
-      <View style={styles.viewContainer}>
-        <ScrollView keyboardShouldPersistTaps="handled">
-          <KeyboardAvoidingView>
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.viewContainer}>
+          <ScrollView keyboardShouldPersistTaps="handled">
+            <KeyboardAvoidingView>
 
-            {this.isFieldInError('username') && this.getErrorsInField('username').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
-            <TextInput autoCapitalize="none" placeholder="username" ref="username" onChangeText={(username) => this.setState({ username })} value={this.state.username} style={styles.TextInputStyleClass} />
+              {this.isFieldInError('username') && this.getErrorsInField('username').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
+              <TextInput autoCapitalize="none" placeholder="username" ref="username" onChangeText={(username) => this.setState({ username })} value={this.state.username} style={styles.TextInputStyleClass} />
 
-            {this.isFieldInError('password') && this.getErrorsInField('password').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
-            <TextInput autoCapitalize="none" placeholder="password" ref="password" onChangeText={(password) => this.setState({ password })} value={this.state.password} style={styles.TextInputStyleClass} />
+              {this.isFieldInError('password') && this.getErrorsInField('password').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
+              <TextInput autoCapitalize="none" placeholder="password" ref="password" onChangeText={(password) => this.setState({ password })} value={this.state.password} style={styles.TextInputStyleClass} />
 
-            <TouchableOpacity style={styles.button} onPress={this._onPressButton}>
-              <Text style={styles.text}>Submit</Text>
-            </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={this._onPressButton}>
+                <Text style={styles.text}>Submit</Text>
+              </TouchableOpacity>
 
-          </KeyboardAvoidingView>
-        </ScrollView>
-      </View>
+            </KeyboardAvoidingView>
+          </ScrollView>
+        </View>
+      </SafeAreaView>
     );
   }
 

@@ -7,7 +7,7 @@ import MyPicker2 from '../../components/Picker2';
 import Mytextinput from '../../components/Mytextinput';
 import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
-import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Alert, SafeAreaView } from 'react-native';
 
 export default class Observations extends ValidationComponent {
 
@@ -99,79 +99,81 @@ export default class Observations extends ValidationComponent {
       return (<Loader />);
     }
     return (
-      <View style={styles.viewContainer}>
-        <ScrollView keyboardShouldPersistTaps="handled">
-          <KeyboardAvoidingView>
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.viewContainer}>
+          <ScrollView keyboardShouldPersistTaps="handled">
+            <KeyboardAvoidingView>
 
-            <Mytext text="ASSESSMENT COMPLETE" />
-            <MyPicker2
-              selectedValue={this.state.ac_id}
-              onValueChange={(itemValue) => this.setState({ ac_id: itemValue })}
-              items={yesNo}
-            />
+              <Mytext text="ASSESSMENT COMPLETE" />
+              <MyPicker2
+                selectedValue={this.state.ac_id}
+                onValueChange={(itemValue) => this.setState({ ac_id: itemValue })}
+                items={yesNo}
+              />
 
-            <Mytext text="MUSEUM ARTIFACTS PRESENT" />
-            <MyPicker2
-              selectedValue={this.state.map_id}
-              onValueChange={(itemValue) => this.setState({ map_id: itemValue })}
-              items={yesNo}
-            />
+              <Mytext text="MUSEUM ARTIFACTS PRESENT" />
+              <MyPicker2
+                selectedValue={this.state.map_id}
+                onValueChange={(itemValue) => this.setState({ map_id: itemValue })}
+                items={yesNo}
+              />
 
-            <Mytext text="NOTES" />
-            <Mytextinput
-              onChangeText={(notes_desc) => this.setState({ notes_desc })}
-              value={state.notes_desc}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="NOTES" />
+              <Mytextinput
+                onChangeText={(notes_desc) => this.setState({ notes_desc })}
+                value={state.notes_desc}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="REVIEWER" />
-            <Mytextinput
-              onChangeText={(review_desc) => this.setState({ review_desc })}
-              value={state.review_desc}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="REVIEWER" />
+              <Mytextinput
+                onChangeText={(review_desc) => this.setState({ review_desc })}
+                value={state.review_desc}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="TECHNICIAN" />
-            <Mytextinput
-              onChangeText={(tech_desc) => this.setState({ tech_desc })}
-              value={state.tech_desc}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="TECHNICIAN" />
+              <Mytextinput
+                onChangeText={(tech_desc) => this.setState({ tech_desc })}
+                value={state.tech_desc}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="KEY DISCUSSION POINTS" />
-            <Mytextinput
-              multiline={true}
-              numberOfLines={5}
-              onChangeText={(kdp_notes) => this.setState({ kdp_notes })}
-              value={state.kdp_notes}
-              style={styles.TextAreaStyleClass}
-            />
+              <Mytext text="KEY DISCUSSION POINTS" />
+              <Mytextinput
+                multiline={true}
+                numberOfLines={5}
+                onChangeText={(kdp_notes) => this.setState({ kdp_notes })}
+                value={state.kdp_notes}
+                style={styles.TextAreaStyleClass}
+              />
 
-            <Mytext text="Site Contact" />
-            <Mytextinput
-              multiline={true}
-              numberOfLines={5}
-              onChangeText={(site_contact) => this.setState({ site_contact })}
-              value={state.site_contact}
-              style={styles.TextAreaStyleClass}
-            />
+              <Mytext text="Site Contact" />
+              <Mytextinput
+                multiline={true}
+                numberOfLines={5}
+                onChangeText={(site_contact) => this.setState({ site_contact })}
+                value={state.site_contact}
+                style={styles.TextAreaStyleClass}
+              />
 
-            <Mytext text="GENERAL ASSESSOR OBSERVATIONS" />
-            <Mytextinput
-              multiline={true}
-              numberOfLines={5}
-              onChangeText={(gao_notes) => this.setState({ gao_notes })}
-              value={state.gao_notes}
-              style={styles.TextAreaStyleClass}
-            />
+              <Mytext text="GENERAL ASSESSOR OBSERVATIONS" />
+              <Mytextinput
+                multiline={true}
+                numberOfLines={5}
+                onChangeText={(gao_notes) => this.setState({ gao_notes })}
+                value={state.gao_notes}
+                style={styles.TextAreaStyleClass}
+              />
 
-            <TouchableOpacity style={styles.button} onPress={this.onPressButton}>
-              <Text style={styles.text}>Submit</Text>
-            </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={this.onPressButton}>
+                <Text style={styles.text}>Submit</Text>
+              </TouchableOpacity>
 
-          </KeyboardAvoidingView>
-        </ScrollView>
-      </View>
+            </KeyboardAvoidingView>
+          </ScrollView>
+        </View>
+      </SafeAreaView>
     );
   }
 

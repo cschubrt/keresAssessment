@@ -4,7 +4,7 @@ import Loader from '../components/Loader';
 import { openDatabase } from 'react-native-sqlite-storage';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { View, Text, FlatList } from 'react-native';
+import { View, Text, FlatList, SafeAreaView } from 'react-native';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
 
 export default class ClientList extends Component {
@@ -62,25 +62,27 @@ export default class ClientList extends Component {
             return (<Loader />);
         }
         return (
-            <View style={styles.listContainer}>
-                <FlatList
-                    data={this.state.dataSource}
-                    ItemSeparatorComponent={this.ListViewItemSeparator}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item }) =>
-                        <View style={{ flex: 1, flexDirection: 'row' }}>
-                            <Text style={styles.rowViewContainer}
-                                onPress={this.clickFunction.bind(
-                                    this, item.client_id,
-                                    item.client_desc,
-                                    this.state.user_name
-                                )} >
-                                {item.client_desc}
-                            </Text>
-                            <Text style={styles.textViewList}><FontAwesomeIcon icon={faChevronRight} /></Text>
-                        </View>}
-                />
-            </View>
+            <SafeAreaView style={{ flex: 1 }}>
+                <View style={styles.listContainer}>
+                    <FlatList
+                        data={this.state.dataSource}
+                        ItemSeparatorComponent={this.ListViewItemSeparator}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({ item }) =>
+                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                                <Text style={styles.rowViewContainer}
+                                    onPress={this.clickFunction.bind(
+                                        this, item.client_id,
+                                        item.client_desc,
+                                        this.state.user_name
+                                    )} >
+                                    {item.client_desc}
+                                </Text>
+                                <Text style={styles.textViewList}><FontAwesomeIcon icon={faChevronRight} /></Text>
+                            </View>}
+                    />
+                </View>
+            </SafeAreaView>
         );
     }
 

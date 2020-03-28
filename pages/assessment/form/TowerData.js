@@ -6,7 +6,7 @@ import ValidationComponent from '../../../vals';
 import Mytextinput from '../../components/Mytextinput';
 import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
-import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Alert, SafeAreaView } from 'react-native';
 
 export default class SiteData extends ValidationComponent {
 
@@ -129,94 +129,96 @@ export default class SiteData extends ValidationComponent {
       return (<Loader />);
     }
     return (
-      <View style={styles.viewContainer}>
-        <ScrollView keyboardShouldPersistTaps="handled">
-          <KeyboardAvoidingView>
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.viewContainer}>
+          <ScrollView keyboardShouldPersistTaps="handled">
+            <KeyboardAvoidingView>
 
-            <Mytext text="GROSS SQF" />
-            <Mytextinput
-              onChangeText={(gross_sqf) => this.setState({ gross_sqf })}
-              value={state.gross_sqf}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="GROSS SQF" />
+              <Mytextinput
+                onChangeText={(gross_sqf) => this.setState({ gross_sqf })}
+                value={state.gross_sqf}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="ORIGINAL COST" />
-            <Mytextinput
-              onChangeText={(original_cost) => this.setState({ original_cost })}
-              value={state.original_cost}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="ORIGINAL COST" />
+              <Mytextinput
+                onChangeText={(original_cost) => this.setState({ original_cost })}
+                value={state.original_cost}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="FBMS USEFUL LIFE" />
-            <Mytextinput
-              onChangeText={(useful_life) => this.setState({ useful_life })}
-              value={state.useful_life}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="FBMS USEFUL LIFE" />
+              <Mytextinput
+                onChangeText={(useful_life) => this.setState({ useful_life })}
+                value={state.useful_life}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="PLANNED REPLACEMENT YEAR" />
-            <Mytextinput
-              onChangeText={(planned_replacement_year) => this.setState({ planned_replacement_year })}
-              value={state.planned_replacement_year}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="PLANNED REPLACEMENT YEAR" />
+              <Mytextinput
+                onChangeText={(planned_replacement_year) => this.setState({ planned_replacement_year })}
+                value={state.planned_replacement_year}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="PROJECT NUMBER" />
-            <Mytextinput
-              onChangeText={(project_number) => this.setState({ project_number })}
-              value={state.project_number}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="PROJECT NUMBER" />
+              <Mytextinput
+                onChangeText={(project_number) => this.setState({ project_number })}
+                value={state.project_number}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="TOTAL FUND AREA" />
-            <Mytextinput
-              onChangeText={(total_fund_area) => this.setState({ total_fund_area })}
-              value={state.total_fund_area}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="TOTAL FUND AREA" />
+              <Mytextinput
+                onChangeText={(total_fund_area) => this.setState({ total_fund_area })}
+                value={state.total_fund_area}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="ELEVATION" />
-            <Mytextinput
-              onChangeText={(elevation) => this.setState({ elevation })}
-              value={state.elevation}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="ELEVATION" />
+              <Mytextinput
+                onChangeText={(elevation) => this.setState({ elevation })}
+                value={state.elevation}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="HEIGHT" />
-            <Mytextinput
-              onChangeText={(height) => this.setState({ height })}
-              value={state.height}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="HEIGHT" />
+              <Mytextinput
+                onChangeText={(height) => this.setState({ height })}
+                value={state.height}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="ICE LOAD" />
-            <Mytextinput
-              onChangeText={(ice_load) => this.setState({ ice_load })}
-              value={state.ice_load}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="ICE LOAD" />
+              <Mytextinput
+                onChangeText={(ice_load) => this.setState({ ice_load })}
+                value={state.ice_load}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="WIND LOAD" />
-            <Mytextinput
-              onChangeText={(wind_load) => this.setState({ wind_load })}
-              value={state.wind_load}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="WIND LOAD" />
+              <Mytextinput
+                onChangeText={(wind_load) => this.setState({ wind_load })}
+                value={state.wind_load}
+                style={styles.TextInputStyleClass}
+              />
 
-            <Mytext text="TENSION" />
-            <Mytextinput
-              onChangeText={(tension) => this.setState({ tension })}
-              value={state.tension}
-              style={styles.TextInputStyleClass}
-            />
+              <Mytext text="TENSION" />
+              <Mytextinput
+                onChangeText={(tension) => this.setState({ tension })}
+                value={state.tension}
+                style={styles.TextInputStyleClass}
+              />
 
-            <TouchableOpacity style={styles.button} onPress={this.onPressButton}>
-              <Text style={styles.text}>Submit</Text>
-            </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={this.onPressButton}>
+                <Text style={styles.text}>Submit</Text>
+              </TouchableOpacity>
 
-          </KeyboardAvoidingView>
-        </ScrollView>
-      </View>
+            </KeyboardAvoidingView>
+          </ScrollView>
+        </View>
+      </SafeAreaView>
     );
   }
 

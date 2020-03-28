@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
         fontSize: 27,
         textAlign: 'center',
         paddingBottom: 10
-    }
+    },
 })
 
 export default styles;

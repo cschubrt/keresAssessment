@@ -6,21 +6,21 @@ import Browser from '../pages/Browser';
 import LoginForm from '../pages/LoginForm';
 import UpdateApp from '../pages/UpdateApp';
 import ViewAllUser from '../pages/ViewAllUser';
+import Info from '../pages/assessment/form/Info';
+import FormIndex from '../pages/assessment/form/index';
 import AssessmentHome from '../pages/assessment/Index';
 import ClientList from '../pages/assessment/ClientList';
 import AgencyList from '../pages/assessment/AgencyList';
-import AssessmentList from '../pages/assessment/AssessmentList';
-import FormIndex from '../pages/assessment/form/index';
-import Info from '../pages/assessment/form/Info';
-import Observations from '../pages/assessment/form/Observations';
-import ValidationData from '../pages/assessment/form/ValidationData';
-import BuildingData from '../pages/assessment/form/BuildingData';
+import TankData from '../pages/assessment/form/TankData';
 import SiteData from '../pages/assessment/form/SiteData';
 import TowerData from '../pages/assessment/form/TowerData';
-import TankData from '../pages/assessment/form/TankData';
+import BuildingData from '../pages/assessment/form/BuildingData';
+import AssessmentList from '../pages/assessment/AssessmentList';
+import Observations from '../pages/assessment/form/Observations';
+import ValidationData from '../pages/assessment/form/ValidationData';
 
-let textColor = '#404040';
-let headerColor = '#F0F0F0';
+let textColor = '#F0F0F0';
+let headerColor = '#404040';
 
 const HomeStack = createStackNavigator({
     Home: {

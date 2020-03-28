@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import styles from '../../styles/styles';
 import { format } from "date-fns";
+import Footer from '../components/Footer';
 import Loader from '../components/Loader';
 import RenderIf from '../components/RenderIf';
 import NetInfo from "@react-native-community/netinfo";
 import { openDatabase } from 'react-native-sqlite-storage';
 import { Table, Row, Rows } from 'react-native-table-component';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { View, Text, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, ScrollView, SafeAreaView } from 'react-native';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
 import { faChevronRight, faDownload, faUpload, faTimes, faCheck } from '@fortawesome/free-solid-svg-icons';
 
@@ -61,11 +62,6 @@ export default class AssessmentList extends Component {
     this.setState({ online: true });
   }
 
-
-
-
-
-
   getTowerData = (master_id) => {
     try {
       fetch('https://cschubert.serviceseval.com/keres_fca/app/getTowerData.php', {
@@ -104,14 +100,6 @@ export default class AssessmentList extends Component {
       );
     });
   };
-
-
-
-
-
-
-
-
 
   getBuildingData = (master_id) => {
     try {
@@ -528,25 +516,30 @@ export default class AssessmentList extends Component {
       return (<Loader />);
     }
     return (
-      <View style={styles.tableContainer}>
-        <ScrollView keyboardShouldPersistTaps="handled">
-          <View style={styles.ViewBlack}>
-            <Text style={styles.textBlack}>{state.agency_name}</Text>
-            <Text style={styles.textBlackRight}>{this.state.connection_Status}</Text>
-          </View>
-          {RenderIf(state.tableData.length > 0,
-            <Table borderStyle={{ borderWidth: 1, borderColor: '#888' }}>
-              <Row data={state.tableHead} flexArr={[2, 1, 2, .8, .8, .5]} style={styles.head} textStyle={styles.headerText} />
-              <Rows data={state.tableData} flexArr={[2, 1, 2, .8, .8, .5]} textStyle={styles.cellText} />
-            </Table>
-          )}
-        </ScrollView>
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.tableContainer}>
+          <ScrollView keyboardShouldPersistTaps="handled">
 
-        <TouchableOpacity style={styles.button} onPress={this.deleteit}>
-          <Text style={styles.text}>Delete</Text>
-        </TouchableOpacity>
+            <View style={styles.ViewBlack}>
+              <Text style={styles.textBlack}>{state.agency_name}</Text>
+              <Text style={styles.textBlackRight}>{this.state.connection_Status}</Text>
+            </View>
+            {RenderIf(state.tableData.length > 0,
+              <Table borderStyle={{ borderWidth: 1, borderColor: '#888' }}>
+                <Row data={state.tableHead} flexArr={[2, 1, 2, .8, .8, .5]} style={styles.head} textStyle={styles.headerText} />
+                <Rows data={state.tableData} flexArr={[2, 1, 2, .8, .8, .5]} textStyle={styles.cellText} />
+              </Table>
+            )}
 
-      </View>
+          </ScrollView>
+
+          <TouchableOpacity style={styles.button} onPress={this.deleteit}>
+            <Text style={styles.text}>Delete</Text>
+          </TouchableOpacity>
+
+        </View>
+        <Footer nav={this.props.navigation} />
+      </SafeAreaView>
     )
   }
 

@@ -5,13 +5,13 @@ export default class FooterTabsExample extends Component {
 
     render() {
         return (
-            <Footer>
-                <FooterTab style={{ backgroundColor: "#425A78" }}>
-                    <Button style={{ backgroundColor: "#687B93" }} active>
-                        <Text>Home</Text>
+            <Footer style={{marginBottom: 0, height: 45}}>
+                <FooterTab style={{ backgroundColor: "#404040" }}>
+                    <Button onPress={() => this.props.nav.navigate('Home')}>
+                        <Text style={{color: '#fff'}}>Home</Text>
                     </Button>
-                    <Button onPress={() => navigation.navigate('LoginForm')}>
-                        <Text>Login</Text>
+                    <Button onPress={() => this.props.nav.navigate('LoginForm')}>
+                        <Text style={{color: '#fff'}}>Logout</Text>
                     </Button>
                 </FooterTab>
             </Footer>

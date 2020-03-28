@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import styles from '../../styles/styles';
 import Loader from '../components/Loader';
+import Footer from '../components/Footer';
 import NetInfo from "@react-native-community/netinfo";
 import { openDatabase } from 'react-native-sqlite-storage';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
 
 export default class AssessmentHome extends Component {
@@ -214,17 +215,22 @@ export default class AssessmentHome extends Component {
             return (<Loader />);
         }
         return (
-            <View style={styles.viewContainer}>
-                <View style={styles.list}>
+            <SafeAreaView style={{ flex: 1 }}>
+                <View style={{ flex: 1, justifyContent: 'space-between' }}>
+                    <View style={{ padding: 10 }}>
 
-                    <Text style={{ textAlign: 'center', fontSize: 25, color: '#404040', paddingTop: 10 }}>Keres Assessment</Text>
+                        <ScrollView keyboardShouldPersistTaps="handled">
+                            <Text style={{ textAlign: 'center', fontSize: 25, color: '#404040', paddingTop: 10 }}>Keres Assessment</Text>
 
-                    <TouchableOpacity style={styles.button} onPress={() => this.handlePress('ClientList')}>
-                        <Text style={styles.text}>Client List</Text>
-                    </TouchableOpacity>
+                            <TouchableOpacity style={styles.button} onPress={() => this.handlePress('ClientList')}>
+                                <Text style={styles.text}>Client List</Text>
+                            </TouchableOpacity>
+                        </ScrollView>
 
+                    </View>
+                    <Footer nav={this.props.navigation} />
                 </View>
-            </View>
+            </SafeAreaView>
         )
     }
 }

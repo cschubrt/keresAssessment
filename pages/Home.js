@@ -4,7 +4,7 @@ import Loader from './components/Loader';
 //import Footer from './components/Footer';
 import NetInfo from "@react-native-community/netinfo";
 import { openDatabase } from 'react-native-sqlite-storage';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
 
 export default class Home extends Component {
@@ -137,23 +137,25 @@ export default class Home extends Component {
             return (<Loader />);
         }
         return (
-            <View style={styles.viewContainer}>
-                <ScrollView keyboardShouldPersistTaps="handled">
+            <SafeAreaView style={{ flex: 1 }}>
+                <View style={styles.viewContainer}>
+                    <ScrollView keyboardShouldPersistTaps="handled">
 
-                    <Text style={styles.header}>Status {this.state.connection_Status}</Text>
+                        <Text style={styles.header}>Status {this.state.connection_Status}</Text>
 
-                    {this.keresButton()}
+                        {this.keresButton()}
 
-                    <TouchableOpacity style={styles.button} onPress={() => this.handlePress('LoginForm')}>
-                        <Text style={styles.text}>Assessment Login</Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity style={styles.button} onPress={() => this.handlePress('LoginForm')}>
+                            <Text style={styles.text}>Assessment Login</Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.button} onPress={() => this.handlePress('ViewAllUser')}>
-                        <Text style={styles.text}>View All</Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity style={styles.button} onPress={() => this.handlePress('ViewAllUser')}>
+                            <Text style={styles.text}>View All</Text>
+                        </TouchableOpacity>
 
-                </ScrollView>
-            </View>
+                    </ScrollView>
+                </View>
+            </SafeAreaView>
         )
     }
 }
