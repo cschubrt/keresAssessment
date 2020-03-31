@@ -33,6 +33,7 @@ yarn add date-fns
 #yarn add react-navigation-tabs
 
 #yarn add react-native-reanimated
+#yarn add react-navigation-drawer  <---------------
 
 yarn add @fortawesome/fontawesome-svg-core
 yarn add @fortawesome/free-solid-svg-icons

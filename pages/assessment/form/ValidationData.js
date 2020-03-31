@@ -53,7 +53,7 @@ export default class ValidationData extends ValidationComponent {
   }
 
   componentDidMount() {
-    this.getObservation();
+    this.getValidation();
   }
 
   onPressButton = () => {
@@ -66,7 +66,7 @@ export default class ValidationData extends ValidationComponent {
       if (this.state.isInsert) {
         this.insertValidation();
       } else {
-        this.updateObservation();
+        this.updateValidation();
       }
     }
   }
@@ -94,7 +94,7 @@ export default class ValidationData extends ValidationComponent {
     });
   };
 
-  updateObservation() {
+  updateValidation() {
     var that = this;
     const state = this.state;
     db.transaction(function (tx) {
@@ -117,7 +117,7 @@ export default class ValidationData extends ValidationComponent {
     });
   }
 
-  getObservation() {
+  getValidation() {
     try {
       db.transaction(tx => {
         tx.executeSql('SELECT * FROM validation_data_table WHERE master_id = ?', [this.state.master_id], (tx, results) => {
@@ -144,7 +144,6 @@ export default class ValidationData extends ValidationComponent {
               maintained_id: results.rows.item(0).maintained_id,
               maintained_by_id: results.rows.item(0).maintained_by_id,
               owned_by_id: results.rows.item(0).owned_by_id,
-              occupancy_date: results.rows.item(0).occupancy_date,
               occupancy_date: format(new Date(results.rows.item(0).occupancy_date), "MM/dd/yyyy"),
               remarks: results.rows.item(0).remarks,
               occupency_id: results.rows.item(0).occupency_id,

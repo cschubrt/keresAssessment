@@ -8,7 +8,7 @@ import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
 import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Alert, SafeAreaView } from 'react-native';
 
-export default class SiteData extends ValidationComponent {
+export default class TowerData extends ValidationComponent {
 
   constructor(props) {
     super(props);
@@ -32,20 +32,20 @@ export default class SiteData extends ValidationComponent {
   }
 
   componentDidMount() {
-    this.getSiteData();
+    this.getTowerData();
   }
 
   onPressButton = () => {
     if (this.isFormValid()) {
       if (this.state.isInsert) {
-        this.insertSiteData();
+        this.insertTowerData();
       } else {
-        this.updateSiteData();
+        this.updateTowerData();
       }
     }
   }
 
-  insertSiteData() {
+  insertTowerData() {
     var that = this;
     const state = this.state;
     db.transaction(function (tx) {
@@ -54,21 +54,21 @@ export default class SiteData extends ValidationComponent {
         [state.master_id, state.gross_sqf, state.original_cost, state.useful_life, state.planned_replacement_year, state.project_number, state.total_fund_area, state.elevation, state.height, state.ice_load, state.wind_load, state.tension],
         (tx, results) => {
           if (results.rowsAffected > 0) {
-            Alert.alert('Success', 'Site Data added successfully',
+            Alert.alert('Success', 'Tower Data added successfully',
               [
                 { text: 'Ok', onPress: () => that.props.navigation.navigate('FormIndex', { master_id: state.master_id, assessment_name: state.assessment_name }) },
               ],
               { cancelable: false }
             );
           } else {
-            alert('Site Data add Failed');
+            alert('Tower Data add Failed');
           }
         }
       );
     });
   };
 
-  updateSiteData() {
+  updateTowerData() {
     var that = this;
     const state = this.state;
     db.transaction(function (tx) {
@@ -77,24 +77,24 @@ export default class SiteData extends ValidationComponent {
         [state.gross_sqf, state.original_cost, state.useful_life, state.planned_replacement_year, state.project_number, state.total_fund_area, state.elevation, state.height, state.ice_load, state.wind_load, state.tension, state.master_id],
         (tx, results) => {
           if (results.rowsAffected > 0) {
-            Alert.alert('Success', 'Site Data updated successfully',
+            Alert.alert('Success', 'Tower Data updated successfully',
               [
                 { text: 'Ok', onPress: () => that.props.navigation.navigate('FormIndex', { master_id: state.master_id, assessment_name: state.assessment_name }) },
               ],
               { cancelable: false }
             );
           } else {
-            alert('Site Data Update Failed');
+            alert('Tower Data Update Failed');
           }
         }
       );
     });
   }
 
-  getSiteData() {
+  getTowerData() {
     try {
       db.transaction(tx => {
-        tx.executeSql('SELECT * FROM tower_data_table', [], (tx, results) => {
+        tx.executeSql('SELECT * FROM tower_data_table WHERE master_id = ?', [this.state.master_id], (tx, results) => {
           if (results.rows.length > 0) {
             this.setState({
               gross_sqf: results.rows.item(0).gross_sqf,

@@ -8,6 +8,7 @@ import UpdateApp from '../pages/UpdateApp';
 import ViewAllUser from '../pages/ViewAllUser';
 import Info from '../pages/assessment/form/Info';
 import FormIndex from '../pages/assessment/form/index';
+import Upload from '../pages/assessment/form/Upload';
 import AssessmentHome from '../pages/assessment/Index';
 import ClientList from '../pages/assessment/ClientList';
 import AgencyList from '../pages/assessment/AgencyList';
@@ -21,6 +22,7 @@ import ValidationData from '../pages/assessment/form/ValidationData';
 
 let textColor = '#F0F0F0';
 let headerColor = '#404040';
+let headerHeight = 45;
 
 const HomeStack = createStackNavigator({
     Home: {
@@ -29,7 +31,8 @@ const HomeStack = createStackNavigator({
             title: 'Home',
             headerTintColor: textColor,
             headerStyle: {
-                backgroundColor: headerColor
+                backgroundColor: headerColor,
+                height: headerHeight
             }
         })
     },
@@ -39,7 +42,8 @@ const HomeStack = createStackNavigator({
             title: navigation.state.params.title,
             headerTintColor: textColor,
             headerStyle: {
-                backgroundColor: headerColor
+                backgroundColor: headerColor,
+                height: headerHeight
             }
         })
     },
@@ -49,7 +53,8 @@ const HomeStack = createStackNavigator({
             title: 'Login',
             headerTintColor: textColor,
             headerStyle: {
-                backgroundColor: headerColor
+                backgroundColor: headerColor,
+                height: headerHeight
             }
         })
     },
@@ -58,6 +63,7 @@ const HomeStack = createStackNavigator({
         navigationOptions: ({ navigation }) => ({
             title: 'Assessments',
             headerTintColor: textColor,
+            headerShown: false,
             headerStyle: {
                 backgroundColor: headerColor
             }
@@ -69,7 +75,8 @@ const HomeStack = createStackNavigator({
             title: 'Clients',
             headerTintColor: textColor,
             headerStyle: {
-                backgroundColor: headerColor
+                backgroundColor: headerColor,
+                height: headerHeight
             }
         })
     },
@@ -79,7 +86,8 @@ const HomeStack = createStackNavigator({
             title: 'Agencies',
             headerTintColor: textColor,
             headerStyle: {
-                backgroundColor: headerColor
+                backgroundColor: headerColor,
+                height: headerHeight
             }
         })
     },
@@ -89,7 +97,8 @@ const HomeStack = createStackNavigator({
             title: 'Assessment List',
             headerTintColor: textColor,
             headerStyle: {
-                backgroundColor: headerColor
+                backgroundColor: headerColor,
+                height: headerHeight
             }
         })
     },
@@ -99,7 +108,8 @@ const HomeStack = createStackNavigator({
             title: 'Assessment',
             headerTintColor: textColor,
             headerStyle: {
-                backgroundColor: headerColor
+                backgroundColor: headerColor,
+                height: headerHeight
             }
         })
     },
@@ -109,7 +119,8 @@ const HomeStack = createStackNavigator({
             title: 'Info',
             headerTintColor: textColor,
             headerStyle: {
-                backgroundColor: headerColor
+                backgroundColor: headerColor,
+                height: headerHeight
             }
         })
     },
@@ -119,7 +130,8 @@ const HomeStack = createStackNavigator({
             title: 'Observations',
             headerTintColor: textColor,
             headerStyle: {
-                backgroundColor: headerColor
+                backgroundColor: headerColor,
+                height: headerHeight
             }
         })
     },
@@ -129,7 +141,8 @@ const HomeStack = createStackNavigator({
             title: 'Validation Data',
             headerTintColor: textColor,
             headerStyle: {
-                backgroundColor: headerColor
+                backgroundColor: headerColor,
+                height: headerHeight
             }
         })
     },
@@ -139,7 +152,8 @@ const HomeStack = createStackNavigator({
             title: 'Building Data',
             headerTintColor: textColor,
             headerStyle: {
-                backgroundColor: headerColor
+                backgroundColor: headerColor,
+                height: headerHeight
             }
         })
     },
@@ -149,7 +163,8 @@ const HomeStack = createStackNavigator({
             title: 'Site Data',
             headerTintColor: textColor,
             headerStyle: {
-                backgroundColor: headerColor
+                backgroundColor: headerColor,
+                height: headerHeight
             }
         })
     },
@@ -159,7 +174,8 @@ const HomeStack = createStackNavigator({
             title: 'Tower Data',
             headerTintColor: textColor,
             headerStyle: {
-                backgroundColor: headerColor
+                backgroundColor: headerColor,
+                height: headerHeight
             }
         })
     },
@@ -169,7 +185,8 @@ const HomeStack = createStackNavigator({
             title: 'Tank Data',
             headerTintColor: textColor,
             headerStyle: {
-                backgroundColor: headerColor
+                backgroundColor: headerColor,
+                height: headerHeight
             }
         })
     },
@@ -179,7 +196,8 @@ const HomeStack = createStackNavigator({
             title: 'Update',
             headerTintColor: textColor,
             headerStyle: {
-                backgroundColor: headerColor
+                backgroundColor: headerColor,
+                height: headerHeight
             }
         })
     },
@@ -189,7 +207,20 @@ const HomeStack = createStackNavigator({
             title: 'ViewAllUser Data',
             headerTintColor: textColor,
             headerStyle: {
-                backgroundColor: headerColor
+                backgroundColor: headerColor,
+                height: headerHeight
+            }
+        })
+    },
+    Upload: {
+        screen: Upload,
+        navigationOptions: ({ navigation }) => ({
+            title: 'Upload Data',
+            headerTintColor: textColor,
+            headerShown: false,
+            headerStyle: {
+                backgroundColor: headerColor,
+                height: headerHeight
             }
         })
     }

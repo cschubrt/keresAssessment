@@ -10,7 +10,7 @@ import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
 import { View, Text, TouchableOpacity, ScrollView, KeyboardAvoidingView, Alert, SafeAreaView } from 'react-native';
 
-export default class TankingData extends ValidationComponent {
+export default class TankData extends ValidationComponent {
 
   constructor(props) {
     super(props);
@@ -45,28 +45,29 @@ export default class TankingData extends ValidationComponent {
   }
 
   componentDidMount() {
-    this.getTankingData();
+    this.getTankData();
   }
 
   onPressButton = () => {
     this.validate({
-      maintained_date: { date: 'MM/DD/YYYY' }
+      instal_date: { date: 'MM/DD/YYYY' },
+      out_of_service_date: { date: 'MM/DD/YYYY' }
     });
     if (this.isFormValid()) {
       if (this.state.isInsert) {
-        this.insertTankingData();
+        this.insertTankData();
       } else {
-        this.updateTankingData();
+        this.updateTankData();
       }
     }
   }
 
-  insertTankingData() {
+  insertTankData() {
     var that = this;
     const state = this.state;
     db.transaction(function (tx) {
       tx.executeSql(
-        'INSERT INTO tank_data_table(master_id,painted_id,insulated_id,cathode_protected_id,epa_regulated_id,leak_detection_id,fa_type_id,tank_location_id,tank_use_id,tank_type_id,instal_date,out_of_service_date,manufacturer,modal_no,serial_no,capacity,fuel_type,alt_fuel_type,msn,classification) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);',
+        'INSERT INTO tank_data_table(master_id,painted_id,insulated_id,cathode_protected_id,epa_regulated_id,leak_detection_id,fa_type_id,tank_location_id,tank_use_id,tank_type_id,instal_date,out_of_service_date,manufacturer,modal_no,serial_no,capacity,fuel_type,alt_fuel_type,msn,classification) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);',
         [state.master_id, state.painted_id, state.insulated_id, state.cathode_protected_id, state.epa_regulated_id, state.leak_detection_id, state.fa_type_id, state.tank_location_id, state.tank_use_id, state.tank_type_id, state.instal_date, state.out_of_service_date, state.manufacturer, state.modal_no, state.serial_no, state.capacity, state.fuel_type, state.alt_fuel_type, state.msn, state.classification],
         (tx, results) => {
           if (results.rowsAffected > 0) {
@@ -84,12 +85,12 @@ export default class TankingData extends ValidationComponent {
     });
   };
 
-  updateTankingData() {
+  updateTankData() {
     var that = this;
     const state = this.state;
     db.transaction(function (tx) {
       tx.executeSql(
-        'UPDATE tank_data_table SET painted_id = ?, insulated_id = ?, cathode_protected_id = ?, epa_regulated_id = ?, leak_detection_id = ?, fa_type_id = ?, tank_location_id = ?, tank_use_id = ?, tank_type_id = ?, instal_date = ?, out_of_service_date = ?, manufacturer = ?, modal_no = ?, serial_no = ?, capacity = ?, fuel_type = ?, alt_fuel_type = ?, msn = ?, classification WHERE master_id = ?',
+        'UPDATE tank_data_table SET painted_id = ?, insulated_id = ?, cathode_protected_id = ?, epa_regulated_id = ?, leak_detection_id = ?, fa_type_id = ?, tank_location_id = ?, tank_use_id = ?, tank_type_id = ?, instal_date = ?, out_of_service_date = ?, manufacturer = ?, modal_no = ?, serial_no = ?, capacity = ?, fuel_type = ?, alt_fuel_type = ?, msn = ?, classification = ? WHERE master_id = ?',
         [state.painted_id, state.insulated_id, state.cathode_protected_id, state.epa_regulated_id, state.leak_detection_id, state.fa_type_id, state.tank_location_id, state.tank_use_id, state.tank_type_id, state.instal_date, state.out_of_service_date, state.manufacturer, state.modal_no, state.serial_no, state.capacity, state.fuel_type, state.alt_fuel_type, state.msn, state.classification, state.master_id],
         (tx, results) => {
           if (results.rowsAffected > 0) {
@@ -107,7 +108,7 @@ export default class TankingData extends ValidationComponent {
     });
   }
 
-  getTankingData() {
+  getTankData() {
     try {
       db.transaction(tx => {
         tx.executeSql('SELECT * FROM tank_data_table WHERE master_id = ?', [this.state.master_id], (tx, results) => {
@@ -123,8 +124,8 @@ export default class TankingData extends ValidationComponent {
               tank_location_id: results.rows.item(0).tank_location_id,
               tank_use_id: results.rows.item(0).tank_use_id,
               tank_type_id: results.rows.item(0).tank_type_id,
-              instal_date: results.rows.item(0).instal_date,
-              out_of_service_date: results.rows.item(0).out_of_service_date,
+              instal_date: format(new Date(results.rows.item(0).instal_date), "MM/dd/yyyy"),
+              out_of_service_date: format(new Date(results.rows.item(0).out_of_service_date), "MM/dd/yyyy"),
               manufacturer: results.rows.item(0).manufacturer,
               modal_no: results.rows.item(0).modal_no,
               serial_no: results.rows.item(0).serial_no,

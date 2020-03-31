@@ -1,9 +1,11 @@
 import React from 'react';
+import RenderIf from './RenderIf';
 import { Item, Picker, Icon } from 'native-base';
 
 
 const MyPicker2 = props => {
     const theItems = props.items ? props.items : [{ label: '', value: '' }];
+    //const pkr = RenderIf(props.selectedValue == '',<Picker.Item label='Select' value='' />);
     return (
         <Item style={{ marginBottom: 22 }} picker>
             <Picker

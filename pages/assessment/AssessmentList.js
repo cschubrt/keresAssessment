@@ -62,9 +62,9 @@ export default class AssessmentList extends Component {
     this.setState({ online: true });
   }
 
-  getTowerData = (master_id) => {
+  getTankData = (master_id) => {
     try {
-      fetch('https://cschubert.serviceseval.com/keres_fca/app/getTowerData.php', {
+      fetch('https://cschubert.serviceseval.com/keres_fca/app/getTankData.php', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -80,7 +80,46 @@ export default class AssessmentList extends Component {
             observationSource: responseJson
           })
           if (this.state.observationSource.length > 0) {
-            this.insertTowerData(this.state.observationSource);
+            this.insertTankData(this.state.observationSource);
+          }
+        }).catch((error) => {
+          console.log(error);
+        });
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+
+  insertTankData(src) {
+    db.transaction(function (tx) {
+      tx.executeSql(
+        'INSERT INTO tank_data_table(master_id,painted_id,insulated_id,cathode_protected_id,epa_regulated_id,leak_detection_id,fa_type_id,tank_location_id,tank_use_id,tank_type_id,instal_date,out_of_service_date,manufacturer,modal_no,serial_no,capacity,fuel_type,alt_fuel_type,msn,classification) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);',
+        [src[0].master_id, src[0].painted_id, src[0].insulated_id, src[0].cathode_protected_id, src[0].epa_regulated_id, src[0].leak_detection_id, src[0].fa_type_id, src[0].tank_location_id, src[0].tank_use_id, src[0].tank_type_id, src[0].instal_date, src[0].out_of_service_date, src[0].manufacturer, src[0].modal_no, src[0].serial_no, src[0].capacity, src[0].fuel_type, src[0].alt_fuel_type, src[0].msn, src[0].classification],
+        (tx, results) => { }
+      );
+    });
+  };
+
+  getTowerData = (master_id) => {
+    try {
+      fetch('https://cschubert.serviceseval.com/keres_fca/app/getTowerData.php', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          master_id: master_id,
+          key: '58PvahBTd'
+        })
+      }).then((response) => response.json())
+        .then((responseJson) => {
+          this.setState({
+            towerSource: responseJson
+          })
+          if (this.state.towerSource.length > 0) {
+            this.insertTowerData(this.state.towerSource);
           }
         }).catch((error) => {
           console.log(error);
@@ -307,6 +346,7 @@ export default class AssessmentList extends Component {
         this.getBuildingData(master_id);
         this.getSiteData(master_id);
         this.getTowerData(master_id);
+        this.getTankData(master_id);
 
         alert('Assessment Downloaded');
         this.setState({ tableData: [] });
@@ -331,10 +371,10 @@ export default class AssessmentList extends Component {
     });
   };
 
-  uploadAssessment(values) {
+  uploadAssessment(master_id, assessment_name) {
     Alert.alert('Alert', 'Press Ok To Update Assessment',
       [
-        { text: 'Ok', onPress: () => this.UpdateBca(values) },
+        { text: 'Ok', onPress: () => this.props.navigation.navigate('Upload', { master_id: master_id, assessment_name: assessment_name }) },
         { text: 'Cancel' },
       ],
       { cancelable: false }
@@ -365,7 +405,7 @@ export default class AssessmentList extends Component {
                   val['assessment_name'],
                   format(new Date(val['assessment_date']), "MM/dd/yyyy"),
                   val['name_of_assessor'],
-                  (val['checked_out_by'] === this.state.user_name ? this.checkedValue(val['master_id']) : this.addLink(val['master_id'])),
+                  (val['checked_out_by'] === this.state.user_name ? this.checkedValue(val['master_id'], val['assessment_name']) : this.addLink(val['master_id'])),
                   (val['checked_out_by'] === this.state.user_name ? this.NoGoTo(val['master_id'], val['assessment_name']) : false),
                   (val['checked_out_by'] === this.state.user_name ? this.goTo(val['master_id'], val['assessment_name']) : false),
                 ]
@@ -431,8 +471,8 @@ export default class AssessmentList extends Component {
     </TouchableOpacity>
   }
 
-  checkedValue(values) {
-    return <TouchableOpacity onPress={() => this.uploadAssessment(values)}>
+  checkedValue(master_id, assessment_name) {
+    return <TouchableOpacity onPress={() => this.uploadAssessment(master_id, assessment_name)}>
       <Text style={{ color: '#000', textAlign: 'center' }}><FontAwesomeIcon icon={faUpload} size={18} /></Text>
     </TouchableOpacity>
   }
@@ -476,6 +516,12 @@ export default class AssessmentList extends Component {
       tx.executeSql(
         'delete from validation_data_table WHERE master_id = ?', [master_id], (tx, results) => { }
       );
+      tx.executeSql(
+        'delete from tank_data_table WHERE master_id = ?', [master_id], (tx, results) => { }
+      );
+      tx.executeSql(
+        'delete from tower_data_table WHERE master_id = ?', [master_id], (tx, results) => { }
+      );
     });
     if (this.state.connection) {
       this.deleteAssessment(master_id);
@@ -499,17 +545,6 @@ export default class AssessmentList extends Component {
     });
   }
 
-  deleteit = () => {
-    db.transaction(function (tx) {
-      tx.executeSql(
-        'delete from assessment_table;', [], (tx, results) => { }
-      );
-      tx.executeSql(
-        'delete from observations_table;', [], (tx, results) => { }
-      );
-    });
-  };
-
   render() {
     const state = this.state;
     if (this.state.isLoading) {
@@ -532,10 +567,6 @@ export default class AssessmentList extends Component {
             )}
 
           </ScrollView>
-
-          <TouchableOpacity style={styles.button} onPress={this.deleteit}>
-            <Text style={styles.text}>Delete</Text>
-          </TouchableOpacity>
 
         </View>
         <Footer nav={this.props.navigation} />

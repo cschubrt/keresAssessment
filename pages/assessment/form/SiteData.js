@@ -103,7 +103,7 @@ export default class SiteData extends ValidationComponent {
   getSiteData() {
     try {
       db.transaction(tx => {
-        tx.executeSql('SELECT * FROM site_data_table', [], (tx, results) => {
+        tx.executeSql('SELECT * FROM site_data_table WHERE master_id = ?', [this.state.master_id], (tx, results) => {
           if (results.rows.length > 0) {
             this.setState({
               flower_area_sf: results.rows.item(0).flower_area_sf,

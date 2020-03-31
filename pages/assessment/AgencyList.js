@@ -90,7 +90,7 @@ export default class AgencyList extends Component {
                                 </View>}
                         />
                     )}
-                    {RenderIf(!this.state.dataSource,
+                    {this.state.isLoading === false && RenderIf(!this.state.dataSource,
                         <Text style={styles.noText}>No Results</Text>
                     )}
                 </View>
