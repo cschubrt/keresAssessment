@@ -528,7 +528,7 @@ export default class AssessmentList extends Component {
     }
     alert('Assessment Deleted');
     this.setState({ tableData: [] });
-    this.getAssessmentByAgency()
+    this.getAssessmentByAgency();
   };
 
   deleteAssessment = (master_id) => {
