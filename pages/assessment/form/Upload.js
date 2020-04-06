@@ -49,9 +49,9 @@ export default class Upload extends Component {
                             })
                         }).then((response) => response.json())
                             .then((responseJson) => {
-                                console.log(responseJson);
+                                //console.log(responseJson);
                             }).catch((error) => {
-                                console.error(error);
+                                //console.error(error);
                             });
                     }
                 });
@@ -87,9 +87,9 @@ export default class Upload extends Component {
                             })
                         }).then((response) => response.json())
                             .then((responseJson) => {
-                                console.log(responseJson);
+                                //console.log(responseJson);
                             }).catch((error) => {
-                                console.log(error);
+                                //console.log(error);
                             });
                     }
                 });
@@ -142,9 +142,9 @@ export default class Upload extends Component {
                             })
                         }).then((response) => response.json())
                             .then((responseJson) => {
-                                console.log(responseJson);
+                                //console.log(responseJson);
                             }).catch((error) => {
-                                console.log(error);
+                                //console.log(error);
                             });
                     }
                 });
@@ -160,6 +160,7 @@ export default class Upload extends Component {
         try {
             db.transaction(tx => {
                 tx.executeSql('SELECT * FROM building_data_table WHERE master_id = ?', [this.state.master_id], (tx, results) => {
+                    //console.log(results.rows.length);
                     if (results.rows.length > 0) {
                         fetch('https://cschubert.serviceseval.com/keres_fca/app/updateBuilding.php', {
                             method: 'POST',
@@ -189,9 +190,9 @@ export default class Upload extends Component {
                             })
                         }).then((response) => response.json())
                             .then((responseJson) => {
-                                console.log(responseJson);
+                                //console.log(responseJson);
                             }).catch((error) => {
-                                console.log(error);
+                                //console.log(error);
                             });
                     }
                 });
@@ -240,9 +241,9 @@ export default class Upload extends Component {
                             })
                         }).then((response) => response.json())
                             .then((responseJson) => {
-                                console.log(responseJson);
+                               // console.log(responseJson);
                             }).catch((error) => {
-                                console.log(error);
+                                //console.log(error);
                             });
                     }
                 });
@@ -281,9 +282,9 @@ export default class Upload extends Component {
                             })
                         }).then((response) => response.json())
                             .then((responseJson) => {
-                                console.log(responseJson);
+                                //console.log(responseJson);
                             }).catch((error) => {
-                                console.log(error);
+                                //console.log(error);
                             });
                     }
                 });
@@ -332,9 +333,9 @@ export default class Upload extends Component {
                             })
                         }).then((response) => response.json())
                             .then((responseJson) => {
-                                console.log(responseJson);
+                                //console.log(responseJson);
                             }).catch((error) => {
-                                console.log(error);
+                                //console.log(error);
                             });
                         this.setState({
                             isLoading: false
@@ -354,6 +355,7 @@ export default class Upload extends Component {
         this.getAssessment();
         this.getObservation();
         this.getValidation();
+        this.getBuildingData();
         this.getSiteData();
         this.getTowerData();
         this.getTankData();

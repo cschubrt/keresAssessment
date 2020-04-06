@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from '../styles/styles';
 import ValidationComponent from '../vals';
+import Mybutton from './components/Mybutton';
 import { sha256 } from 'react-native-sha256';
 import { openDatabase } from 'react-native-sqlite-storage';
 var db = openDatabase({ name: 'keres_assessment.db', createFromLocation: "~keres_assessment.db" });
@@ -64,9 +65,10 @@ export default class LoginForm extends ValidationComponent {
               {this.isFieldInError('password') && this.getErrorsInField('password').map(errorMessage => <Text style={styles.textAlert}>{errorMessage}</Text>)}
               <TextInput autoCapitalize="none" placeholder="password" ref="password" onChangeText={(password) => this.setState({ password })} value={this.state.password} style={styles.TextInputStyleClass} />
 
-              <TouchableOpacity style={styles.button} onPress={this._onPressButton}>
-                <Text style={styles.text}>Submit</Text>
-              </TouchableOpacity>
+              <Mybutton
+                title='Submit'
+                customClick={() => this._onPressButton()}
+              />
 
             </KeyboardAvoidingView>
           </ScrollView>

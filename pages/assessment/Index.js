@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import styles from '../../styles/styles';
 import Loader from '../components/Loader';
 import Footer from '../components/Footer';
+import Mybutton from '../components/Mybutton';
 import NetInfo from "@react-native-community/netinfo";
 import { openDatabase } from 'react-native-sqlite-storage';
 import { View, Text, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
@@ -222,9 +222,10 @@ export default class AssessmentHome extends Component {
                         <ScrollView keyboardShouldPersistTaps="handled">
                             <Text style={{ textAlign: 'center', fontSize: 25, color: '#404040', paddingTop: 10 }}>Keres Assessment</Text>
 
-                            <TouchableOpacity style={styles.button} onPress={() => this.handlePress('ClientList')}>
-                                <Text style={styles.text}>Client List</Text>
-                            </TouchableOpacity>
+                            <Mybutton
+                                title='Client List'
+                                customClick={() => this.handlePress('ClientList')}
+                            />
                         </ScrollView>
 
                     </View>

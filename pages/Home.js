@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styles from '../styles/styles';
 import Loader from './components/Loader';
-//import Footer from './components/Footer';
+import Mybutton from './components/Mybutton';
 import NetInfo from "@react-native-community/netinfo";
 import { openDatabase } from 'react-native-sqlite-storage';
 import { View, Text, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
@@ -112,13 +112,11 @@ export default class Home extends Component {
     keresButton() {
         if (this.state.connection) {
             return this.state.links.map((item, index) => (
-                <TouchableOpacity
+                <Mybutton
                     key={index}
-                    onPress={() => this.handleButtonPress(item)}
-                    style={styles.button}
-                >
-                    <Text style={styles.text}>{item.title}</Text>
-                </TouchableOpacity>
+                    title={item.title}
+                    customClick={() => this.handleButtonPress(item)}
+                />
             ));
         }
     }
@@ -145,18 +143,20 @@ export default class Home extends Component {
 
                         {this.keresButton()}
 
-                        <TouchableOpacity style={styles.button} onPress={() => this.handlePress('LoginForm')}>
-                            <Text style={styles.text}>Assessment Login</Text>
-                        </TouchableOpacity>
+                        <Mybutton
+                            title='Assessment Login'
+                            customClick={() => this.handlePress('LoginForm')}
+                        />
 
-                        <TouchableOpacity style={styles.button} onPress={() => this.handlePress('ViewAllUser')}>
-                            <Text style={styles.text}>View All</Text>
-                        </TouchableOpacity>
+                        <Mybutton
+                            title='View All'
+                            customClick={() => this.handlePress('ViewAllUser')}
+                        />
 
                     </ScrollView>
                 </View>
             </SafeAreaView>
         )
     }
-    
+
 }

@@ -23,6 +23,7 @@ class Browser extends Component {
             />
         )
     }
+    
 }
 
 export default Browser
