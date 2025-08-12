@@ -12,8 +12,8 @@ export default class LoginForm extends ValidationComponent {
   constructor(props) {
     super(props);
     this.state = {
-      username: "cschubert",
-      password: "FAtchick22",
+      username: "",
+      password: "",
       user_name: ""
     };
   }
